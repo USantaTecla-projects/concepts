@@ -13,7 +13,7 @@ public class Concept {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String definition;
+    private String text;
 
     @OneToMany
     private List<Answer> answer;
