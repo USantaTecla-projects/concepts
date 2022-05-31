@@ -1,4 +1,4 @@
-package com.example.backend.api.core.services.question;
+package com.example.backend.api.core.question.services;
 
 import org.springframework.stereotype.Service;
 

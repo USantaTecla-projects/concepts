@@ -1,5 +1,6 @@
-package com.example.backend.api.core.models;
+package com.example.backend.api.core.answer.models;
 
+import com.example.backend.api.core.justification.models.Justification;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -1,5 +1,6 @@
-package com.example.backend.api.core.models;
+package com.example.backend.api.core.concepts.models;
 
+import com.example.backend.api.core.answer.models.Answer;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,7 +18,5 @@ public class Concept {
 
     @OneToMany
     private List<Answer> answer;
-
-
 
 }

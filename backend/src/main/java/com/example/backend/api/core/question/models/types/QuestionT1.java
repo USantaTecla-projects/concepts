@@ -1,6 +1,6 @@
-package com.example.backend.api.core.models.questions.types;
+package com.example.backend.api.core.question.models.types;
 
-import com.example.backend.api.core.models.questions.Question;
+import com.example.backend.api.core.question.models.Question;
 import lombok.Data;
 
 @Data

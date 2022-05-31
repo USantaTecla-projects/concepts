@@ -1,4 +1,4 @@
-package com.example.backend.api.core.models;
+package com.example.backend.api.core.justification.models;
 
 import lombok.Data;
 

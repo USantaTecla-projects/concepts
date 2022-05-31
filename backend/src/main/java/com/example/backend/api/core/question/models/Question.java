@@ -1,6 +1,6 @@
-package com.example.backend.api.core.models.questions;
+package com.example.backend.api.core.question.models;
 
-import com.example.backend.api.core.models.Concept;
+import com.example.backend.api.core.concepts.models.Concept;
 
 import javax.persistence.*;
 
