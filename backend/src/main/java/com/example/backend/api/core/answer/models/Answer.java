@@ -1,5 +1,6 @@
 package com.example.backend.api.core.answer.models;
 
+import com.example.backend.api.core.concepts.models.Concept;
 import com.example.backend.api.core.justification.models.Justification;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class Answer {
     private String text;
 
     private boolean isCorrect;
-
+    
     @OneToOne
     private Justification justification;
 
