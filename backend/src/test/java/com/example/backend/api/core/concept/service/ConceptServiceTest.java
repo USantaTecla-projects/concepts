@@ -4,7 +4,7 @@ import com.example.backend.api.core.answer.AnswerRepository;
 import com.example.backend.api.core.concept.ConceptRepository;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.exception.model.DTOBadRequest.DTOBadRequest;
+import com.example.backend.api.exception.model.DTOBadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,6 +57,6 @@ class ConceptServiceTest {
     void createWithWrongDTO(){
         ConceptDTO wrongConceptDTO = new ConceptDTO();
 
-        assertThrows(DTOBadRequest.class, () -> conceptService.create(wrongConceptDTO));
+        assertThrows(DTOBadRequestException.class, () -> conceptService.create(wrongConceptDTO));
     }
 }

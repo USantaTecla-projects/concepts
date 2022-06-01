@@ -6,9 +6,10 @@ import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.exception.model.DTOBadRequest.DTOBadRequest;
+import com.example.backend.api.exception.model.DTOBadRequestException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -38,20 +39,26 @@ public class ConceptService implements IConceptService {
         String text = getTextFromDTO(conceptDTO.getText());
         List<Answer> answers = getAnswersFromDTO(conceptDTO.getAnswers());
 
-        return this.conceptRepository.save(new Concept(text, answers));
+        return conceptRepository.save(new Concept(text, answers));
     }
+
+    public Concept findOne(Long id) {
+        return conceptRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("The concept with id = " + id + " has not been found"));
+    }
+
 
     /**
      * Get the text from DTO if exists. If not, throw an Exception.
      *
-     * @param text The text in the DTO
-     * @return The text of the DTO
+     * @param text The text in the DTO.
+     * @return The text of the DTO.
      */
     private String getTextFromDTO(final String text) {
         return Optional
                 .ofNullable(text)
                 .filter(t -> !t.isEmpty())
-                .orElseThrow(() -> new DTOBadRequest("Field text in DTO is mandatory"));
+                .orElseThrow(() -> new DTOBadRequestException("Field text in DTO is mandatory"));
     }
 
     /**
@@ -68,7 +75,7 @@ public class ConceptService implements IConceptService {
                 .orElse(new LinkedList<>());
 
         return answersIds.stream()
-                .map(this.answerRepository::findAnswerById)
+                .map(answerRepository::findAnswerById)
                 .filter(Objects::nonNull)
                 .toList();
     }

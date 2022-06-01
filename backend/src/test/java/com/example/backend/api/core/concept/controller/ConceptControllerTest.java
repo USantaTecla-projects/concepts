@@ -52,6 +52,12 @@ class ConceptControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Converts Object to JSON.
+     * @param object The object to be converted.
+     * @return A String with the Object as JSON.
+     * @throws JsonProcessingException Is thrown if the Object can't be parsed.
+     */
     private String mapObjectToJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);

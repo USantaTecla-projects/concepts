@@ -17,7 +17,12 @@ public class ConceptController {
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody Concept create(@RequestBody final ConceptDTO conceptDTO) {
-        return this.conceptsService.create(conceptDTO);
+        return conceptsService.create(conceptDTO);
+    }
+
+    @GetMapping("/{id}")
+    public @ResponseBody Concept findOne(@PathVariable final Long id){
+        return  conceptsService.findOne(id);
     }
 
 }
