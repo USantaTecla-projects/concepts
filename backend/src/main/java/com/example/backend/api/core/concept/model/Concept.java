@@ -1,12 +1,10 @@
 package com.example.backend.api.core.concept.model;
 
 import com.example.backend.api.core.answer.model.Answer;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Entity
 public class Concept {
 
@@ -14,6 +12,7 @@ public class Concept {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
     private String text;
 
     @OneToMany

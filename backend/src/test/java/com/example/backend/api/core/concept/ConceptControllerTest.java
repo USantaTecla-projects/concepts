@@ -6,10 +6,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,7 +20,6 @@ import java.util.LinkedList;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ConceptController.class)
@@ -33,7 +34,8 @@ class ConceptControllerTest {
 
 
     @Test
-    void create_concept() throws Exception {
+    @DisplayName("Should get 201 when creating a new Concept")
+    void create() throws Exception {
         ConceptDTO conceptDTO = new ConceptDTO("Software", new LinkedList<>());
         String conceptJsonDTO = mapObjectToJson(conceptDTO);
 
@@ -47,10 +49,8 @@ class ConceptControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(conceptJsonDTO)
                 )
-                .andExpect(status().isCreated())
-                .andExpect(content().json(conceptJson));
+                .andExpect(status().isCreated());
     }
-
 
     private String mapObjectToJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
