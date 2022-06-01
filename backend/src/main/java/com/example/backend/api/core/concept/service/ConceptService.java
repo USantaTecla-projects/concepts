@@ -50,7 +50,8 @@ public class ConceptService implements IConceptService {
     private String getTextFromDTO(final String text) {
         return Optional
                 .ofNullable(text)
-                .orElseThrow(() -> new DTOBadRequest("Field name in DTO is mandatory"));
+                .filter(t -> !t.isEmpty())
+                .orElseThrow(() -> new DTOBadRequest("Field text in DTO is mandatory"));
     }
 
     /**

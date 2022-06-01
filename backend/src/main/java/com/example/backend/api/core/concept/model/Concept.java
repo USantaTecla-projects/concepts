@@ -32,4 +32,37 @@ public class Concept {
         this.text = text;
         this.answers = answers;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    @Override
+    public String toString() {
+        return "Concept{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", answers=" + answers +
+                '}';
+    }
 }

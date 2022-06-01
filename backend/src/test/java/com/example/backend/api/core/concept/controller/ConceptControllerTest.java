@@ -1,5 +1,7 @@
-package com.example.backend.api.core.concept;
+package com.example.backend.api.core.concept.controller;
 
+import com.example.backend.api.core.concept.ConceptController;
+import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.model.Concept;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,7 +41,6 @@ class ConceptControllerTest {
         String conceptJsonDTO = mapObjectToJson(conceptDTO);
 
         Concept concept = new Concept(1L, "Software", new LinkedList<>());
-        String conceptJson = mapObjectToJson(concept);
 
         when(conceptService.create(conceptDTO)).thenReturn(concept);
 
