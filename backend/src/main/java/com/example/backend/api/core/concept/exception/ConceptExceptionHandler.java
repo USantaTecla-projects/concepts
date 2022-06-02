@@ -1,7 +1,8 @@
-package com.example.backend.api.exception;
+package com.example.backend.api.core.concept.exception;
 
+import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.exception.dto.ExceptionDTO;
-import com.example.backend.api.exception.model.DTOBadRequestException;
+import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,10 +12,10 @@ import javax.persistence.EntityNotFoundException;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ConceptExceptionHandler {
 
-    @ExceptionHandler(value = {DTOBadRequestException.class})
-    public ResponseEntity<Object> handleDTOBadRequestException(DTOBadRequestException exception){
+    @ExceptionHandler(value = {ConceptDTOBadRequestException.class})
+    public ResponseEntity<Object> handleDTOBadRequestException(ConceptDTOBadRequestException exception){
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.BAD_REQUEST,
@@ -23,8 +24,8 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(exceptionDTO,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
-    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException exception){
+    @ExceptionHandler(value = {ConceptNotFoundException.class})
+    public ResponseEntity<Object> handleEntityNotFoundException(ConceptNotFoundException exception){
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.NOT_FOUND,

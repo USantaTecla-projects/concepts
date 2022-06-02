@@ -23,11 +23,28 @@ public interface IConceptService {
     Concept findOne(final Long id);
 
     /**
-     * Find all Concepts by the given page number .
+     * Find all Concepts by the given page number.
      *
      * @param page The page number to look for.
      * @return The page with the corresponding set of results.
      */
     Page<Concept> findAll(int page);
+
+    /**
+     * Update an existing Concept, providing the id of the Concept to update and the new info.
+     *
+     * @param id         The id of the Concept to update.
+     * @param conceptDTO The new information to update the Concept.
+     */
+    void updateOne(Long id, ConceptDTO conceptDTO);
+
+    /**
+     * Delete a Concept by a given id, if not found throws an Exception.
+     *
+     * @param id The id of the Concept to remove.
+     */
+    void removeOne(Long id);
+
+
 
 }

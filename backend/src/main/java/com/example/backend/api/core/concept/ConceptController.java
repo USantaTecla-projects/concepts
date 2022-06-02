@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequestMapping("/concepts")
 public class ConceptController {
@@ -58,5 +55,18 @@ public class ConceptController {
                 linkIterable
         );
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void updateOne(@PathVariable final Long id,@RequestBody final ConceptDTO conceptDTO){
+        conceptsService.updateOne(id,conceptDTO);
+    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void removeOne(@PathVariable final Long id){
+        conceptsService.removeOne(id);
+    }
+
+
 
 }

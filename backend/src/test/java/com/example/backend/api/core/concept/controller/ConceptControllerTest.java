@@ -3,9 +3,10 @@ package com.example.backend.api.core.concept.controller;
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.concept.util.ConceptAssembler;
-import com.example.backend.api.exception.model.DTOBadRequestException;
+import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,21 +25,21 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ConceptController.class)
 class ConceptControllerTest {
 
+    public static final String BASE_URL = "/concepts/";
     @Autowired
     private MockMvc mockMvc;
 
@@ -93,89 +95,154 @@ class ConceptControllerTest {
         );
     }
 
-    @Test
-    @DisplayName("Should get 201 when creating a Concept")
-    void createWithCorrectDTO() throws Exception {
-        String conceptJsonDTO = mapObjectToJson(conceptDTO1);
+    @Nested
+    @DisplayName("POST")
+    class ConceptPost {
+        @Test
+        @DisplayName("(Create) Should get 201 when creating a Concept")
+        void createWithCorrectDTO() throws Exception {
+            String conceptJsonDTO = mapObjectToJson(conceptDTO1);
 
-        mockMvc.perform(post("/concepts/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(conceptJsonDTO))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.text", Matchers.is("Software")))
-                .andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$._links.self").exists())
-                .andExpect(jsonPath("$._links.concepts").exists());
+            mockMvc.perform(post(BASE_URL)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(conceptJsonDTO))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.text", Matchers.is("Software")))
+                    .andExpect(jsonPath("$.id", Matchers.is(1)))
+                    .andExpect(jsonPath("$._links.self").exists())
+                    .andExpect(jsonPath("$._links.concepts").exists());
+        }
+
+        @Test
+        @DisplayName("Create) Should get 400 when creating a wrong Concept")
+        void createWithWrongDTO() throws Exception {
+            lenient()
+                    .when(conceptService.create(wrongConceptDTO))
+                    .thenThrow(new ConceptDTOBadRequestException("Field text in DTO is mandatory"));
+
+            String conceptJsonDTO = mapObjectToJson(wrongConceptDTO);
+
+            mockMvc.perform(post(BASE_URL)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(conceptJsonDTO))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
-    @Test
-    @DisplayName("Should get 400 when creating a wrong Concept")
-    void createWithWrongDTO() throws Exception {
-        lenient()
-                .when(conceptService.create(wrongConceptDTO))
-                .thenThrow(new DTOBadRequestException("Field text in DTO is mandatory"));
+    @Nested
+    @DisplayName("GET")
+    class ConceptGet {
+        @Test
+        @DisplayName("(FindOne) Should get 200 when finding a Concept by a given id if exists")
+        void findOneWhenExists() throws Exception {
+            String conceptJsonDTO = mapObjectToJson(conceptDTO1);
 
-        String conceptJsonDTO = mapObjectToJson(wrongConceptDTO);
+            mockMvc.perform(post(BASE_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(conceptJsonDTO));
 
-        mockMvc.perform(post("/concepts/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(conceptJsonDTO))
-                .andExpect(status().isBadRequest());
+            mockMvc.perform(get(BASE_URL + concept1.getId()))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("(FindOne) Should get 404 when the given id doesn't exists")
+        void findOneWhenNotExists() throws Exception {
+            lenient()
+                    .when(conceptService.findOne(99L))
+                    .thenThrow(new ConceptNotFoundException("The concept with id = " + 99L + " has not been found"));
+
+            mockMvc.perform(get(BASE_URL + "99"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("(FindAll) Should get 200 if there are entities")
+        void findAllWithEntitiesInDatabase() throws Exception {
+            createConcept(conceptDTO1);
+            createConcept(conceptDTO2);
+            createConcept(conceptDTO3);
+
+            mockMvc.perform(get(BASE_URL + "?page=0"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$._embedded").exists())
+                    .andExpect(jsonPath("$._embedded.conceptList.size()", Matchers.is(3)))
+                    .andExpect(jsonPath("$._links.first").exists())
+                    .andExpect(jsonPath("$._links.prev").exists())
+                    .andExpect(jsonPath("$._links.self").exists())
+                    .andExpect(jsonPath("$._links.next").exists())
+                    .andExpect(jsonPath("$._links.last").exists());
+        }
+
+        @Test
+        @DisplayName("(FindAll) Should get 404 if there are no entities")
+        void findAllWithNoEntitiesInDatabase() throws Exception {
+
+            lenient()
+                    .when(conceptService.findAll(1))
+                    .thenThrow(new ConceptNotFoundException("The requested page doesn't exists"));
+
+            mockMvc.perform(get(BASE_URL + "?page=1"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("Should get 200 when finding a Concept by a given id if exists")
-    void findOneWhenExists() throws Exception {
-        String conceptJsonDTO = mapObjectToJson(conceptDTO1);
+    @Nested
+    @DisplayName("PUT")
+    class ConceptPut {
 
-        mockMvc.perform(post("/concepts/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(conceptJsonDTO));
+        @Test
+        @DisplayName("(UpdateOne) Should get 204 updating the Concept")
+        void updateExistingConcept() throws Exception {
+            createConcept(conceptDTO1);
 
-        mockMvc.perform(get("/concepts/" + concept1.getId()))
-                .andExpect(status().isOk());
+            String conceptJsonDTO = mapObjectToJson(conceptDTO1);
+
+            mockMvc.perform(put(BASE_URL + "1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(conceptJsonDTO))
+                    .andExpect(status().isNoContent());
+        }
+
+        @Test
+        @DisplayName("(UpdateOne) Should get 404 deleting the Concept")
+        void updateNonExistingConcept() throws Exception {
+            createConcept(conceptDTO1);
+
+            String conceptJsonDTO = mapObjectToJson(conceptDTO1);
+
+            doThrow(new ConceptNotFoundException("The concept with id = " + 99L + " has not been found"))
+                    .when(conceptService).updateOne(99L,conceptDTO1);
+
+            mockMvc.perform(put(BASE_URL + "99")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(conceptJsonDTO))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("Should get 404 when the given id doesn't exists")
-    void findOneWhenNotExists() throws Exception {
-        lenient()
-                .when(conceptService.findOne(99L))
-                .thenThrow(new EntityNotFoundException("The concept with id = " + 99L + " has not been found"));
+    @Nested
+    @DisplayName("DELETE")
+    class ConceptDelete {
+        @Test
+        @DisplayName("(RemoveOne) Should get 204 deleting the Concept")
+        void deleteExistingConcept() throws Exception {
 
-        mockMvc.perform(get("/concepts/99"))
-                .andExpect(status().isNotFound());
+            mockMvc.perform(delete(BASE_URL + "1"))
+                    .andExpect(status().isNoContent());
+        }
+
+        @Test
+        @DisplayName("(RemoveOne) Should get 404 deleting the Concept")
+        void deleteNonExistingConcept() throws Exception {
+            doThrow(new ConceptNotFoundException("The concept with id = " + 99L + " has not been found"))
+                    .when(conceptService).removeOne(99L);
+
+            mockMvc.perform(delete(BASE_URL + "99"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("Should get 200 if there are entities")
-    void findAllWithEntitiesInDatabase() throws Exception {
-        createConcept(conceptDTO1);
-        createConcept(conceptDTO2);
-        createConcept(conceptDTO3);
-
-        mockMvc.perform(get("/concepts/?page=0"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded").exists())
-                .andExpect(jsonPath("$._embedded.conceptList.size()", Matchers.is(3)))
-                .andExpect(jsonPath("$._links.first").exists())
-                .andExpect(jsonPath("$._links.prev").exists())
-                .andExpect(jsonPath("$._links.self").exists())
-                .andExpect(jsonPath("$._links.next").exists())
-                .andExpect(jsonPath("$._links.last").exists());
-    }
-
-    @Test
-    @DisplayName("Should get 404 if there are no entities")
-    void findAllWithNoEntitiesInDatabase() throws Exception {
-
-        lenient()
-                .when(conceptService.findAll(1))
-                .thenThrow(new EntityNotFoundException("The requested page doesn't exists"));
-
-        mockMvc.perform(get("/concepts/?page=1"))
-                .andExpect(status().isNotFound());
-    }
 
     /**
      * Auxiliary method to create a Concept.
@@ -186,7 +253,7 @@ class ConceptControllerTest {
     private void createConcept(ConceptDTO conceptDTO) throws Exception {
         String conceptJsonDTO = mapObjectToJson(conceptDTO);
 
-        mockMvc.perform(post("/concepts/")
+        mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(conceptJsonDTO));
     }
