@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class ConceptTest {
+public class ConceptE2ETest {
 
     String BASE_URL = "/concepts/";
 
