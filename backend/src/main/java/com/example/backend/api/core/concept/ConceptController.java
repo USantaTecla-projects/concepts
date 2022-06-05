@@ -1,8 +1,8 @@
 package com.example.backend.api.core.concept;
 
-import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
-import com.example.backend.api.core.concept.link.ConceptAssembler;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
+
 import com.example.backend.api.core.concept.model.Concept;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
@@ -13,28 +13,37 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/concepts")
 public class ConceptController {
     private final IConceptService conceptsService;
-    private final ConceptAssembler conceptAssembler;
 
 
-    public ConceptController(IConceptService conceptsService, ConceptAssembler conceptAssembler) {
+    public ConceptController(IConceptService conceptsService) {
         this.conceptsService = conceptsService;
-        this.conceptAssembler = conceptAssembler;
     }
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
     public EntityModel<Concept> create(@RequestBody final ConceptDTO conceptDTO) {
-        return conceptAssembler.toModel(conceptsService.create(conceptDTO));
+        Concept concept = conceptsService.create(conceptDTO);
+
+        return EntityModel.of(concept,
+                linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
+                linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")
+        );
     }
 
     @GetMapping("/{id}")
     public EntityModel<Concept> findOne(@PathVariable final Long id) {
         Concept concept = conceptsService.findOne(id);
-        return conceptAssembler.toModel(concept);
+        return EntityModel.of(concept,
+                linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
+                linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")
+        );
     }
 
     @GetMapping("/")
@@ -42,13 +51,29 @@ public class ConceptController {
         Page<Concept> conceptPage = conceptsService.findAll(page);
         List<Concept> conceptList = conceptPage.getContent();
 
+        int firstPage = 0;
         int lastPage = conceptPage.getTotalPages() - 1;
+        int prevPage = page == firstPage ? firstPage : page - 1;
+        int nextPage = page == lastPage ? lastPage : page + 1;
 
         if (page > lastPage)
             throw new ConceptNotFoundException("The requested page doesn't exists");
 
-        List<EntityModel<Concept>> conceptIterable = conceptAssembler.toModelWithPageAsRoot(conceptList,page);
-        Iterable<Link> linkIterable =  conceptAssembler.generatePageLinks(conceptPage, page);
+        List<EntityModel<Concept>> conceptIterable = conceptList
+                .stream()
+                .map(concept -> EntityModel.of(
+                        concept,
+                        linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
+                        linkTo(methodOn(ConceptController.class).findAll(page)).withRel("concepts")))
+                .toList();
+
+        Iterable<Link> linkIterable = List.of(
+                linkTo(methodOn(ConceptController.class).findAll(firstPage)).withRel("first"),
+                linkTo(methodOn(ConceptController.class).findAll(prevPage)).withRel("prev"),
+                linkTo(methodOn(ConceptController.class).findAll(page)).withSelfRel(),
+                linkTo(methodOn(ConceptController.class).findAll(nextPage)).withRel("next"),
+                linkTo(methodOn(ConceptController.class).findAll(lastPage)).withRel("last")
+        );
 
         return CollectionModel.of(
                 conceptIterable,
@@ -58,16 +83,14 @@ public class ConceptController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void updateOne(@PathVariable final Long id,@RequestBody final ConceptDTO conceptDTO){
-        conceptsService.updateOne(id,conceptDTO);
+    public void updateOne(@PathVariable final Long id, @RequestBody final ConceptDTO conceptDTO) {
+        conceptsService.updateOne(id, conceptDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void removeOne(@PathVariable final Long id){
+    public void removeOne(@PathVariable final Long id) {
         conceptsService.removeOne(id);
     }
-
-
 
 }

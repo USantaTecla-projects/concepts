@@ -5,6 +5,8 @@ import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.concept.model.Concept;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IAnswerService {
 
     /**
@@ -21,15 +23,14 @@ public interface IAnswerService {
      * @param id The id of the Answer to find.
      * @return The Answer if found, an Exception if not found.
      */
-    Answer findOne(final Long id);
+    Answer findOne(final Concept concept, final Long id);
 
     /**
      * Find all Answer by the given page number.
      *
-     * @param page The page number to look for.
-     * @return The page with the corresponding set of results.
+     * @return The list with the corresponding set of results.
      */
-    Page<Answer> findAll(int page);
+    List<Answer> findAll(final Concept concept);
 
     /**
      * Update an existing Answer, providing the id of the Answer to update and the new info.
@@ -37,12 +38,12 @@ public interface IAnswerService {
      * @param id        The id of the Answer to update.
      * @param answerDTO The new information to update the Answer.
      */
-    void updateOne(Concept concept, Long id, AnswerDTO answerDTO);
+    void updateOne(final Concept concept, final Long id, final AnswerDTO answerDTO);
 
     /**
      * Delete an Answer by a given id, if not found throws an Exception.
      *
      * @param id The id of the Answer to remove.
      */
-    void removeOne(Concept concept, Long id);
+    void removeOne(final Concept concept, final Long id);
 }

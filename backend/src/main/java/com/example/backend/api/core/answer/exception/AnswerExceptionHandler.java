@@ -1,6 +1,7 @@
 package com.example.backend.api.core.answer.exception;
 
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
+import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
@@ -16,22 +17,22 @@ import java.time.ZonedDateTime;
 public class AnswerExceptionHandler {
 
     @ExceptionHandler(value = {AnswerDTOBadRequestException.class})
-    public ResponseEntity<Object> handleAnswerDTOBadRequestException(AnswerDTOBadRequestException exception){
+    public ResponseEntity<Object> handleAnswerDTOBadRequestException(AnswerDTOBadRequestException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now());
 
-        return new ResponseEntity<>(exceptionDTO,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {AnswerNotFoundException.class})
-    public ResponseEntity<Object> handleAnswerNotFoundException(AnswerNotFoundException exception){
+    @ExceptionHandler(value = {AnswerNotFoundException.class, AnswerNotBelongToConceptException.class})
+    public ResponseEntity<Object> handleAnswerNotFoundException(AnswerNotFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.NOT_FOUND,
                 ZonedDateTime.now());
 
-        return new ResponseEntity<>(exceptionDTO,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_FOUND);
     }
 }

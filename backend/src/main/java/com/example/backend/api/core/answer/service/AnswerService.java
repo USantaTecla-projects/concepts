@@ -4,6 +4,7 @@ import com.example.backend.api.core.answer.AnswerRepository;
 import com.example.backend.api.core.answer.IAnswerService;
 import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
+import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.concept.ConceptRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,13 +22,19 @@ public class AnswerService implements IAnswerService {
     private final ConceptRepository conceptRepository;
     private final AnswerRepository answerRepository;
 
-    public AnswerService(ConceptRepository conceptRepository, AnswerRepository answerRepository) {
+    public AnswerService(
+            final ConceptRepository conceptRepository,
+            final AnswerRepository answerRepository
+    ) {
         this.conceptRepository = conceptRepository;
         this.answerRepository = answerRepository;
     }
 
     @Override
-    public Answer create(Concept concept, AnswerDTO answerDTO) {
+    public Answer create(
+            final Concept concept,
+            final AnswerDTO answerDTO
+    ) {
         String textFromDTO = getTextFromDTO(answerDTO.getText())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in DTO is mandatory"));
 
@@ -42,21 +50,30 @@ public class AnswerService implements IAnswerService {
     }
 
     @Override
-    public Answer findOne(Long id) {
+    public Answer findOne(
+            final Concept concept,
+            final Long id
+    ) {
 
-        return answerRepository.findById(id)
+        Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new AnswerNotFoundException("The answer with id = " + id + " has not been found"));
+
+        if (!concept.containsAnswer(answer))
+            throw new AnswerNotBelongToConceptException(
+                    "The answer with id = " + id + " doesn't belong to the concept with id = " + concept.getId()
+            );
+
+        return answer;
     }
 
     @Override
-    public Page<Answer> findAll(int page) {
-        int pageSize = 5;
-        return answerRepository.findAll(PageRequest.of(page, pageSize));
+    public List<Answer> findAll(final Concept concept) {
+        return concept.getAnswers();
     }
 
     @Override
     public void updateOne(Concept concept, Long id, AnswerDTO answerDTO) {
-        Answer answer = findOne(id);
+        Answer answer = findOne(concept, id);
 
         String textFromDTO = getTextFromDTO(answerDTO.getText())
                 .orElse(answer.getText());
@@ -72,7 +89,7 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public void removeOne(Concept concept, Long id) {
-        Answer answer = findOne(id);
+        Answer answer = findOne(concept, id);
         concept.removeAnswer(answer);
 
         conceptRepository.save(concept);

@@ -55,6 +55,16 @@ public class Concept {
         answers.remove(answer);
     }
 
+    /**
+     * Check if an Answer is in the list.
+     *
+     * @param answer The Answer to look for.
+     * @return True if is in the list, else false.
+     */
+    public boolean containsAnswer(Answer answer) {
+        return answers.contains(answer);
+    }
+
     public Long getId() {
         return id;
     }
