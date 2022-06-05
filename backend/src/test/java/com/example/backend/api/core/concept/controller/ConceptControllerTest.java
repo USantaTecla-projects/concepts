@@ -3,10 +3,9 @@ package com.example.backend.api.core.concept.controller;
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.concept.link.ConceptAssembler;
-import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -30,8 +29,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,9 +42,6 @@ class ConceptControllerTest {
 
     @MockBean
     private IConceptService conceptService;
-
-    @MockBean
-    private ConceptAssembler conceptAssembler;
 
     private final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
     private final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
@@ -64,35 +58,16 @@ class ConceptControllerTest {
     @BeforeEach
     void setUpMocks() {
         lenient().when(conceptService.create(conceptDTO1)).thenReturn(concept1);
+        lenient().when(conceptService.create(conceptDTO2)).thenReturn(concept2);
+        lenient().when(conceptService.create(conceptDTO3)).thenReturn(concept3);
 
         lenient().when(conceptService.findOne(1L)).thenReturn(concept1);
+        lenient().when(conceptService.findOne(2L)).thenReturn(concept2);
+        lenient().when(conceptService.findOne(3L)).thenReturn(concept3);
 
         lenient().when(conceptService.findAll(0)).thenReturn(conceptPage);
 
-        lenient().when(conceptAssembler.toModel(concept1)).thenReturn(
-                EntityModel.of(concept1,
-                        linkTo(methodOn(ConceptController.class).findOne(concept1.getId())).withSelfRel(),
-                        linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")
-                )
-        );
 
-        lenient().when(conceptAssembler.toModelWithPageAsRoot(conceptPage.getContent(), 0)).thenReturn(
-                conceptPage.getContent()
-                        .stream()
-                        .map(concept -> EntityModel.of(
-                                concept,
-                                linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
-                                linkTo(methodOn(ConceptController.class).findAll(0)).withRel("concepts")))
-                        .toList()
-        );
-
-        lenient().when(conceptAssembler.generatePageLinks(conceptPage, 0)).thenReturn(
-                List.of(linkTo(methodOn(ConceptController.class).findAll(0)).withRel("first"),
-                        linkTo(methodOn(ConceptController.class).findAll(0)).withRel("prev"),
-                        linkTo(methodOn(ConceptController.class).findAll(0)).withSelfRel(),
-                        linkTo(methodOn(ConceptController.class).findAll(0)).withRel("next"),
-                        linkTo(methodOn(ConceptController.class).findAll(0)).withRel("last"))
-        );
     }
 
     @Nested
