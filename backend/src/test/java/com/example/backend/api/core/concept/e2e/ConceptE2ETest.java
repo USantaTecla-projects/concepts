@@ -20,13 +20,13 @@ public class ConceptE2ETest {
 
     String BASE_URL = "/concepts/";
 
-    ConceptDTO conceptDTO1 = new ConceptDTO("Software", new LinkedList<>());
-    ConceptDTO conceptDTO2 = new ConceptDTO("Hardware", new LinkedList<>());
-    ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming", new LinkedList<>());
-    ConceptDTO conceptDTO4 = new ConceptDTO("Unix", new LinkedList<>());
-    ConceptDTO conceptDTO5 = new ConceptDTO("Haskell", new LinkedList<>());
+    ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+    ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
+    ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
+    ConceptDTO conceptDTO4 = new ConceptDTO("Unix");
+    ConceptDTO conceptDTO5 = new ConceptDTO("Haskell");
 
-    ConceptDTO wrongConceptDTO = new ConceptDTO("", new LinkedList<>());
+    ConceptDTO wrongConceptDTO = new ConceptDTO("");
 
     @BeforeAll
     static void setup() {

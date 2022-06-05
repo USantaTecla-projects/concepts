@@ -1,4 +1,4 @@
-package com.example.backend.api.core.concept.util;
+package com.example.backend.api.core.concept.link;
 
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.model.Concept;

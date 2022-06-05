@@ -1,8 +1,9 @@
 package com.example.backend.api.core.concept;
 
+import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
+import com.example.backend.api.core.concept.link.ConceptAssembler;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.concept.util.ConceptAssembler;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -10,7 +11,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -45,7 +45,7 @@ public class ConceptController {
         int lastPage = conceptPage.getTotalPages() - 1;
 
         if (page > lastPage)
-            throw new EntityNotFoundException("The requested page doesn't exists");
+            throw new ConceptNotFoundException("The requested page doesn't exists");
 
         List<EntityModel<Concept>> conceptIterable = conceptAssembler.toModelWithPageAsRoot(conceptList,page);
         Iterable<Link> linkIterable =  conceptAssembler.generatePageLinks(conceptPage, page);
@@ -61,6 +61,7 @@ public class ConceptController {
     public void updateOne(@PathVariable final Long id,@RequestBody final ConceptDTO conceptDTO){
         conceptsService.updateOne(id,conceptDTO);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void removeOne(@PathVariable final Long id){

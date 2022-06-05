@@ -5,7 +5,7 @@ import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.concept.util.ConceptAssembler;
+import com.example.backend.api.core.concept.link.ConceptAssembler;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,9 +49,9 @@ class ConceptControllerTest {
     @MockBean
     private ConceptAssembler conceptAssembler;
 
-    private final ConceptDTO conceptDTO1 = new ConceptDTO("Software", new LinkedList<>());
-    private final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware", new LinkedList<>());
-    private final ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming", new LinkedList<>());
+    private final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+    private final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
+    private final ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
 
     private final ConceptDTO wrongConceptDTO = new ConceptDTO();
 

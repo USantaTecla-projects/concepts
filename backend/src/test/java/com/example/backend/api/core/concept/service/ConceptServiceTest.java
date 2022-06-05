@@ -46,7 +46,7 @@ class ConceptServiceTest {
     private final Concept concept2 = new Concept(2L, "Hardware", new LinkedList<>());
     private final Concept concept3 = new Concept(3L, "Functional Programming", new LinkedList<>());
 
-    private final ConceptDTO conceptDTO1 = new ConceptDTO("Software", new LinkedList<>());
+    private final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
     private final ConceptDTO wrongConceptDTO = new ConceptDTO();
 
     private final Page<Concept> conceptPage = new PageImpl(List.of(concept1, concept2, concept3));

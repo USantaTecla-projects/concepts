@@ -33,6 +33,28 @@ public class Concept {
         this.answers = answers;
     }
 
+    public Concept(String text) {
+        this.text = text;
+    }
+
+    /**
+     * Add a new Answer to the list.
+     *
+     * @param answer The Answer to add.
+     */
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+    }
+
+    /**
+     * Remove an Answer from the list.
+     *
+     * @param answer The Answer to remove.
+     */
+    public void removeAnswer(Answer answer) {
+        answers.remove(answer);
+    }
+
     public Long getId() {
         return id;
     }
