@@ -11,22 +11,22 @@ import org.springframework.http.HttpStatus;
 import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 
 public class AnswerE2ETest {
 
-    int CONCEPT_ID = 1;
+    static int CONCEPT_ID = 1;
     String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/";
 
 
-    ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+    static ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+    ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
 
     AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
-    AnswerDTO conceptDTO2 = new AnswerDTO("Hardware answer", true);
-    AnswerDTO conceptDTO3 = new AnswerDTO("Functional Programming answer", false);
-    AnswerDTO conceptDTO4 = new AnswerDTO("Unix answer", false);
-    AnswerDTO conceptDTO5 = new AnswerDTO("Haskell answer", true);
+    AnswerDTO answerDTO2 = new AnswerDTO("Hardware answer", true);
+    AnswerDTO answerDTO3 = new AnswerDTO("Functional Programming answer", false);
+    AnswerDTO answerDTO4 = new AnswerDTO("Unix answer", false);
+    AnswerDTO answerDTO5 = new AnswerDTO("Haskell answer", true);
 
     AnswerDTO wrongAnswerDTO = new AnswerDTO("");
 
@@ -34,10 +34,6 @@ public class AnswerE2ETest {
     static void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
-    }
-
-    @BeforeEach
-    void createConceptToWorkWith(){
         CONCEPT_ID = createConcept(conceptDTO1).extract().path("id");
     }
 
@@ -76,6 +72,32 @@ public class AnswerE2ETest {
                     .body("message", res -> equalTo("Field text in DTO is mandatory"))
                     .body("httpStatus", res -> equalTo("BAD_REQUEST"));
         }
+
+        @Test
+        @DisplayName("(Create) Should create the Answer only in the specified Concept")
+        void createAnswerInTheCorrectConcept(){
+            int conceptId = createConcept(conceptDTO1).extract().path("id");
+            int answerId = createAnswer(answerDTO1,conceptId).extract().path("id");
+
+            // Check that the Answer is in the first Concept
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("conceptId", conceptId)
+            .when()
+                    .get("/concepts/{conceptId}")
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("answers._embedded.answerList[0].id", res -> is(answerId));
+
+            // Check that the Answer is not in the second Concept
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("conceptId", conceptId+999)
+            .when()
+                    .get("/concepts/{conceptId}")
+            .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
+        }
     }
 
     @Nested
@@ -83,9 +105,9 @@ public class AnswerE2ETest {
     class AnswerGet {
 
         @Test
-        @DisplayName("(FindOne) Should find a Concept with the given id")
+        @DisplayName("(FindOne) Should find an Answer with the given id")
         void findOneWhenExists() {
-            int id = createAnswer(answerDTO1).extract().path("id");
+            int id = createAnswer(answerDTO1,CONCEPT_ID).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -101,7 +123,7 @@ public class AnswerE2ETest {
         }
 
         @Test
-        @DisplayName("(FindOne) Should not find a Concept with the given id")
+        @DisplayName("(FindOne) Should not find an Answer with the given id")
         void findOneWhenNotExists() {
             int id = 999;
 
@@ -113,36 +135,149 @@ public class AnswerE2ETest {
             .then()
                     .statusCode(HttpStatus.NOT_FOUND.value());
         }
+
+        @Test
+        @DisplayName("(FindAll) Should find a List of Answers")
+        void findAllWhenExists(){
+            createAnswer(answerDTO1,CONCEPT_ID);
+            createAnswer(answerDTO2,CONCEPT_ID);
+            createAnswer(answerDTO3,CONCEPT_ID);
+
+            given()
+                    .accept(ContentType.JSON)
+            .when()
+                    .get(BASE_URL)
+            .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("_embedded.answerList.size()", greaterThanOrEqualTo(3));
+        }
+
+        @Test
+        @DisplayName("(FindAll) Should find an empty List of Answers")
+        void findAllWhenNotExists(){
+            int conceptId = createConcept(conceptDTO1).extract().path("id");
+
+            given()
+                    .accept(ContentType.JSON)
+            .when()
+                    .get("/concepts/" + conceptId + "/answers/")
+            .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("isEmpty()", is(true));
+
+        }
+
     }
 
     @Nested
     @DisplayName("PUT")
     class AnswerPut {
 
+        @Test
+        @DisplayName("(UpdateOne) Should update the Answer")
+        void updateWhenExists(){
+            int id = createAnswer(answerDTO1,CONCEPT_ID).extract().path("id");
+
+            // Check the initial Answer content
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("id", id)
+            .when()
+                    .get(BASE_URL + "{id}")
+                    .then()
+            .statusCode(HttpStatus.OK.value())
+                    .body("text", res -> equalTo(answerDTO1.getText()))
+                    .body("isCorrect", res -> equalTo(answerDTO1.getIsCorrect()));
+
+            // Update the Answer
+            given()
+                    .contentType("application/json")
+                    .pathParam("id", id)
+                    .body(answerDTO4)
+            .when()
+                    .put(BASE_URL + "{id}")
+            .then()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
+
+            // Check the updated Answer content
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("id", id)
+            .when()
+                    .get(BASE_URL + "{id}")
+            .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("text", res -> equalTo(answerDTO4.getText()))
+                    .body("isCorrect", res -> equalTo(answerDTO4.getIsCorrect()));
+        }
+
+        @Test
+        @DisplayName("(UpdateOne) Should throw an exception")
+        void updateWhenNotExists() {
+            int id = createConcept(conceptDTO1).extract().path("id");
+
+            given()
+                    .contentType("application/json")
+                    .pathParam("id", 9999)
+                    .body(answerDTO4)
+            .when()
+                    .put(BASE_URL + "{id}")
+            .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
+        }
     }
 
     @Nested
     @DisplayName("DELETE")
     class AnswerDelete {
+        @Test
+        @DisplayName("(Remove) Should delete the Answer")
+        void deleteWhenExits() {
+            int answerId = createAnswer(answerDTO1,CONCEPT_ID).extract().path("id");
 
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("answerId", answerId)
+            .when()
+                    .delete(BASE_URL + "{answerId}")
+            .then()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
+
+        }
+
+        @Test
+        @DisplayName("(Remove) Should throw an Exception")
+        void deleteWhenNotExits() {
+
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("answerId", 9999)
+            .when()
+                    .delete(BASE_URL + "{answerId}")
+            .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
+
+        }
     }
 
-    private ValidatableResponse createAnswer(AnswerDTO answerDTO) {
+    private ValidatableResponse createAnswer(AnswerDTO answerDTO,int conceptId) {
         return
                 given()
                         .contentType("application/json")
                         .body(answerDTO)
                 .when()
-                        .post(BASE_URL).then();
+                        .post("/concepts/" + conceptId + "/answers/")
+                .then();
     }
 
-    private ValidatableResponse createConcept(ConceptDTO conceptDTO) {
+    private static ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
                         .contentType("application/json")
                         .body(conceptDTO)
                 .when()
-                        .post("/concepts/").then();
+                        .post("/concepts/")
+                .then();
     }
 
 }

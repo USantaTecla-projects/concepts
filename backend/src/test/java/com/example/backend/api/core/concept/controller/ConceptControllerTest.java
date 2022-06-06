@@ -3,14 +3,17 @@ package com.example.backend.api.core.concept.controller;
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.dto.ConceptRestDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
+import com.example.backend.api.core.concept.util.ConceptAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.hamcrest.Matchers;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,15 +23,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +46,9 @@ class ConceptControllerTest {
     public static final String BASE_URL = "/concepts/";
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private ConceptAssembler conceptAssembler;
 
     @MockBean
     private IConceptService conceptService;
@@ -56,7 +66,8 @@ class ConceptControllerTest {
     private final Page<Concept> conceptPage = new PageImpl(List.of(concept1, concept2, concept3));
 
     @BeforeEach
-    void setUpMocks() {
+    void setUpConceptServiceMocks() {
+
         lenient().when(conceptService.create(conceptDTO1)).thenReturn(concept1);
         lenient().when(conceptService.create(conceptDTO2)).thenReturn(concept2);
         lenient().when(conceptService.create(conceptDTO3)).thenReturn(concept3);
@@ -67,8 +78,38 @@ class ConceptControllerTest {
 
         lenient().when(conceptService.findAll(0)).thenReturn(conceptPage);
 
+    }
+
+    @BeforeEach
+    void setUpConceptAssemblerMocks() {
+        lenient()
+                .when(conceptAssembler.toModel(concept1)).thenReturn(
+                        EntityModel.of(new ConceptRestDTO(concept1.getId(), concept1.getText()),
+                                linkTo(methodOn(ConceptController.class).findOne(concept1.getId())).withSelfRel(),
+                                linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")
+                        )
+                );
+
+        lenient()
+                .when(conceptAssembler.toCollectionModel(conceptPage.getContent())).thenReturn(
+                        CollectionModel.of(
+                                conceptPage.getContent()
+                                        .stream()
+                                        .map(concept -> EntityModel.of(new ConceptRestDTO(concept.getId(), concept.getText())))
+                                        .toList()
+                        )
+                );
+
+        lenient()
+                .when(conceptAssembler.toCollectionPageModel(
+                        conceptPage.getContent(),
+                        conceptPage.getTotalPages(),
+                        conceptPage.getNumber()
+                ))
+                .thenCallRealMethod();
 
     }
+
 
     @Nested
     @DisplayName("POST")
@@ -141,7 +182,7 @@ class ConceptControllerTest {
             mockMvc.perform(get(BASE_URL + "?page=0"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$._embedded").exists())
-                    .andExpect(jsonPath("$._embedded.conceptList.size()", Matchers.is(3)))
+                    .andExpect(jsonPath("$._embedded.conceptRestDTOList.size()", Matchers.is(3)))
                     .andExpect(jsonPath("$._links.first").exists())
                     .andExpect(jsonPath("$._links.prev").exists())
                     .andExpect(jsonPath("$._links.self").exists())
@@ -187,7 +228,7 @@ class ConceptControllerTest {
             String conceptJsonDTO = mapObjectToJson(conceptDTO1);
 
             doThrow(new ConceptNotFoundException("The concept with id = " + 99L + " has not been found"))
-                    .when(conceptService).updateOne(99L,conceptDTO1);
+                    .when(conceptService).updateOne(99L, conceptDTO1);
 
             mockMvc.perform(put(BASE_URL + "99")
                             .contentType(MediaType.APPLICATION_JSON)

@@ -1,5 +1,6 @@
 package com.example.backend.api.core.concept.e2e;
 
+import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -9,9 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.Collections;
-import java.util.LinkedList;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -27,6 +25,8 @@ public class ConceptE2ETest {
     ConceptDTO conceptDTO5 = new ConceptDTO("Haskell");
 
     ConceptDTO wrongConceptDTO = new ConceptDTO("");
+
+    AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
 
     @BeforeAll
     static void setup() {
@@ -50,7 +50,8 @@ public class ConceptE2ETest {
                     .statusCode(HttpStatus.CREATED.value())
                     .contentType(ContentType.JSON)
                     .body("text", res -> equalTo("Software"))
-                    .body("answers", res -> equalTo(Collections.emptyList()));
+                    .body("_links", res -> hasKey("self"))
+                    .body("_links", res -> hasKey("concepts"));
         }
 
         @Test
@@ -85,7 +86,6 @@ public class ConceptE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo("Software"))
-                    .body("answers", res -> equalTo(Collections.emptyList()))
                     .body("_links", res -> hasKey("self"))
                     .body("_links", res -> hasKey("concepts"));
         }
@@ -105,8 +105,24 @@ public class ConceptE2ETest {
         }
 
         @Test
+        @DisplayName("(FindOne) Should find the created Answer in the Concept")
+        void checkThatAnswerIsInConcept(){
+            int conceptId = createConcept(conceptDTO1).extract().path("id");
+            int answerId = createAnswer(answerDTO1,conceptId).extract().path("id");
+
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("conceptId", conceptId)
+            .when()
+                    .get(BASE_URL + "{conceptId}")
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("answers._embedded.answerList[0].id", res -> is(answerId));
+        }
+
+        @Test
         @DisplayName("(FindAll) Should find a Page of Concepts")
-        void findAllWithConceptsInDatabase() {
+        void findAllWhenExists() {
             createConcept(conceptDTO1);
             createConcept(conceptDTO2);
             createConcept(conceptDTO3);
@@ -119,8 +135,8 @@ public class ConceptE2ETest {
                     .get(BASE_URL + "?page=0")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("_embedded", res -> hasKey("conceptList"))
-                    .body("_embedded.conceptList.size()", res -> is(5))
+                    .body("_embedded", res -> hasKey("conceptRestDTOList"))
+                    .body("_embedded.conceptRestDTOList.size()", res -> is(5))
                     .body("_links", res -> hasKey("prev"))
                     .body("_links", res -> hasKey("next"));
         }
@@ -136,6 +152,17 @@ public class ConceptE2ETest {
         void updateWhenExists() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
+            // Check the initial Concept content
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("id", id)
+            .when()
+                    .get(BASE_URL + "{id}")
+            .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("text", res -> equalTo(conceptDTO1.getText()));
+
+            // Update the concept
             given()
                     .contentType("application/json")
                     .pathParam("id", id)
@@ -144,6 +171,16 @@ public class ConceptE2ETest {
                     .put(BASE_URL + "{id}")
             .then()
                     .statusCode(HttpStatus.NO_CONTENT.value());
+
+            // Check the updated Concept content
+            given()
+                    .accept(ContentType.JSON)
+                    .pathParam("id", id)
+            .when()
+                    .get(BASE_URL + "{id}")
+            .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("text", res -> equalTo(conceptDTO2.getText()));
         }
 
         @Test
@@ -153,7 +190,7 @@ public class ConceptE2ETest {
 
             given()
                     .contentType("application/json")
-                    .pathParam("id", id + 9874)
+                    .pathParam("id", id + 9999)
                     .body(conceptDTO2)
             .when()
                     .put(BASE_URL + "{id}")
@@ -166,7 +203,7 @@ public class ConceptE2ETest {
     @DisplayName("DELETE")
     class ConceptDelete {
         @Test
-        @DisplayName("(Remove) Should delete the concept")
+        @DisplayName("(Remove) Should delete the Concept")
         void deleteWhenExits() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
@@ -181,7 +218,7 @@ public class ConceptE2ETest {
         }
 
         @Test
-        @DisplayName("(Remove) Should throw an exception")
+        @DisplayName("(Remove) Should throw an Exception")
         void deleteWhenNotExits() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
@@ -196,13 +233,23 @@ public class ConceptE2ETest {
         }
     }
 
-
     private ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
                         .contentType("application/json")
                         .body(conceptDTO)
                 .when()
-                        .post(BASE_URL).then();
+                        .post(BASE_URL)
+                .then();
+    }
+
+    private ValidatableResponse createAnswer(AnswerDTO answerDTO,int conceptId) {
+        return
+                given()
+                        .contentType("application/json")
+                        .body(answerDTO)
+                .when()
+                        .post("/concepts/" + conceptId + "/answers/")
+                .then();
     }
 }
