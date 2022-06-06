@@ -233,6 +233,12 @@ public class ConceptE2ETest {
         }
     }
 
+    /**
+     * Create a Concept.
+     *
+     * @param conceptDTO The Concept to be created.
+     * @return The response body.
+     */
     private ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
@@ -243,6 +249,13 @@ public class ConceptE2ETest {
                 .then();
     }
 
+    /**
+     * Create an Answer in a Concept by its id.
+     *
+     * @param answerDTO The Answer to be created.
+     * @param conceptId The Concept id where the Answer should be created.
+     * @return The response body.
+     */
     private ValidatableResponse createAnswer(AnswerDTO answerDTO,int conceptId) {
         return
                 given()
