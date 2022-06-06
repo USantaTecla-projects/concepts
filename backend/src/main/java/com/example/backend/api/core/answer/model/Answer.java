@@ -29,6 +29,13 @@ public class Answer {
     public Answer() {
     }
 
+    public Answer(Long id, String text, Boolean isCorrect, Long conceptId) {
+        this.id = id;
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.conceptId = conceptId;
+    }
+
     public Answer(String text, Boolean isCorrect, Long conceptId) {
         this.text = text;
         this.isCorrect = isCorrect;

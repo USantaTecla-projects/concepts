@@ -1,4 +1,4 @@
-package com.example.backend.api.core.concept.controller;
+package com.example.backend.api.core.test.controller;
 
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.IConceptService;
@@ -6,14 +6,12 @@ import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.dto.ConceptRestDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
-import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.concept.util.ConceptAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.hamcrest.Matchers;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,17 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import static com.example.backend.api.core.data.ConceptTestDataConstants.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -52,18 +45,6 @@ class ConceptControllerTest {
 
     @MockBean
     private IConceptService conceptService;
-
-    private final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
-    private final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
-    private final ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
-
-    private final ConceptDTO wrongConceptDTO = new ConceptDTO();
-
-    private final Concept concept1 = new Concept(1L, "Software", new LinkedList<>());
-    private final Concept concept2 = new Concept(2L, "Hardware", new LinkedList<>());
-    private final Concept concept3 = new Concept(3L, "Functional Programming", new LinkedList<>());
-
-    private final Page<Concept> conceptPage = new PageImpl(List.of(concept1, concept2, concept3));
 
     @BeforeEach
     void setUpConceptServiceMocks() {
