@@ -10,8 +10,15 @@ public class AnswerDTO {
 
     private Boolean isCorrect;
 
-    private Integer conceptId;
+    public AnswerDTO() {
+    }
 
-    private Justification justification;
+    public AnswerDTO(String text, Boolean isCorrect) {
+        this.text = text;
+        this.isCorrect = isCorrect;
+    }
 
+    public AnswerDTO(String text) {
+        this.text = text;
+    }
 }

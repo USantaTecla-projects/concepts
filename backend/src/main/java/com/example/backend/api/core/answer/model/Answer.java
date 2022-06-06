@@ -14,14 +14,25 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
     private String text;
 
+    @Column
     private Boolean isCorrect;
+
+    @Column
+    private Long conceptId;
 
     @OneToOne
     private Justification justification;
 
     public Answer() {
+    }
+
+    public Answer(String text, Boolean isCorrect, Long conceptId) {
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.conceptId = conceptId;
     }
 
     public Answer(String text, Boolean isCorrect) {
@@ -51,6 +62,14 @@ public class Answer {
 
     public void setIsCorrect(Boolean correct) {
         isCorrect = correct;
+    }
+
+    public Long getConceptId() {
+        return conceptId;
+    }
+
+    public void setConceptId(Long conceptId) {
+        this.conceptId = conceptId;
     }
 
     public Justification getJustification() {

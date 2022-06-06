@@ -39,7 +39,7 @@ public class ConceptE2ETest {
     class ConceptPost {
         @Test
         @DisplayName("(Create) Should create a Concept giving a basic DTO")
-        void createWithBasicDTO() {
+        void createWithCorrectDTO() {
 
             given()
                     .contentType("application/json")
@@ -74,7 +74,7 @@ public class ConceptE2ETest {
     class ConceptGet {
         @Test
         @DisplayName("(FindOne) Should find a Concept with the given id")
-        void findOneWithAnExistingId() {
+        void findOneWhenExists() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
             given()
@@ -92,7 +92,7 @@ public class ConceptE2ETest {
 
         @Test
         @DisplayName("(FindOne) Should not find a Concept with the given id")
-        void findOneWithANonExistingId() {
+        void findOneWhenNotExists() {
             int id = 999;
 
             given()
@@ -133,7 +133,7 @@ public class ConceptE2ETest {
     class ConceptPut {
         @Test
         @DisplayName("(UpdateOne) Should update the concept")
-        void updateWhenExists(){
+        void updateWhenExists() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
             given()
@@ -148,12 +148,12 @@ public class ConceptE2ETest {
 
         @Test
         @DisplayName("(UpdateOne) Should throw an exception")
-        void updateWhenNotExists(){
+        void updateWhenNotExists() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
             given()
                     .contentType("application/json")
-                    .pathParam("id", id+9874)
+                    .pathParam("id", id + 9874)
                     .body(conceptDTO2)
             .when()
                     .put(BASE_URL + "{id}")
@@ -161,12 +161,13 @@ public class ConceptE2ETest {
                     .statusCode(HttpStatus.NOT_FOUND.value());
         }
     }
+
     @Nested
     @DisplayName("DELETE")
-    class ConceptDelete{
+    class ConceptDelete {
         @Test
         @DisplayName("(Remove) Should delete the concept")
-        void deleteWhenExits(){
+        void deleteWhenExits() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
             given()
@@ -181,15 +182,15 @@ public class ConceptE2ETest {
 
         @Test
         @DisplayName("(Remove) Should throw an exception")
-        void deleteWhenNotExits(){
+        void deleteWhenNotExits() {
             int id = createConcept(conceptDTO1).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
-                    .pathParam("id", id+9854)
-                .when()
+                    .pathParam("id", id + 9854)
+            .when()
                     .delete(BASE_URL + "{id}")
-                .then()
+            .then()
                     .statusCode(HttpStatus.NOT_FOUND.value());
 
         }
@@ -197,10 +198,11 @@ public class ConceptE2ETest {
 
 
     private ValidatableResponse createConcept(ConceptDTO conceptDTO) {
-        return given()
-                .contentType("application/json")
-                .body(conceptDTO)
+        return
+                given()
+                        .contentType("application/json")
+                        .body(conceptDTO)
                 .when()
-                .post(BASE_URL).then();
+                        .post(BASE_URL).then();
     }
 }

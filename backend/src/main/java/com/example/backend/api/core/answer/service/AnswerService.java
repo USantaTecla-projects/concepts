@@ -41,7 +41,7 @@ public class AnswerService implements IAnswerService {
         Boolean isCorrectFromDTO = getIsCorrectFromDTO(answerDTO.getIsCorrect())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in DTO is mandatory"));
 
-        Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO));
+        Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO,concept.getId()));
 
         concept.addAnswer(answer);
         conceptRepository.save(concept);
