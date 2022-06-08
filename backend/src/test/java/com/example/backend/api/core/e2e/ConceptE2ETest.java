@@ -1,4 +1,4 @@
-package com.example.backend.api.core.test.e2e;
+package com.example.backend.api.core.e2e;
 
 import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
@@ -16,17 +16,7 @@ import static org.hamcrest.Matchers.*;
 
 public class ConceptE2ETest {
 
-    String BASE_URL = "/concepts/";
-
-    ConceptDTO conceptDTO1 = new ConceptDTO("Software");
-    ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
-    ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
-    ConceptDTO conceptDTO4 = new ConceptDTO("Unix");
-    ConceptDTO conceptDTO5 = new ConceptDTO("Haskell");
-
-    ConceptDTO wrongConceptDTO = new ConceptDTO("");
-
-    AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+    final String BASE_URL = "/concepts/";
 
     @BeforeAll
     static void setup() {
@@ -40,10 +30,11 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(Create) Should create a Concept giving a basic DTO")
         void createWithCorrectDTO() {
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
 
             given()
                     .contentType("application/json")
-                    .body(conceptDTO1)
+                    .body(conceptDTO)
             .when()
                     .post(BASE_URL)
             .then()
@@ -57,6 +48,8 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(Create) Should not create a Concept giving a wrong DTO")
         void createWithWrongDTO() {
+            final ConceptDTO wrongConceptDTO = new ConceptDTO();
+
             given()
                     .contentType("application/json")
                     .body(wrongConceptDTO)
@@ -76,7 +69,9 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(FindOne) Should find a Concept with the given id")
         void findOneWhenExists() {
-            int id = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+
+            final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -93,7 +88,7 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(FindOne) Should not find a Concept with the given id")
         void findOneWhenNotExists() {
-            int id = 999;
+            final int id = 999;
 
             given()
                     .accept(ContentType.JSON)
@@ -107,15 +102,18 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(FindOne) Should find the created Answer in the Concept")
         void checkThatAnswerIsInConcept(){
-            int conceptId = createConcept(conceptDTO1).extract().path("id");
-            int answerId = createAnswer(answerDTO1,conceptId).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+
+            final int conceptId = createConcept(conceptDTO).extract().path("id");
+            final int answerId = createAnswer(answerDTO,conceptId).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
                     .pathParam("conceptId", conceptId)
             .when()
                     .get(BASE_URL + "{conceptId}")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("answers._embedded.answerList[0].id", res -> is(answerId));
         }
@@ -123,6 +121,12 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(FindAll) Should find a Page of Concepts")
         void findAllWhenExists() {
+            final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+            final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
+            final ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
+            final ConceptDTO conceptDTO4 = new ConceptDTO("Unix");
+            final ConceptDTO conceptDTO5 = new ConceptDTO("Haskell");
+
             createConcept(conceptDTO1);
             createConcept(conceptDTO2);
             createConcept(conceptDTO3);
@@ -150,7 +154,10 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(UpdateOne) Should update the concept")
         void updateWhenExists() {
-            int id = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+            final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
+
+            final int id = createConcept(conceptDTO1).extract().path("id");
 
             // Check the initial Concept content
             given()
@@ -186,7 +193,10 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(UpdateOne) Should throw an exception")
         void updateWhenNotExists() {
-            int id = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
+
+            final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .contentType("application/json")
@@ -205,7 +215,9 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(Remove) Should delete the Concept")
         void deleteWhenExits() {
-            int id = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+
+            final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -220,7 +232,9 @@ public class ConceptE2ETest {
         @Test
         @DisplayName("(Remove) Should throw an Exception")
         void deleteWhenNotExits() {
-            int id = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+
+            final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)

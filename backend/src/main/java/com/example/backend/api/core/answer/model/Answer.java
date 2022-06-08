@@ -86,4 +86,15 @@ public class Answer {
     public void setJustification(Justification justification) {
         this.justification = justification;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", conceptId=" + conceptId +
+                ", justification=" + justification +
+                '}';
+    }
 }

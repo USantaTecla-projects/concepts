@@ -1,4 +1,4 @@
-package com.example.backend.api.core.test.e2e;
+package com.example.backend.api.core.e2e;
 
 import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.concept.dto.ConceptDTO;
@@ -11,16 +11,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static com.example.backend.api.core.data.AnswerTestDataConstants.*;
-import static com.example.backend.api.core.data.ConceptTestDataConstants.conceptDTO1;
-import static com.example.backend.api.core.data.ConceptTestDataConstants.conceptDTO2;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class AnswerE2ETest {
 
-    static int CONCEPT_ID = 1;
-    String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/";
+    public static int CONCEPT_ID = 1;
+    public final String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/";
 
 
 
@@ -28,7 +25,7 @@ public class AnswerE2ETest {
     static void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
-        CONCEPT_ID = createConcept(conceptDTO1).extract().path("id");
+        CONCEPT_ID = createConcept(new ConceptDTO("Software")).extract().path("id");
     }
 
     @Nested
@@ -36,12 +33,13 @@ public class AnswerE2ETest {
     class AnswerPost {
 
         @Test
-        @DisplayName("(Create) Should create an Answer giving a basic DTO")
+        @DisplayName("(Create) Should create an answer if the DTO is correct")
         void createWithCorrectDTO() {
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
             given()
                     .contentType("application/json")
-                    .body(answerDTO1)
+                    .body(answerDTO)
             .when()
                     .post(BASE_URL)
             .then()
@@ -52,12 +50,13 @@ public class AnswerE2ETest {
         }
 
         @Test
-        @DisplayName("(Create) Should not create an Answer giving a wrong DTO")
+        @DisplayName("(Create) Should not create an Answer if the DTO is malformed")
         void createWithWrongDTO() {
+            final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
 
             given()
                     .contentType("application/json")
-                    .body(wrongAnswerDTO1)
+                    .body(wrongAnswerDTO)
             .when()
                     .post(BASE_URL)
             .then()
@@ -70,8 +69,11 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Create) Should create the Answer only in the specified Concept")
         void createAnswerInTheCorrectConcept() {
-            int conceptId = createConcept(conceptDTO2).extract().path("id");
-            int answerId = createAnswer(answerDTO1, conceptId).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Hardware");
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+
+            final int conceptId = createConcept(conceptDTO).extract().path("id");
+            final int answerId = createAnswer(answerDTO, conceptId).extract().path("id");
 
             // Check that the Answer is in the first Concept
             given()
@@ -101,7 +103,9 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindOne) Should find an Answer with the given id")
         void findOneWhenExists() {
-            int id = createAnswer(answerDTO1, CONCEPT_ID).extract().path("id");
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+
+            final int id = createAnswer(answerDTO, CONCEPT_ID).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -119,7 +123,7 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindOne) Should not find an Answer with the given id")
         void findOneWhenNotExists() {
-            int id = 999;
+            final int id = 999;
 
             given()
                     .accept(ContentType.JSON)
@@ -133,6 +137,12 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindAll) Should find a List of Answers")
         void findAllWhenExists() {
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+            final AnswerDTO answerDTO2 = new AnswerDTO("Hardware answer", true);
+            final AnswerDTO answerDTO3 = new AnswerDTO("Functional Programming answer", false);
+            final AnswerDTO answerDTO4 = new AnswerDTO(" answer", false);
+            final AnswerDTO answerDTO5 = new AnswerDTO("Haskell answer", true);
+
             createAnswer(answerDTO1, CONCEPT_ID);
             createAnswer(answerDTO2, CONCEPT_ID);
             createAnswer(answerDTO3, CONCEPT_ID);
@@ -151,7 +161,9 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindAll) Should find an empty List of Answers")
         void findAllWhenNotExists() {
-            int conceptId = createConcept(conceptDTO1).extract().path("id");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+
+            final int conceptId = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -172,7 +184,11 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(UpdateOne) Should update the Answer")
         void updateWhenExists() {
-            int id = createAnswer(answerDTO1, CONCEPT_ID).extract().path("id");
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+            final AnswerDTO answerDTO2 = new AnswerDTO("Hardware answer", true);
+
+
+            final int id = createAnswer(answerDTO1, CONCEPT_ID).extract().path("id");
 
             // Check the initial Answer content
             given()
@@ -189,7 +205,7 @@ public class AnswerE2ETest {
             given()
                     .contentType("application/json")
                     .pathParam("id", id)
-                    .body(answerDTO4)
+                    .body(answerDTO2)
             .when()
                     .put(BASE_URL + "{id}")
             .then()
@@ -203,19 +219,22 @@ public class AnswerE2ETest {
                     .get(BASE_URL + "{id}")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("text", res -> equalTo(answerDTO4.getText()))
-                    .body("isCorrect", res -> equalTo(answerDTO4.getIsCorrect()));
+                    .body("text", res -> equalTo(answerDTO2.getText()))
+                    .body("isCorrect", res -> equalTo(answerDTO2.getIsCorrect()));
         }
 
         @Test
         @DisplayName("(UpdateOne) Should throw an exception")
         void updateWhenNotExists() {
+            final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+
             createConcept(conceptDTO1).extract().path("id");
 
             given()
                     .contentType("application/json")
                     .pathParam("id", 9999)
-                    .body(answerDTO4)
+                    .body(answerDTO1)
             .when()
                     .put(BASE_URL + "{id}")
             .then()
@@ -229,7 +248,9 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Remove) Should delete the Answer")
         void deleteWhenExits() {
-            int answerId = createAnswer(answerDTO1, CONCEPT_ID).extract().path("id");
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+
+            final int answerId = createAnswer(answerDTO, CONCEPT_ID).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -244,7 +265,6 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Remove) Should throw an Exception")
         void deleteWhenNotExits() {
-
             given()
                     .accept(ContentType.JSON)
                     .pathParam("answerId", 9999)

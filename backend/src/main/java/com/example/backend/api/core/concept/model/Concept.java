@@ -4,6 +4,7 @@ import com.example.backend.api.core.answer.model.Answer;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Concept {

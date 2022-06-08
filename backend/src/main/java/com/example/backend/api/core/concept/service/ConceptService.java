@@ -28,7 +28,7 @@ public class ConceptService implements IConceptService {
     @Override
     public Concept create(final ConceptDTO conceptDTO) {
         String textFromDTO = getTextFromDTO(conceptDTO.getText())
-                .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in DTO is mandatory"));
+                .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in Concept DTO is mandatory"));
 
         return conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
     }

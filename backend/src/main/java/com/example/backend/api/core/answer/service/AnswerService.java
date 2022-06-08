@@ -9,8 +9,6 @@ import com.example.backend.api.core.answer.exception.model.AnswerNotFoundExcepti
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.concept.ConceptRepository;
 import com.example.backend.api.core.concept.model.Concept;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,10 +34,10 @@ public class AnswerService implements IAnswerService {
             final AnswerDTO answerDTO
     ) {
         String textFromDTO = getTextFromDTO(answerDTO.getText())
-                .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in DTO is mandatory"));
+                .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in Answer DTO is mandatory"));
 
         Boolean isCorrectFromDTO = getIsCorrectFromDTO(answerDTO.getIsCorrect())
-                .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in DTO is mandatory"));
+                .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in Answer DTO is mandatory"));
 
         Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO,concept.getId()));
 
@@ -68,7 +66,10 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public List<Answer> findAll(final Concept concept) {
-        return concept.getAnswers();
+        return Optional.ofNullable(concept.getAnswers())
+                .orElseThrow(() -> new AnswerNotFoundException(
+                        "The concept with id = " + concept.getId() + " has no answers"
+                ));
     }
 
     @Override
