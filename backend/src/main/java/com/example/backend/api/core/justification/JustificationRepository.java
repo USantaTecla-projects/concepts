@@ -1,7 +1,6 @@
 package com.example.backend.api.core.justification;
 
-import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.models.Justification;
+import com.example.backend.api.core.justification.model.Justification;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

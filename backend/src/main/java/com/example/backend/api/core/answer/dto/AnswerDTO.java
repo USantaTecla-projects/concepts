@@ -1,7 +1,8 @@
 package com.example.backend.api.core.answer.dto;
 
-import com.example.backend.api.core.justification.models.Justification;
 import lombok.Data;
+
+import java.util.Optional;
 
 @Data
 public class AnswerDTO {
@@ -20,5 +21,16 @@ public class AnswerDTO {
 
     public AnswerDTO(String text) {
         this.text = text;
+    }
+
+    public Optional<String> getTextOptional(final String text) {
+        return Optional
+                .ofNullable(text)
+                .filter(t -> !t.isEmpty());
+    }
+
+    public Optional<Boolean> getIsCorrectOptional(final Boolean isCorrect) {
+        return Optional
+                .ofNullable(isCorrect);
     }
 }

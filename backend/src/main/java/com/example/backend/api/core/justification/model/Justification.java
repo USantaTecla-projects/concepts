@@ -1,11 +1,11 @@
-package com.example.backend.api.core.answer.model;
+package com.example.backend.api.core.justification.model;
 
-import com.example.backend.api.core.justification.model.Justification;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
-public class Answer {
+public class Justification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,31 +18,25 @@ public class Answer {
     private Boolean isCorrect;
 
     @Column
+    private String error;
+
+    @Column
     private Long conceptId;
 
-    @OneToOne
-    private Justification justification;
+    @Column
+    private Long answerId;
 
-    public Answer() {
-    }
-
-    public Answer(Long id, String text, Boolean isCorrect, Long conceptId) {
-        this.id = id;
+    public Justification(String text, Boolean isCorrect, String error, Long conceptId, Long answerId) {
         this.text = text;
         this.isCorrect = isCorrect;
+        this.error = error;
         this.conceptId = conceptId;
+        this.answerId = answerId;
     }
 
-    public Answer(String text, Boolean isCorrect, Long conceptId) {
-        this.text = text;
-        this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
+    public Justification() {
     }
 
-    public Answer(String text, Boolean isCorrect) {
-        this.text = text;
-        this.isCorrect = isCorrect;
-    }
 
     public Long getId() {
         return id;
@@ -68,6 +62,14 @@ public class Answer {
         isCorrect = correct;
     }
 
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public Long getConceptId() {
         return conceptId;
     }
@@ -76,11 +78,11 @@ public class Answer {
         this.conceptId = conceptId;
     }
 
-    public Justification getJustification() {
-        return justification;
+    public Long getAnswerId() {
+        return answerId;
     }
 
-    public void setJustification(Justification justification) {
-        this.justification = justification;
+    public void setAnswerId(Long answerId) {
+        this.answerId = answerId;
     }
 }

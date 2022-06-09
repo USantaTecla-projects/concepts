@@ -31,15 +31,16 @@ public class AnswerService implements IAnswerService {
     @Override
     public Answer create(
             final Concept concept,
-            final AnswerDTO answerDTO
-    ) {
-        String textFromDTO = getTextFromDTO(answerDTO.getText())
+            final AnswerDTO answerDTO) {
+        String textFromDTO = answerDTO
+                .getTextOptional(answerDTO.getText())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in Answer DTO is mandatory"));
 
-        Boolean isCorrectFromDTO = getIsCorrectFromDTO(answerDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = answerDTO
+                .getIsCorrectOptional(answerDTO.getIsCorrect())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in Answer DTO is mandatory"));
 
-        Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO,concept.getId()));
+        Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO, concept.getId()));
 
         concept.addAnswer(answer);
         conceptRepository.save(concept);
@@ -50,10 +51,10 @@ public class AnswerService implements IAnswerService {
     @Override
     public Answer findOne(
             final Concept concept,
-            final Long id
-    ) {
+            final Long id) {
 
-        Answer answer = answerRepository.findById(id)
+        Answer answer = answerRepository
+                .findById(id)
                 .orElseThrow(() -> new AnswerNotFoundException("The answer with id = " + id + " has not been found"));
 
         if (!concept.containsAnswer(answer))
@@ -66,30 +67,38 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public List<Answer> findAll(final Concept concept) {
-        return Optional.ofNullable(concept.getAnswers())
+        return Optional
+                .ofNullable(concept.getAnswers())
                 .orElseThrow(() -> new AnswerNotFoundException(
                         "The concept with id = " + concept.getId() + " has no answers"
                 ));
     }
 
     @Override
-    public void updateOne(Concept concept, Long id, AnswerDTO answerDTO) {
+    public void updateOne(
+            final Concept concept,
+            final Long id,
+            final AnswerDTO answerDTO) {
         Answer answer = findOne(concept, id);
 
-        String textFromDTO = getTextFromDTO(answerDTO.getText())
+        String textFromDTO = answerDTO
+                .getTextOptional(answerDTO.getText())
                 .orElse(answer.getText());
 
-        Boolean isCorrectFromDTO = getIsCorrectFromDTO(answerDTO.getIsCorrect())
-                .orElse(answer.getIsCorrect());
+        Boolean isCorrectFromDTO = answerDTO
+                .getIsCorrectOptional(answerDTO.getIsCorrect())
+                .orElse(answer.getCorrect());
 
         answer.setText(textFromDTO);
-        answer.setIsCorrect(isCorrectFromDTO);
+        answer.setCorrect(isCorrectFromDTO);
 
         answerRepository.save(answer);
     }
 
     @Override
-    public void removeOne(Concept concept, Long id) {
+    public void removeOne(
+            final Concept concept,
+            final Long id) {
         Answer answer = findOne(concept, id);
         concept.removeAnswer(answer);
 
@@ -97,27 +106,5 @@ public class AnswerService implements IAnswerService {
         answerRepository.delete(answer);
     }
 
-    /**
-     * Get the text from DTO if exists. If not, throw an Exception.
-     *
-     * @param text The text in the DTO.
-     * @return The text of the DTO.
-     */
-    private Optional<String> getTextFromDTO(final String text) {
-        return Optional
-                .ofNullable(text)
-                .filter(t -> !t.isEmpty());
-    }
-
-    /**
-     * Get the isCorrect param from DTO if exists. If not, throw an Exception.
-     *
-     * @param isCorrect Tells if the answer is correct in the DTO.
-     * @return The isCorrect param of the DTO.
-     */
-    private Optional<Boolean> getIsCorrectFromDTO(final Boolean isCorrect) {
-        return Optional
-                .ofNullable(isCorrect);
-    }
 
 }

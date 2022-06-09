@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class ConceptService implements IConceptService {
@@ -27,7 +26,8 @@ public class ConceptService implements IConceptService {
 
     @Override
     public Concept create(final ConceptDTO conceptDTO) {
-        String textFromDTO = getTextFromDTO(conceptDTO.getText())
+        String textFromDTO = conceptDTO
+                .getTextOptional(conceptDTO.getText())
                 .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in Concept DTO is mandatory"));
 
         return conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
@@ -48,7 +48,8 @@ public class ConceptService implements IConceptService {
     @Override
     public void updateOne(Long id, ConceptDTO conceptDTO) {
         Concept concept = findOne(id);
-        String textFromDTO = getTextFromDTO(conceptDTO.getText())
+        String textFromDTO = conceptDTO
+                .getTextOptional(conceptDTO.getText())
                 .orElse(concept.getText());
 
         concept.setText(textFromDTO);
@@ -61,17 +62,4 @@ public class ConceptService implements IConceptService {
         Concept concept = findOne(id);
         conceptRepository.delete(concept);
     }
-
-    /**
-     * Get the text from DTO if exists. If not, throw an Exception.
-     *
-     * @param text The text in the DTO.
-     * @return The text of the DTO.
-     */
-    private Optional<String> getTextFromDTO(final String text) {
-        return Optional
-                .ofNullable(text)
-                .filter(t -> !t.isEmpty());
-    }
-
 }
