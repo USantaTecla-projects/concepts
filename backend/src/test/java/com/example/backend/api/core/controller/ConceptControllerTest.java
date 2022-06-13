@@ -226,7 +226,7 @@ class ConceptControllerTest {
     @DisplayName("DELETE")
     class ConceptDelete {
         @Test
-        @DisplayName("(RemoveOne) Should get 204 deleting a Concept")
+        @DisplayName("(RemoveOne) Should get 204 if the concept exists")
         void deleteWhenExists() throws Exception {
             final long conceptId = 1L;
 
@@ -235,7 +235,7 @@ class ConceptControllerTest {
         }
 
         @Test
-        @DisplayName("(RemoveOne) Should get 404 deleting a Concept")
+        @DisplayName("(RemoveOne) Should get 404 if the concept does not exists")
         void deleteWhenNotExists() throws Exception {
             final long wrongConceptId = 99L;
 

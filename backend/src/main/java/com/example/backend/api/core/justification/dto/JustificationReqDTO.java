@@ -1,7 +1,14 @@
 package com.example.backend.api.core.justification.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Optional;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class JustificationReqDTO {
 
     private String text;
@@ -25,30 +32,5 @@ public class JustificationReqDTO {
 
     public Optional<String> getErrorOptional(final String error) {
         return getTextOptional(error);
-    }
-
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Boolean getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(Boolean isCorrect) {
-        this.isCorrect = isCorrect;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
     }
 }

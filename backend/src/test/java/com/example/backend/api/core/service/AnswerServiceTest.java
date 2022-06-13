@@ -49,8 +49,7 @@ public class AnswerServiceTest {
             final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
             final Answer answer = new Answer(2L, "Software answer", true, 1L);
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
-
-
+            
             when(answerRepository.save(any(Answer.class)))
                     .thenReturn(answer);
 

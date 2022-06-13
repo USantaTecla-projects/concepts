@@ -11,7 +11,6 @@ import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.answer.util.AnswerAssembler;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.util.JustificationAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -45,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AnswerControllerTest {
 
     public final static long CONCEPT_ID = 1L;
+    public final static long ANSWER_ID = 2L;
     public final String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/";
 
     @Autowired
@@ -54,14 +54,10 @@ public class AnswerControllerTest {
     private AnswerAssembler answerAssembler;
 
     @MockBean
-    private JustificationAssembler justificationAssembler;
-
-    @MockBean
     private IAnswerService answerService;
 
     @MockBean
     private IConceptService conceptService;
-
 
     @Nested
     @DisplayName("POST")
@@ -70,7 +66,7 @@ public class AnswerControllerTest {
         @DisplayName("(Create) Should get 201 if the DTO is correct")
         void createWithCorrectDTO() throws Exception {
             final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID, Collections.emptyList());
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, Collections.emptyList());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -92,9 +88,9 @@ public class AnswerControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(answerJsonDTO))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("text", Matchers.is("Software answer")))
+                    .andExpect(jsonPath("text", Matchers.is(answer.getText())))
                     .andExpect(jsonPath("id").exists())
-                    .andExpect(jsonPath("isCorrect", Matchers.is(true)))
+                    .andExpect(jsonPath("isCorrect", Matchers.is(answer.getCorrect())))
                     .andExpect(jsonPath("_links.self").exists())
                     .andExpect(jsonPath("_links.answers").exists());
         }
@@ -103,7 +99,7 @@ public class AnswerControllerTest {
         @DisplayName("Create) Should get 400 if the DTO is malformed")
         void createWithWrongDTO() throws Exception {
             final AnswerReqDTO wrongConceptDTO = new AnswerReqDTO();
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -127,8 +123,7 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(FindOne) Should get 200 if the answer exists on the concept answers list")
         void findOneWhenExists() throws Exception {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -144,13 +139,6 @@ public class AnswerControllerTest {
                                     linkTo(methodOn(AnswerController.class).findOne(answer.getConceptId(), answer.getId())).withSelfRel(),
                                     linkTo(methodOn(AnswerController.class).findAll(answer.getConceptId())).withRel("answers")));
 
-
-            final String conceptJsonDTO = mapObjectToJson(answerReqDTO);
-
-            mockMvc.perform(post(BASE_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(conceptJsonDTO));
-
             mockMvc.perform(get(BASE_URL + answer.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("id").exists())
@@ -162,9 +150,9 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(FindOne) Should get 404 if the given id does not match in the database")
         void findOneWhenNotExists() throws Exception {
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
-            final long wrongAnswerId = 99;
+            final long wrongAnswerId = 99L;
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
@@ -180,7 +168,7 @@ public class AnswerControllerTest {
         @DisplayName("(FindOne) Should get 404 if the given id does not exists on the concept answers list")
         void findOneWhenNotBelongsToConcept() throws Exception {
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
-            final Answer answer = new Answer(2L, "Software answer", true, 3L);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, 3L);
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
@@ -198,8 +186,8 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(FindAll) Should get 200 if the concept have answers in its answers list")
         void findAllWhenDataExists() throws Exception {
-            final Answer answer1 = new Answer(2L, "Software answer", true, CONCEPT_ID);
-            final Answer answer2 = new Answer(4L, "Hardware answer", true, CONCEPT_ID);
+            final Answer answer1 = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
+            final Answer answer2 = new Answer(3L, "Hardware answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer1, answer2)));
 
             when(conceptService.findOne(concept.getId()))
@@ -243,10 +231,10 @@ public class AnswerControllerTest {
     @DisplayName("PUT")
     class AnswerPut {
         @Test
-        @DisplayName("(UpdateOne) Should get 204 if the Answer is in the concept answers list")
+        @DisplayName("(UpdateOne) Should get 204 if the justification is in the concept answers list")
         void updateWhenExists() throws Exception {
             final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -270,10 +258,10 @@ public class AnswerControllerTest {
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            String answerJsonDTO = mapObjectToJson(answerReqDTO);
-
             doThrow(new AnswerNotFoundException("The answer with id = " + wrongAnswerId + " has not been found"))
                     .when(answerService).updateOne(concept, wrongAnswerId, answerReqDTO);
+
+            String answerJsonDTO = mapObjectToJson(answerReqDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + wrongAnswerId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -286,7 +274,8 @@ public class AnswerControllerTest {
         void updateWhenNotBelongsToConcept() throws Exception {
             final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
-            final long wrongAnswerId = 99L;
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
+
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
@@ -295,11 +284,11 @@ public class AnswerControllerTest {
 
             doThrow(
                     new AnswerNotBelongToConceptException(
-                            "The answer with id = " + wrongAnswerId + " doesn't belong to the concept with id = " + concept.getId())
+                            "The answer with id = " + answer.getId() + " doesn't belong to the concept with id = " + concept.getId())
             )
-                    .when(answerService).updateOne(concept, wrongAnswerId, answerReqDTO);
+                    .when(answerService).updateOne(concept, answer.getId(), answerReqDTO);
 
-            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + wrongAnswerId)
+            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(answerJsonDTO))
                     .andExpect(status().isNotFound());
@@ -312,14 +301,13 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(RemoveOne) Should get 204 if the answer is in the concept answers list")
         void deleteWhenExists() throws Exception {
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
-            final long answerId = 1;
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            mockMvc.perform(delete(BASE_URL + answerId))
+            mockMvc.perform(delete(BASE_URL + answer.getId()))
                     .andExpect(status().isNoContent());
         }
 

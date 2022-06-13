@@ -1,7 +1,5 @@
 package com.example.backend.api.core.justification.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +24,15 @@ public class Justification {
     @Column
     private Long answerId;
 
+    public Justification(Long id, String text, Boolean isCorrect, String error, Long conceptId, Long answerId) {
+        this.id = id;
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.error = error;
+        this.conceptId = conceptId;
+        this.answerId = answerId;
+    }
+
     public Justification(String text, Boolean isCorrect, String error, Long conceptId, Long answerId) {
         this.text = text;
         this.isCorrect = isCorrect;
@@ -33,6 +40,8 @@ public class Justification {
         this.conceptId = conceptId;
         this.answerId = answerId;
     }
+
+
 
     public Justification() {
     }
