@@ -5,7 +5,7 @@ import com.example.backend.api.core.answer.exception.model.AnswerNotFoundExcepti
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.justification.IJustificationsService;
 import com.example.backend.api.core.justification.JustificationRepository;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
+import com.example.backend.api.core.justification.dto.JustificationReqDTO;
 import com.example.backend.api.core.justification.exception.model.JustificationDTOBadRequestException;
 import com.example.backend.api.core.justification.exception.model.JustificationErrorNotProvidedException;
 import com.example.backend.api.core.justification.exception.model.JustificationNotBelongToAnswerException;
@@ -34,17 +34,17 @@ public class JustificationsService implements IJustificationsService {
     public Justification create(
             final Long conceptId,
             final Answer answer,
-            final JustificationDTO justificationDTO) {
-        String textFromDTO = justificationDTO
-                .getTextOptional(justificationDTO.getText())
+            final JustificationReqDTO justificationReqDTO) {
+        String textFromDTO = justificationReqDTO
+                .getTextOptional(justificationReqDTO.getText())
                 .orElseThrow(() -> new JustificationDTOBadRequestException("Field text in Justification DTO is mandatory"));
 
-        Boolean isCorrectFromDTO = justificationDTO
-                .getCorrectOptional(justificationDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = justificationReqDTO
+                .getCorrectOptional(justificationReqDTO.getIsCorrect())
                 .orElseThrow(() -> new JustificationDTOBadRequestException("Field isCorrect in Justification DTO is mandatory"));
 
-        String errorFromDTO = justificationDTO
-                .getErrorOptional(justificationDTO.getError())
+        String errorFromDTO = justificationReqDTO
+                .getErrorOptional(justificationReqDTO.getError())
                 .orElseGet(() -> {
                     if (!isCorrectFromDTO)
                         throw new JustificationDTOBadRequestException("Field error in Justification DTO is mandatory");
@@ -90,20 +90,20 @@ public class JustificationsService implements IJustificationsService {
     public void updateOne(
             Answer answer,
             Long justificationId,
-            JustificationDTO justificationDTO) {
+            JustificationReqDTO justificationReqDTO) {
 
         Justification justification = findOne(answer, justificationId);
 
-        String textFromDTO = justificationDTO
-                .getTextOptional(justificationDTO.getText())
+        String textFromDTO = justificationReqDTO
+                .getTextOptional(justificationReqDTO.getText())
                 .orElse(justification.getText());
 
-        Boolean isCorrectFromDTO = justificationDTO
-                .getCorrectOptional(justificationDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = justificationReqDTO
+                .getCorrectOptional(justificationReqDTO.getIsCorrect())
                 .orElse(justification.getCorrect());
 
-        String errorFromDTO = justificationDTO
-                .getErrorOptional(justificationDTO.getError())
+        String errorFromDTO = justificationReqDTO
+                .getErrorOptional(justificationReqDTO.getError())
                 .orElse(justification.getError());
 
         if (!isCorrectFromDTO && errorFromDTO == null)

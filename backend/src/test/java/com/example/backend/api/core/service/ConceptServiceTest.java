@@ -1,7 +1,7 @@
 package com.example.backend.api.core.service;
 
 import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.dto.ConceptReqDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
@@ -44,12 +44,12 @@ class ConceptServiceTest {
         @DisplayName("(Create) Should create a Concept with a correct DTO")
         void createWithCorrectDTO() {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
 
            when(conceptRepository.save(any(Concept.class)))
                     .thenReturn(concept);
 
-            Concept createdConcept = conceptService.create(conceptDTO);
+            Concept createdConcept = conceptService.create(conceptReqDTO);
 
             assertEquals(concept, createdConcept);
         }
@@ -57,9 +57,9 @@ class ConceptServiceTest {
         @Test
         @DisplayName("(Create) Should not create a Concept with an incorrect DTO")
         void createWithWrongDTO() {
-            final ConceptDTO wrongConceptDTO = new ConceptDTO();
+            final ConceptReqDTO wrongConceptReqDTO = new ConceptReqDTO();
 
-            assertThrows(ConceptDTOBadRequestException.class, () -> conceptService.create(wrongConceptDTO));
+            assertThrows(ConceptDTOBadRequestException.class, () -> conceptService.create(wrongConceptReqDTO));
         }
     }
 
@@ -122,26 +122,26 @@ class ConceptServiceTest {
         @Test
         @DisplayName("(Update) Should update a Concept if exists")
         void updateWhenExists() {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
 
            when(conceptRepository.findById(concept.getId()))
                     .thenReturn(Optional.of(concept));
 
-            conceptService.updateOne(concept.getId(), conceptDTO);
+            conceptService.updateOne(concept.getId(), conceptReqDTO);
         }
 
         @Test
         @DisplayName("(Update) Should throw an exception if the Concept is not found")
         void updateWhenNotExists() {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final long wrongConceptId = 2L;
 
            when(conceptRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
 
-            assertThrows(ConceptNotFoundException.class, () -> conceptService.updateOne(wrongConceptId, conceptDTO));
+            assertThrows(ConceptNotFoundException.class, () -> conceptService.updateOne(wrongConceptId, conceptReqDTO));
         }
     }
 

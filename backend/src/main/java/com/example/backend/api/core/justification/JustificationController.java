@@ -4,7 +4,8 @@ import com.example.backend.api.core.answer.IAnswerService;
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
+import com.example.backend.api.core.justification.dto.JustificationReqDTO;
+import com.example.backend.api.core.justification.dto.JustificationResDTO;
 import com.example.backend.api.core.justification.model.Justification;
 import com.example.backend.api.core.justification.util.JustificationAssembler;
 import org.springframework.hateoas.CollectionModel;
@@ -36,20 +37,20 @@ public class JustificationController {
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public EntityModel<Justification> create(
+    public EntityModel<JustificationResDTO> create(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
-            @RequestBody final JustificationDTO justificationDTO
+            @RequestBody final JustificationReqDTO justificationReqDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        Justification justification = justificationsService.create(concept.getId(), answer, justificationDTO);
+        Justification justification = justificationsService.create(concept.getId(), answer, justificationReqDTO);
 
         return justificationAssembler.toModel(justification);
     }
 
     @GetMapping("/{justificationId}")
-    public EntityModel<Justification> findOne(
+    public EntityModel<JustificationResDTO> findOne(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
             @PathVariable final Long justificationId
@@ -62,7 +63,7 @@ public class JustificationController {
     }
 
     @GetMapping("/")
-    public CollectionModel<EntityModel<Justification>> findAll(
+    public CollectionModel<EntityModel<JustificationResDTO>> findAll(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId
     ){
@@ -79,11 +80,11 @@ public class JustificationController {
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
             @PathVariable final Long justificationId,
-            @RequestBody final JustificationDTO justificationDTO
+            @RequestBody final JustificationReqDTO justificationReqDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        justificationsService.updateOne(answer, justificationId, justificationDTO);
+        justificationsService.updateOne(answer, justificationId, justificationReqDTO);
     }
 
     @DeleteMapping("/{justificationId}")

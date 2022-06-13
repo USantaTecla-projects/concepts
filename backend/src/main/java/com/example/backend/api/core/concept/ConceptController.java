@@ -1,7 +1,7 @@
 package com.example.backend.api.core.concept;
 
-import com.example.backend.api.core.concept.dto.ConceptDTO;
-import com.example.backend.api.core.concept.dto.ConceptRestDTO;
+import com.example.backend.api.core.concept.dto.ConceptReqDTO;
+import com.example.backend.api.core.concept.dto.ConceptResDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.concept.util.ConceptAssembler;
@@ -28,19 +28,19 @@ public class ConceptController {
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public EntityModel<ConceptRestDTO> create(@RequestBody final ConceptDTO conceptDTO) {
-        Concept concept = conceptsService.create(conceptDTO);
+    public EntityModel<ConceptResDTO> create(@RequestBody final ConceptReqDTO conceptReqDTO) {
+        Concept concept = conceptsService.create(conceptReqDTO);
         return conceptAssembler.toModel(concept);
     }
 
     @GetMapping("/{id}")
-    public EntityModel<ConceptRestDTO> findOne(@PathVariable final Long id) {
+    public EntityModel<ConceptResDTO> findOne(@PathVariable final Long id) {
         Concept concept = conceptsService.findOne(id);
         return conceptAssembler.toModel(concept);
     }
 
     @GetMapping("/")
-    public CollectionModel<EntityModel<ConceptRestDTO>> findAll(@RequestParam Integer page) {
+    public CollectionModel<EntityModel<ConceptResDTO>> findAll(@RequestParam Integer page) {
         Page<Concept> conceptPage = conceptsService.findAll(page);
         List<Concept> conceptList = conceptPage.getContent();
 
@@ -55,8 +55,8 @@ public class ConceptController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void updateOne(@PathVariable final Long id, @RequestBody final ConceptDTO conceptDTO) {
-        conceptsService.updateOne(id, conceptDTO);
+    public void updateOne(@PathVariable final Long id, @RequestBody final ConceptReqDTO conceptReqDTO) {
+        conceptsService.updateOne(id, conceptReqDTO);
     }
 
     @DeleteMapping("/{id}")

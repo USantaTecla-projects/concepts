@@ -1,8 +1,7 @@
 package com.example.backend.api.core.justification;
 
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
+import com.example.backend.api.core.justification.dto.JustificationReqDTO;
 import com.example.backend.api.core.justification.model.Justification;
 
 import java.util.List;
@@ -14,10 +13,10 @@ public interface IJustificationsService {
      *
      * @param conceptId        The id of the concept where to store the justification to the given answer.
      * @param answer           The answer where to store the justification.
-     * @param justificationDTO The DTO with the info to create a new justification.
+     * @param justificationReqDTO The DTO with the info to create a new justification.
      * @return The created justification.
      */
-    Justification create(final Long conceptId, final Answer answer, final JustificationDTO justificationDTO);
+    Justification create(final Long conceptId, final Answer answer, final JustificationReqDTO justificationReqDTO);
 
     /**
      * Finds a justification in the given answer.
@@ -41,9 +40,9 @@ public interface IJustificationsService {
      *
      * @param answer           The answer where the justification should be.
      * @param justificationId  The id of the justification.
-     * @param justificationDTO The DTO with the new info for the justification.
+     * @param justificationReqDTO The DTO with the new info for the justification.
      */
-    void updateOne(final Answer answer, final Long justificationId, JustificationDTO justificationDTO);
+    void updateOne(final Answer answer, final Long justificationId, JustificationReqDTO justificationReqDTO);
 
     /**
      * Removes a justification from the given answer.

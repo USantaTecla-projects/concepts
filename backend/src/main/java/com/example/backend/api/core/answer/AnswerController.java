@@ -1,6 +1,7 @@
 package com.example.backend.api.core.answer;
 
-import com.example.backend.api.core.answer.dto.AnswerDTO;
+import com.example.backend.api.core.answer.dto.AnswerReqDTO;
+import com.example.backend.api.core.answer.dto.AnswerResDTO;
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.answer.util.AnswerAssembler;
 import com.example.backend.api.core.concept.IConceptService;
@@ -33,18 +34,18 @@ public class AnswerController {
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public EntityModel<Answer> create(
+    public EntityModel<AnswerResDTO> create(
             @PathVariable final Long conceptId,
-            @RequestBody final AnswerDTO answerDTO
+            @RequestBody final AnswerReqDTO answerReqDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.create(concept, answerDTO);
+        Answer answer = answersService.create(concept, answerReqDTO);
 
         return answerAssembler.toModel(answer);
     }
 
     @GetMapping("/{id}")
-    public EntityModel<Answer> findOne(
+    public EntityModel<AnswerResDTO> findOne(
             @PathVariable final Long conceptId,
             @PathVariable final Long id
     ) {
@@ -55,7 +56,7 @@ public class AnswerController {
     }
 
     @GetMapping("/")
-    public CollectionModel<EntityModel<Answer>> findAll(
+    public CollectionModel<EntityModel<AnswerResDTO>> findAll(
             @PathVariable final Long conceptId
     ) {
         Concept concept = conceptService.findOne(conceptId);
@@ -70,10 +71,10 @@ public class AnswerController {
     public void updateOne(
             @PathVariable final Long conceptId,
             @PathVariable final Long id,
-            @RequestBody final AnswerDTO answerDTO
+            @RequestBody final AnswerReqDTO answerReqDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
-        answersService.updateOne(concept, id, answerDTO);
+        answersService.updateOne(concept, id, answerReqDTO);
     }
 
     @DeleteMapping("/{id}")

@@ -2,7 +2,7 @@ package com.example.backend.api.core.justification.dto;
 
 import java.util.Optional;
 
-public class JustificationDTO {
+public class JustificationReqDTO {
 
     private String text;
 

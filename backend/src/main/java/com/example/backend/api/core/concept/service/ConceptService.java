@@ -2,7 +2,7 @@ package com.example.backend.api.core.concept.service;
 
 import com.example.backend.api.core.concept.ConceptRepository;
 import com.example.backend.api.core.concept.IConceptService;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
+import com.example.backend.api.core.concept.dto.ConceptReqDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
@@ -25,9 +25,9 @@ public class ConceptService implements IConceptService {
     }
 
     @Override
-    public Concept create(final ConceptDTO conceptDTO) {
-        String textFromDTO = conceptDTO
-                .getTextOptional(conceptDTO.getText())
+    public Concept create(final ConceptReqDTO conceptReqDTO) {
+        String textFromDTO = conceptReqDTO
+                .getTextOptional(conceptReqDTO.getText())
                 .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in Concept DTO is mandatory"));
 
         return conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
@@ -46,10 +46,10 @@ public class ConceptService implements IConceptService {
     }
 
     @Override
-    public void updateOne(Long id, ConceptDTO conceptDTO) {
+    public void updateOne(Long id, ConceptReqDTO conceptReqDTO) {
         Concept concept = findOne(id);
-        String textFromDTO = conceptDTO
-                .getTextOptional(conceptDTO.getText())
+        String textFromDTO = conceptReqDTO
+                .getTextOptional(conceptReqDTO.getText())
                 .orElse(concept.getText());
 
         concept.setText(textFromDTO);

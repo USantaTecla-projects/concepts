@@ -5,21 +5,21 @@ import lombok.Data;
 import java.util.Optional;
 
 @Data
-public class AnswerDTO {
+public class AnswerReqDTO {
 
     private String text;
 
     private Boolean isCorrect;
 
-    public AnswerDTO() {
+    public AnswerReqDTO() {
     }
 
-    public AnswerDTO(String text, Boolean isCorrect) {
+    public AnswerReqDTO(String text, Boolean isCorrect) {
         this.text = text;
         this.isCorrect = isCorrect;
     }
 
-    public AnswerDTO(String text) {
+    public AnswerReqDTO(String text) {
         this.text = text;
     }
 

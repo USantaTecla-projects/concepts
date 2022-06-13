@@ -1,6 +1,6 @@
 package com.example.backend.api.core.answer;
 
-import com.example.backend.api.core.answer.dto.AnswerDTO;
+import com.example.backend.api.core.answer.dto.AnswerReqDTO;
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.concept.model.Concept;
 
@@ -12,10 +12,10 @@ public interface IAnswerService {
      * Creates a new answer.
      *
      * @param concept   The concept where to store the answer.
-     * @param answerDTO The DTO with the information to create the answer.
+     * @param answerReqDTO The DTO with the information to create the answer.
      * @return The created answer, if the DTO is valid.
      */
-    Answer create(final Concept concept, final AnswerDTO answerDTO);
+    Answer create(final Concept concept, final AnswerReqDTO answerReqDTO);
 
     /**
      * Find one answer by id in the given concept.
@@ -40,9 +40,9 @@ public interface IAnswerService {
      *
      * @param concept   The concept where to find the answer.
      * @param id        The id of the answer to update.
-     * @param answerDTO The new information to update the answer.
+     * @param answerReqDTO The new information to update the answer.
      */
-    void updateOne(final Concept concept, final Long id, final AnswerDTO answerDTO);
+    void updateOne(final Concept concept, final Long id, final AnswerReqDTO answerReqDTO);
 
     /**
      * Delete an answer by a given id in the given concept, if not found throws an exception.

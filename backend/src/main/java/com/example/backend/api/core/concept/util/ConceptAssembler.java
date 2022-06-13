@@ -2,7 +2,7 @@ package com.example.backend.api.core.concept.util;
 
 import com.example.backend.api.core.answer.util.AnswerAssembler;
 import com.example.backend.api.core.concept.ConceptController;
-import com.example.backend.api.core.concept.dto.ConceptRestDTO;
+import com.example.backend.api.core.concept.dto.ConceptResDTO;
 import com.example.backend.api.core.concept.model.Concept;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.CollectionModel;
@@ -16,7 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class ConceptAssembler implements RepresentationModelAssembler<Concept, EntityModel<ConceptRestDTO>> {
+public class ConceptAssembler implements RepresentationModelAssembler<Concept, EntityModel<ConceptResDTO>> {
 
     private final AnswerAssembler answerAssembler;
 
@@ -25,12 +25,12 @@ public class ConceptAssembler implements RepresentationModelAssembler<Concept, E
     }
 
     @Override
-    public @NotNull EntityModel<ConceptRestDTO> toModel(@NotNull Concept concept) {
+    public @NotNull EntityModel<ConceptResDTO> toModel(@NotNull Concept concept) {
 
-        ConceptRestDTO conceptRestDTO = new ConceptRestDTO();
-        conceptRestDTO.setId(concept.getId());
-        conceptRestDTO.setText(concept.getText());
-        conceptRestDTO.setAnswers(
+        ConceptResDTO conceptResDTO = new ConceptResDTO();
+        conceptResDTO.setId(concept.getId());
+        conceptResDTO.setText(concept.getText());
+        conceptResDTO.setAnswers(
                 CollectionModel.of(concept.getAnswers()
                         .stream()
                         .map(answerAssembler::toModel)
@@ -39,19 +39,19 @@ public class ConceptAssembler implements RepresentationModelAssembler<Concept, E
         );
 
         return EntityModel.of(
-                conceptRestDTO,
+                conceptResDTO,
                 linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
                 linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")
         );
     }
 
     @Override
-    public @NotNull CollectionModel<EntityModel<ConceptRestDTO>> toCollectionModel(@NotNull Iterable<? extends Concept> concepts) {
+    public @NotNull CollectionModel<EntityModel<ConceptResDTO>> toCollectionModel(@NotNull Iterable<? extends Concept> concepts) {
         return RepresentationModelAssembler.super.toCollectionModel(concepts);
     }
 
-    public @NotNull CollectionModel<EntityModel<ConceptRestDTO>> toCollectionPageModel(List<Concept> concepts, int totalPages, int actualPage) {
-        CollectionModel<EntityModel<ConceptRestDTO>> conceptsCollectionModel = toCollectionModel(concepts);
+    public @NotNull CollectionModel<EntityModel<ConceptResDTO>> toCollectionPageModel(List<Concept> concepts, int totalPages, int actualPage) {
+        CollectionModel<EntityModel<ConceptResDTO>> conceptsCollectionModel = toCollectionModel(concepts);
 
         int firstPage = 0;
         int lastPage = totalPages - 1;

@@ -2,8 +2,8 @@ package com.example.backend.api.core.controller;
 
 import com.example.backend.api.core.concept.ConceptController;
 import com.example.backend.api.core.concept.IConceptService;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
-import com.example.backend.api.core.concept.dto.ConceptRestDTO;
+import com.example.backend.api.core.concept.dto.ConceptReqDTO;
+import com.example.backend.api.core.concept.dto.ConceptResDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
@@ -55,19 +55,19 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(Create) Should get 201 if the concept DTO is correct")
         void createWithCorrectDTO() throws Exception {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
-            when(conceptService.create(conceptDTO))
+            when(conceptService.create(conceptReqDTO))
                     .thenReturn(concept);
 
             when(conceptAssembler.toModel(concept)).thenReturn(
-                    EntityModel.of(new ConceptRestDTO(concept.getId(), concept.getText()),
+                    EntityModel.of(new ConceptResDTO(concept.getId(), concept.getText()),
                             linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
                             linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")));
 
 
-            String conceptJsonDTO = mapObjectToJson(conceptDTO);
+            String conceptJsonDTO = mapObjectToJson(conceptReqDTO);
 
             mockMvc.perform(post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -82,12 +82,12 @@ class ConceptControllerTest {
         @Test
         @DisplayName("Create) Should get 400 the concept DTO is malformed")
         void createWithWrongDTO() throws Exception {
-            final ConceptDTO wrongConceptDTO = new ConceptDTO();
+            final ConceptReqDTO wrongConceptReqDTO = new ConceptReqDTO();
 
-            when(conceptService.create(wrongConceptDTO))
+            when(conceptService.create(wrongConceptReqDTO))
                     .thenThrow(new ConceptDTOBadRequestException("Field text in DTO is mandatory"));
 
-            String conceptJsonDTO = mapObjectToJson(wrongConceptDTO);
+            String conceptJsonDTO = mapObjectToJson(wrongConceptReqDTO);
 
             mockMvc.perform(post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -102,18 +102,18 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(FindOne) Should get 200 when finding a Concept by a given id if exists")
         void findOneWhenExists() throws Exception {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
             when(conceptAssembler.toModel(concept)).thenReturn(
-                    EntityModel.of(new ConceptRestDTO(concept.getId(), concept.getText()),
+                    EntityModel.of(new ConceptResDTO(concept.getId(), concept.getText()),
                             linkTo(methodOn(ConceptController.class).findOne(concept.getId())).withSelfRel(),
                             linkTo(methodOn(ConceptController.class).findAll(null)).withRel("concepts")));
 
-            String conceptJsonDTO = mapObjectToJson(conceptDTO);
+            String conceptJsonDTO = mapObjectToJson(conceptReqDTO);
 
             mockMvc.perform(post(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -138,9 +138,9 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(FindAll) Should get 200 if there are entities")
         void findAllWhenDataExists() throws Exception {
-            final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
-            final ConceptDTO conceptDTO2 = new ConceptDTO("Hardware");
-            final ConceptDTO conceptDTO3 = new ConceptDTO("Functional Programming");
+            final ConceptReqDTO conceptReqDTO1 = new ConceptReqDTO("Software");
+            final ConceptReqDTO conceptReqDTO2 = new ConceptReqDTO("Hardware");
+            final ConceptReqDTO conceptReqDTO3 = new ConceptReqDTO("Functional Programming");
             final Concept concept1 = new Concept(1L, "Software", new LinkedList<>());
             final Concept concept2 = new Concept(3L, "Hardware", new LinkedList<>());
             final Concept concept3 = new Concept(5L, "Functional Programming", new LinkedList<>());
@@ -154,7 +154,7 @@ class ConceptControllerTest {
                             CollectionModel.of(
                                     conceptPage.getContent()
                                             .stream()
-                                            .map(concept -> EntityModel.of(new ConceptRestDTO(concept.getId(), concept.getText())))
+                                            .map(concept -> EntityModel.of(new ConceptResDTO(concept.getId(), concept.getText())))
                                             .toList()));
 
             when(conceptAssembler.toCollectionPageModel(
@@ -195,10 +195,10 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 204 updating the Concept")
         void updateWhenExists() throws Exception {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
-            String conceptJsonDTO = mapObjectToJson(conceptDTO);
+            String conceptJsonDTO = mapObjectToJson(conceptReqDTO);
 
             mockMvc.perform(put(BASE_URL + concept.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -209,13 +209,13 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 404 deleting the Concept")
         void updateWhenNotExists() throws Exception {
-            final ConceptDTO conceptDTO = new ConceptDTO("Software");
+            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
             final long wrongConceptId = 99L;
 
             doThrow(new ConceptNotFoundException("The concept with id = " + wrongConceptId + " has not been found"))
-                    .when(conceptService).updateOne(wrongConceptId, conceptDTO);
+                    .when(conceptService).updateOne(wrongConceptId, conceptReqDTO);
 
-            String conceptJsonDTO = mapObjectToJson(conceptDTO);
+            String conceptJsonDTO = mapObjectToJson(conceptReqDTO);
 
             mockMvc.perform(put(BASE_URL + wrongConceptId)
                             .contentType(MediaType.APPLICATION_JSON)

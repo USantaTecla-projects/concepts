@@ -1,17 +1,15 @@
 package com.example.backend.api.core.concept.dto;
 
-import com.example.backend.api.core.answer.dto.AnswerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Optional;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConceptDTO {
+public class ConceptReqDTO {
 
     private String text;
 
