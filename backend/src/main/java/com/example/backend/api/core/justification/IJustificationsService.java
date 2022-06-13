@@ -1,8 +1,11 @@
 package com.example.backend.api.core.justification;
 
 import com.example.backend.api.core.answer.model.Answer;
+import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.justification.dto.JustificationDTO;
 import com.example.backend.api.core.justification.model.Justification;
+
+import java.util.List;
 
 public interface IJustificationsService {
 
@@ -24,6 +27,14 @@ public interface IJustificationsService {
      * @return The justification if found.
      */
     Justification findOne(final Answer answer, final Long justificationId);
+
+    /**
+     * Find all the answers in the given concept.
+     *
+     * @param concept The concept where to find the answers.
+     * @return The list with the corresponding set of results.
+     */
+    List<Justification> findAll(final Answer answer);
 
     /**
      * Updates a justification in the given answer that match with the given id.

@@ -3,6 +3,8 @@ package com.example.backend.api.core.answer.model;
 import com.example.backend.api.core.justification.model.Justification;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Answer {
@@ -20,8 +22,8 @@ public class Answer {
     @Column
     private Long conceptId;
 
-    @OneToOne
-    private Justification justification;
+    @OneToMany
+    private List<Justification> justifications;
 
     public Answer() {
     }
@@ -42,6 +44,18 @@ public class Answer {
     public Answer(String text, Boolean isCorrect) {
         this.text = text;
         this.isCorrect = isCorrect;
+    }
+
+    public void addJustification(Justification justification) {
+        justifications.add(justification);
+    }
+
+    public void removeJustification(Justification justification) {
+        justifications.remove(justification);
+    }
+
+    public boolean containsJustification(Justification justification){
+        return justifications.contains(justification);
     }
 
     public Long getId() {
@@ -76,11 +90,11 @@ public class Answer {
         this.conceptId = conceptId;
     }
 
-    public Justification getJustification() {
-        return justification;
+    public List<Justification> getJustifications() {
+        return justifications;
     }
 
-    public void setJustification(Justification justification) {
-        this.justification = justification;
+    public void setJustifications(List<Justification> justification) {
+        this.justifications = justification;
     }
 }

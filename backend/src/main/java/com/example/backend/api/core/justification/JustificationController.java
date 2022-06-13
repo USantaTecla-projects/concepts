@@ -7,9 +7,12 @@ import com.example.backend.api.core.concept.model.Concept;
 import com.example.backend.api.core.justification.dto.JustificationDTO;
 import com.example.backend.api.core.justification.model.Justification;
 import com.example.backend.api.core.justification.util.JustificationAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/concepts/{conceptId}/answers/{answerId}/justifications")
@@ -45,7 +48,6 @@ public class JustificationController {
         return justificationAssembler.toModel(justification);
     }
 
-    // TODO Check the cardinality with Luis.
     @GetMapping("/{justificationId}")
     public EntityModel<Justification> findOne(
             @PathVariable final Long conceptId,
@@ -57,6 +59,18 @@ public class JustificationController {
         Justification justification = justificationsService.findOne(answer, justificationId);
 
         return justificationAssembler.toModel(justification);
+    }
+
+    @GetMapping("/")
+    public CollectionModel<EntityModel<Justification>> findAll(
+            @PathVariable final Long conceptId,
+            @PathVariable final Long answerId
+    ){
+        Concept concept = conceptService.findOne(conceptId);
+        Answer answer = answersService.findOne(concept,answerId);
+        List<Justification> justificationList = justificationsService.findAll(answer);
+
+        return justificationAssembler.toCollectionModel(justificationList);
     }
 
     @PutMapping("/{justificationId}")

@@ -26,6 +26,7 @@ public interface IAnswerService {
      */
     Answer findOne(final Concept concept, final Long id);
 
+
     /**
      * Find all the answers in the given concept.
      *

@@ -1,6 +1,7 @@
 package com.example.backend.api.core.justification.service;
 
 import com.example.backend.api.core.answer.AnswerRepository;
+import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.justification.IJustificationsService;
 import com.example.backend.api.core.justification.JustificationRepository;
@@ -12,7 +13,8 @@ import com.example.backend.api.core.justification.exception.model.JustificationN
 import com.example.backend.api.core.justification.model.Justification;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JustificationsService implements IJustificationsService {
@@ -53,7 +55,7 @@ public class JustificationsService implements IJustificationsService {
         Justification justification = justificationRepository
                 .save(new Justification(textFromDTO, isCorrectFromDTO, errorFromDTO, conceptId, answer.getId()));
 
-        answer.setJustification(justification);
+        answer.addJustification(justification);
         answerRepository.save(answer);
 
         return justification;
@@ -67,12 +69,21 @@ public class JustificationsService implements IJustificationsService {
                 .orElseThrow(
                         () -> new JustificationNotFoundException("The justification with id = " + justificationId + " has not been found"));
 
-        if (justification != answer.getJustification())
+        if (!answer.containsJustification(justification))
             throw new JustificationNotBelongToAnswerException(
                     "The justification with id = " + justificationId + " doesn't belong to the answer with id = " + answer.getId()
             );
 
         return justification;
+    }
+
+    @Override
+    public List<Justification> findAll(Answer answer) {
+        return Optional
+                .ofNullable(answer.getJustifications())
+                .orElseThrow(() -> new AnswerNotFoundException(
+                        "The answer with id = " + answer.getId() + " has no justifications"
+                ));
     }
 
     @Override
@@ -108,8 +119,7 @@ public class JustificationsService implements IJustificationsService {
     @Override
     public void removeOne(Answer answer, Long justificationId) {
         Justification justification = findOne(answer, justificationId);
-
-        answer.setJustification(null);
+        answer.removeJustification(justification);
 
         answerRepository.save(answer);
         justificationRepository.delete(justification);
