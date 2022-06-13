@@ -42,6 +42,14 @@ public class Answer {
         this.justifications = justifications;
     }
 
+    public Answer(Long id, String text, Boolean isCorrect, Long conceptId, List<Justification> justifications) {
+        this.id = id;
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.conceptId = conceptId;
+        this.justifications = justifications;
+    }
+
     public Answer(String text, Boolean isCorrect, Long conceptId) {
         this.text = text;
         this.isCorrect = isCorrect;

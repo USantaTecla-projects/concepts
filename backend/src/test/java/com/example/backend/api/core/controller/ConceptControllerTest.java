@@ -29,7 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -138,9 +139,6 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(FindAll) Should get 200 if there are entities")
         void findAllWhenDataExists() throws Exception {
-            final ConceptReqDTO conceptReqDTO1 = new ConceptReqDTO("Software");
-            final ConceptReqDTO conceptReqDTO2 = new ConceptReqDTO("Hardware");
-            final ConceptReqDTO conceptReqDTO3 = new ConceptReqDTO("Functional Programming");
             final Concept concept1 = new Concept(1L, "Software", new LinkedList<>());
             final Concept concept2 = new Concept(3L, "Hardware", new LinkedList<>());
             final Concept concept3 = new Concept(5L, "Functional Programming", new LinkedList<>());
@@ -167,7 +165,7 @@ class ConceptControllerTest {
             mockMvc.perform(get(BASE_URL + "?page=" + conceptPage.getNumber()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$._embedded").exists())
-                    .andExpect(jsonPath("$._embedded.conceptRestDTOList.size()", Matchers.is(3)))
+                    .andExpect(jsonPath("$._embedded.conceptResDTOList.size()", Matchers.is(3)))
                     .andExpect(jsonPath("$._links.first").exists())
                     .andExpect(jsonPath("$._links.prev").exists())
                     .andExpect(jsonPath("$._links.self").exists())

@@ -3,6 +3,7 @@ package com.example.backend.api.core.controller;
 import com.example.backend.api.core.answer.AnswerController;
 import com.example.backend.api.core.answer.IAnswerService;
 import com.example.backend.api.core.answer.dto.AnswerReqDTO;
+import com.example.backend.api.core.answer.dto.AnswerResDTO;
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
@@ -10,6 +11,7 @@ import com.example.backend.api.core.answer.model.Answer;
 import com.example.backend.api.core.answer.util.AnswerAssembler;
 import com.example.backend.api.core.concept.IConceptService;
 import com.example.backend.api.core.concept.model.Concept;
+import com.example.backend.api.core.justification.util.JustificationAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -21,14 +23,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +54,9 @@ public class AnswerControllerTest {
     private AnswerAssembler answerAssembler;
 
     @MockBean
+    private JustificationAssembler justificationAssembler;
+
+    @MockBean
     private IAnswerService answerService;
 
     @MockBean
@@ -59,7 +70,7 @@ public class AnswerControllerTest {
         @DisplayName("(Create) Should get 201 if the DTO is correct")
         void createWithCorrectDTO() throws Exception {
             final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
-            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID);
+            final Answer answer = new Answer(2L, "Software answer", true, CONCEPT_ID, Collections.emptyList());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -69,8 +80,11 @@ public class AnswerControllerTest {
                     .thenReturn(answer);
 
             when(answerAssembler.toModel(any(Answer.class)))
-                    .thenCallRealMethod();
-
+                    .thenReturn(
+                            EntityModel.of(
+                                    new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect()),
+                                    linkTo(methodOn(AnswerController.class).findOne(answer.getConceptId(), answer.getId())).withSelfRel(),
+                                    linkTo(methodOn(AnswerController.class).findAll(answer.getConceptId())).withRel("answers")));
 
             final String answerJsonDTO = mapObjectToJson(answerReqDTO);
 
@@ -124,7 +138,11 @@ public class AnswerControllerTest {
                     .thenReturn(answer);
 
             when(answerAssembler.toModel(any(Answer.class)))
-                    .thenCallRealMethod();
+                    .thenReturn(
+                            EntityModel.of(
+                                    new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect()),
+                                    linkTo(methodOn(AnswerController.class).findOne(answer.getConceptId(), answer.getId())).withSelfRel(),
+                                    linkTo(methodOn(AnswerController.class).findAll(answer.getConceptId())).withRel("answers")));
 
 
             final String conceptJsonDTO = mapObjectToJson(answerReqDTO);
@@ -190,16 +208,19 @@ public class AnswerControllerTest {
             when(answerService.findAll(concept))
                     .thenReturn(concept.getAnswers());
 
-            when(answerAssembler.toModel(any(Answer.class)))
-                    .thenCallRealMethod();
-
-            when(answerAssembler.toCollectionModel(any()))
-                    .thenCallRealMethod();
+            when(answerAssembler.toCollectionModel(concept.getAnswers()))
+                    .thenReturn(
+                            CollectionModel.of(
+                                    concept.getAnswers()
+                                            .stream()
+                                            .map(answer -> EntityModel.of(new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect())))
+                                            .toList())
+                    );
 
             mockMvc.perform(get(BASE_URL))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$._embedded").exists())
-                    .andExpect(jsonPath("$._embedded.answerList.size()", Matchers.is(concept.getAnswers().size())));
+                    .andExpect(jsonPath("$._embedded.answerResDTOList.size()", Matchers.is(concept.getAnswers().size())));
         }
 
         @Test

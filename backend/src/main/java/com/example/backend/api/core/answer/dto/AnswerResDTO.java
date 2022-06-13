@@ -18,4 +18,17 @@ public class AnswerResDTO {
     private Boolean isCorrect;
 
     private CollectionModel<EntityModel<JustificationResDTO>> justifications;
+
+    public AnswerResDTO(Long id, String text, Boolean isCorrect, CollectionModel<EntityModel<JustificationResDTO>> justifications) {
+        this.id = id;
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.justifications = justifications;
+    }
+
+    public AnswerResDTO(Long id, String text, Boolean isCorrect) {
+        this.id = id;
+        this.text = text;
+        this.isCorrect = isCorrect;
+    }
 }

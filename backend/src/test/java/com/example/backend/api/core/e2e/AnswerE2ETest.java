@@ -62,7 +62,7 @@ public class AnswerE2ETest {
             .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
                     .contentType(ContentType.JSON)
-                    .body("message", res -> equalTo("Field text in DTO is mandatory"))
+                    .body("message", res -> equalTo("Field text in Answer DTO is mandatory"))
                     .body("httpStatus", res -> equalTo("BAD_REQUEST"));
         }
 
@@ -83,7 +83,7 @@ public class AnswerE2ETest {
                     .get("/concepts/{conceptId}")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("answers._embedded.answerList[0].id", res -> is(answerId));
+                    .body("answers._embedded.answerResDTOList[0].id", res -> is(answerId));
 
             // Check that the Answer is not in the second Concept
             given()
@@ -155,7 +155,7 @@ public class AnswerE2ETest {
                     .get(BASE_URL)
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("_embedded.answerList.size()", greaterThanOrEqualTo(5));
+                    .body("_embedded.answerResDTOList.size()", greaterThanOrEqualTo(5));
         }
 
         @Test
