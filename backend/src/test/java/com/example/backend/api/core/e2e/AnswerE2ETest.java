@@ -1,7 +1,7 @@
 package com.example.backend.api.core.e2e;
 
-import com.example.backend.api.core.answer.dto.AnswerReqDTO;
-import com.example.backend.api.core.concept.dto.ConceptReqDTO;
+import com.example.backend.api.core.answer.dto.AnswerDTO;
+import com.example.backend.api.core.concept.dto.ConceptDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
@@ -25,7 +25,7 @@ public class AnswerE2ETest {
     static void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
-        CONCEPT_ID = createConcept(new ConceptReqDTO("Software")).extract().path("id");
+        CONCEPT_ID = createConcept(new ConceptDTO("Software")).extract().path("id");
     }
 
     @Nested
@@ -35,28 +35,28 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Create) Should create an answer if the DTO is correct")
         void createWithCorrectDTO() {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
             given()
                     .contentType("application/json")
-                    .body(answerReqDTO)
+                    .body(answerDTO)
             .when()
                     .post(BASE_URL)
             .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .contentType(ContentType.JSON)
                     .body("text", res -> equalTo("Software answer"))
-                    .body("isCorrect", res -> equalTo(true));
+                    .body("correct", res -> equalTo(true));
         }
 
         @Test
         @DisplayName("(Create) Should not create an Answer if the DTO is malformed")
         void createWithWrongDTO() {
-            final AnswerReqDTO wrongAnswerReqDTO = new AnswerReqDTO("");
+            final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
 
             given()
                     .contentType("application/json")
-                    .body(wrongAnswerReqDTO)
+                    .body(wrongAnswerDTO)
             .when()
                     .post(BASE_URL)
             .then()
@@ -67,13 +67,13 @@ public class AnswerE2ETest {
         }
 
         @Test
-        @DisplayName("(Create) Should create the Answer only in the specified Concept")
+        @DisplayName("(Create) Should create the answer in the specified concept")
         void createAnswerInTheCorrectConcept() {
-            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Hardware");
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final ConceptDTO conceptDTO = new ConceptDTO("Hardware");
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
-            final int conceptId = createConcept(conceptReqDTO).extract().path("id");
-            final int answerId = createAnswer(answerReqDTO, conceptId).extract().path("id");
+            final int conceptId = createConcept(conceptDTO).extract().path("id");
+            final int answerId = createAnswer(answerDTO, conceptId).extract().path("id");
 
             // Check that the Answer is in the first Concept
             given()
@@ -83,16 +83,8 @@ public class AnswerE2ETest {
                     .get("/concepts/{conceptId}")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("answers._embedded.answerResDTOList[0].id", res -> is(answerId));
+                    .body("answers[0].id", res -> is(answerId));
 
-            // Check that the Answer is not in the second Concept
-            given()
-                    .accept(ContentType.JSON)
-                    .pathParam("conceptId", conceptId + 999)
-            .when()
-                    .get("/concepts/{conceptId}")
-            .then()
-                    .statusCode(HttpStatus.NOT_FOUND.value());
         }
     }
 
@@ -103,9 +95,9 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindOne) Should find an Answer with the given id")
         void findOneWhenExists() {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
-            final int id = createAnswer(answerReqDTO, CONCEPT_ID).extract().path("id");
+            final int id = createAnswer(answerDTO, CONCEPT_ID).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -115,9 +107,8 @@ public class AnswerE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo("Software answer"))
-                    .body("isCorrect", res -> equalTo(true))
-                    .body("_links", res -> hasKey("self"))
-                    .body("_links", res -> hasKey("answers"));
+                    .body("correct", res -> equalTo(true))
+                    .body("conceptId", res -> equalTo(CONCEPT_ID));
         }
 
         @Test
@@ -137,17 +128,17 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(FindAll) Should find a List of Answers")
         void findAllWhenExists() {
-            final AnswerReqDTO answerReqDTO1 = new AnswerReqDTO("Software answer", true);
-            final AnswerReqDTO answerReqDTO2 = new AnswerReqDTO("Hardware answer", true);
-            final AnswerReqDTO answerReqDTO3 = new AnswerReqDTO("Functional Programming answer", false);
-            final AnswerReqDTO answerReqDTO4 = new AnswerReqDTO(" answer", false);
-            final AnswerReqDTO answerReqDTO5 = new AnswerReqDTO("Haskell answer", true);
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+            final AnswerDTO answerDTO2 = new AnswerDTO("Hardware answer", true);
+            final AnswerDTO answerDTO3 = new AnswerDTO("Functional Programming answer", false);
+            final AnswerDTO answerDTO4 = new AnswerDTO(" answer", false);
+            final AnswerDTO answerDTO5 = new AnswerDTO("Haskell answer", true);
 
-            createAnswer(answerReqDTO1, CONCEPT_ID);
-            createAnswer(answerReqDTO2, CONCEPT_ID);
-            createAnswer(answerReqDTO3, CONCEPT_ID);
-            createAnswer(answerReqDTO4, CONCEPT_ID);
-            createAnswer(answerReqDTO5, CONCEPT_ID);
+            createAnswer(answerDTO1, CONCEPT_ID);
+            createAnswer(answerDTO2, CONCEPT_ID);
+            createAnswer(answerDTO3, CONCEPT_ID);
+            createAnswer(answerDTO4, CONCEPT_ID);
+            createAnswer(answerDTO5, CONCEPT_ID);
 
             given()
                     .accept(ContentType.JSON)
@@ -155,15 +146,15 @@ public class AnswerE2ETest {
                     .get(BASE_URL)
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("_embedded.answerResDTOList.size()", greaterThanOrEqualTo(5));
+                    .body("size()", greaterThanOrEqualTo(5));
         }
 
         @Test
         @DisplayName("(FindAll) Should find an empty List of Answers")
         void findAllWhenNotExists() {
-            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
 
-            final int conceptId = createConcept(conceptReqDTO).extract().path("id");
+            final int conceptId = createConcept(conceptDTO).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -184,11 +175,11 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(UpdateOne) Should update the Answer")
         void updateWhenExists() {
-            final AnswerReqDTO answerReqDTO1 = new AnswerReqDTO("Software answer", true);
-            final AnswerReqDTO answerReqDTO2 = new AnswerReqDTO("Hardware answer", true);
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
+            final AnswerDTO answerDTO2 = new AnswerDTO("Hardware answer", true);
 
 
-            final int id = createAnswer(answerReqDTO1, CONCEPT_ID).extract().path("id");
+            final int id = createAnswer(answerDTO1, CONCEPT_ID).extract().path("id");
 
             // Check the initial Answer content
             given()
@@ -198,14 +189,14 @@ public class AnswerE2ETest {
                     .get(BASE_URL + "{id}")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("text", res -> equalTo(answerReqDTO1.getText()))
-                    .body("isCorrect", res -> equalTo(answerReqDTO1.getIsCorrect()));
+                    .body("text", res -> equalTo(answerDTO1.getText()))
+                    .body("correct", res -> equalTo(answerDTO1.getIsCorrect()));
 
             // Update the Answer
             given()
                     .contentType("application/json")
                     .pathParam("id", id)
-                    .body(answerReqDTO2)
+                    .body(answerDTO2)
             .when()
                     .put(BASE_URL + "{id}")
             .then()
@@ -219,22 +210,22 @@ public class AnswerE2ETest {
                     .get(BASE_URL + "{id}")
             .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("text", res -> equalTo(answerReqDTO2.getText()))
-                    .body("isCorrect", res -> equalTo(answerReqDTO2.getIsCorrect()));
+                    .body("text", res -> equalTo(answerDTO2.getText()))
+                    .body("correct", res -> equalTo(answerDTO2.getIsCorrect()));
         }
 
         @Test
         @DisplayName("(UpdateOne) Should throw an exception")
         void updateWhenNotExists() {
-            final ConceptReqDTO conceptReqDTO1 = new ConceptReqDTO("Software");
-            final AnswerReqDTO answerReqDTO1 = new AnswerReqDTO("Software answer", true);
+            final ConceptDTO conceptDTO1 = new ConceptDTO("Software");
+            final AnswerDTO answerDTO1 = new AnswerDTO("Software answer", true);
 
-            createConcept(conceptReqDTO1).extract().path("id");
+            createConcept(conceptDTO1).extract().path("id");
 
             given()
                     .contentType("application/json")
                     .pathParam("id", 9999)
-                    .body(answerReqDTO1)
+                    .body(answerDTO1)
             .when()
                     .put(BASE_URL + "{id}")
             .then()
@@ -248,9 +239,9 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Remove) Should delete the Answer")
         void deleteWhenExits() {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
-            final int answerId = createAnswer(answerReqDTO, CONCEPT_ID).extract().path("id");
+            final int answerId = createAnswer(answerDTO, CONCEPT_ID).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -279,15 +270,15 @@ public class AnswerE2ETest {
     /**
      * Create an Answer in a Concept by its id.
      *
-     * @param answerReqDTO The Answer to be created.
+     * @param answerDTO The Answer to be created.
      * @param conceptId The Concept id where the Answer should be created.
      * @return The response body.
      */
-    private ValidatableResponse createAnswer(AnswerReqDTO answerReqDTO, int conceptId) {
+    private ValidatableResponse createAnswer(AnswerDTO answerDTO, int conceptId) {
         return
                 given()
                         .contentType("application/json")
-                        .body(answerReqDTO)
+                        .body(answerDTO)
                 .when()
                         .post("/concepts/" + conceptId + "/answers/")
                 .then();
@@ -296,14 +287,14 @@ public class AnswerE2ETest {
     /**
      * Create a Concept.
      *
-     * @param conceptReqDTO The Concept to be created.
+     * @param conceptDTO The Concept to be created.
      * @return The response body.
      */
-    private static ValidatableResponse createConcept(ConceptReqDTO conceptReqDTO) {
+    private static ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
                         .contentType("application/json")
-                        .body(conceptReqDTO)
+                        .body(conceptDTO)
                 .when()
                         .post("/concepts/")
                 .then();

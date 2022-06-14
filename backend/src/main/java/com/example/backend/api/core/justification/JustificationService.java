@@ -1,11 +1,9 @@
-package com.example.backend.api.core.justification.service;
+package com.example.backend.api.core.justification;
 
 import com.example.backend.api.core.answer.AnswerRepository;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.justification.IJustificationsService;
-import com.example.backend.api.core.justification.JustificationRepository;
-import com.example.backend.api.core.justification.dto.JustificationReqDTO;
+import com.example.backend.api.core.justification.dto.JustificationDTO;
 import com.example.backend.api.core.justification.exception.model.JustificationDTOBadRequestException;
 import com.example.backend.api.core.justification.exception.model.JustificationErrorNotProvidedException;
 import com.example.backend.api.core.justification.exception.model.JustificationNotBelongToAnswerException;
@@ -17,34 +15,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class JustificationsService implements IJustificationsService {
+public class JustificationService {
 
     private final AnswerRepository answerRepository;
     private final JustificationRepository justificationRepository;
 
 
-    public JustificationsService(
+    public JustificationService(
             AnswerRepository answerRepository,
             JustificationRepository justificationRepository) {
         this.answerRepository = answerRepository;
         this.justificationRepository = justificationRepository;
     }
 
-    @Override
     public Justification create(
             final Long conceptId,
             final Answer answer,
-            final JustificationReqDTO justificationReqDTO) {
-        String textFromDTO = justificationReqDTO
-                .getTextOptional(justificationReqDTO.getText())
+            final JustificationDTO justificationDTO) {
+        String textFromDTO = justificationDTO
+                .getTextOptional(justificationDTO.getText())
                 .orElseThrow(() -> new JustificationDTOBadRequestException("Field text in Justification DTO is mandatory"));
 
-        Boolean isCorrectFromDTO = justificationReqDTO
-                .getCorrectOptional(justificationReqDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = justificationDTO
+                .getCorrectOptional(justificationDTO.getIsCorrect())
                 .orElseThrow(() -> new JustificationDTOBadRequestException("Field isCorrect in Justification DTO is mandatory"));
 
-        String errorFromDTO = justificationReqDTO
-                .getErrorOptional(justificationReqDTO.getError())
+        String errorFromDTO = justificationDTO
+                .getErrorOptional(justificationDTO.getError())
                 .orElseGet(() -> {
                     if (!isCorrectFromDTO)
                         throw new JustificationDTOBadRequestException("Field error in Justification DTO is mandatory");
@@ -61,7 +58,6 @@ public class JustificationsService implements IJustificationsService {
         return justification;
     }
 
-    @Override
     public Justification findOne(Answer answer, Long justificationId) {
 
         Justification justification = justificationRepository
@@ -77,7 +73,6 @@ public class JustificationsService implements IJustificationsService {
         return justification;
     }
 
-    @Override
     public List<Justification> findAll(Answer answer) {
         return Optional
                 .ofNullable(answer.getJustifications())
@@ -86,24 +81,23 @@ public class JustificationsService implements IJustificationsService {
                 ));
     }
 
-    @Override
     public void updateOne(
             Answer answer,
             Long justificationId,
-            JustificationReqDTO justificationReqDTO) {
+            JustificationDTO justificationDTO) {
 
         Justification justification = findOne(answer, justificationId);
 
-        String textFromDTO = justificationReqDTO
-                .getTextOptional(justificationReqDTO.getText())
+        String textFromDTO = justificationDTO
+                .getTextOptional(justificationDTO.getText())
                 .orElse(justification.getText());
 
-        Boolean isCorrectFromDTO = justificationReqDTO
-                .getCorrectOptional(justificationReqDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = justificationDTO
+                .getCorrectOptional(justificationDTO.getIsCorrect())
                 .orElse(justification.getCorrect());
 
-        String errorFromDTO = justificationReqDTO
-                .getErrorOptional(justificationReqDTO.getError())
+        String errorFromDTO = justificationDTO
+                .getErrorOptional(justificationDTO.getError())
                 .orElse(justification.getError());
 
         if (!isCorrectFromDTO && errorFromDTO == null)
@@ -116,7 +110,6 @@ public class JustificationsService implements IJustificationsService {
         justificationRepository.save(justification);
     }
 
-    @Override
     public void removeOne(Answer answer, Long justificationId) {
         Justification justification = findOne(answer, justificationId);
         answer.removeJustification(justification);

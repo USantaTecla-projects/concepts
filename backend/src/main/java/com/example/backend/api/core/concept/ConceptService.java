@@ -1,8 +1,6 @@
-package com.example.backend.api.core.concept.service;
+package com.example.backend.api.core.concept;
 
-import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.core.concept.IConceptService;
-import com.example.backend.api.core.concept.dto.ConceptReqDTO;
+import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class ConceptService implements IConceptService {
+public class ConceptService {
 
     private final ConceptRepository conceptRepository;
 
@@ -24,32 +22,28 @@ public class ConceptService implements IConceptService {
         this.conceptRepository = conceptRepository;
     }
 
-    @Override
-    public Concept create(final ConceptReqDTO conceptReqDTO) {
-        String textFromDTO = conceptReqDTO
-                .getTextOptional(conceptReqDTO.getText())
+    public Concept create(final ConceptDTO conceptDTO) {
+        String textFromDTO = conceptDTO
+                .getTextOptional(conceptDTO.getText())
                 .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in Concept DTO is mandatory"));
 
         return conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
     }
 
-    @Override
     public Concept findOne(Long id) {
         return conceptRepository.findById(id)
                 .orElseThrow(() -> new ConceptNotFoundException("The concept with id = " + id + " has not been found"));
     }
 
-    @Override
     public Page<Concept> findAll(int page) {
         int pageSize = 5;
         return conceptRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    @Override
-    public void updateOne(Long id, ConceptReqDTO conceptReqDTO) {
+    public void updateOne(Long id, ConceptDTO conceptDTO) {
         Concept concept = findOne(id);
-        String textFromDTO = conceptReqDTO
-                .getTextOptional(conceptReqDTO.getText())
+        String textFromDTO = conceptDTO
+                .getTextOptional(conceptDTO.getText())
                 .orElse(concept.getText());
 
         concept.setText(textFromDTO);
@@ -57,7 +51,6 @@ public class ConceptService implements IConceptService {
         conceptRepository.save(concept);
     }
 
-    @Override
     public void removeOne(Long id) {
         Concept concept = findOne(id);
         conceptRepository.delete(concept);

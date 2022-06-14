@@ -1,11 +1,11 @@
 package com.example.backend.api.core.service;
 
 import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.core.concept.dto.ConceptReqDTO;
+import com.example.backend.api.core.concept.dto.ConceptDTO;
 import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
 import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.concept.service.ConceptService;
+import com.example.backend.api.core.concept.ConceptService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,12 +44,12 @@ class ConceptServiceTest {
         @DisplayName("(Create) Should create a Concept with a correct DTO")
         void createWithCorrectDTO() {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
 
            when(conceptRepository.save(any(Concept.class)))
                     .thenReturn(concept);
 
-            Concept createdConcept = conceptService.create(conceptReqDTO);
+            Concept createdConcept = conceptService.create(conceptDTO);
 
             assertEquals(concept, createdConcept);
         }
@@ -57,9 +57,9 @@ class ConceptServiceTest {
         @Test
         @DisplayName("(Create) Should not create a Concept with an incorrect DTO")
         void createWithWrongDTO() {
-            final ConceptReqDTO wrongConceptReqDTO = new ConceptReqDTO();
+            final ConceptDTO wrongConceptDTO = new ConceptDTO();
 
-            assertThrows(ConceptDTOBadRequestException.class, () -> conceptService.create(wrongConceptReqDTO));
+            assertThrows(ConceptDTOBadRequestException.class, () -> conceptService.create(wrongConceptDTO));
         }
     }
 
@@ -122,26 +122,26 @@ class ConceptServiceTest {
         @Test
         @DisplayName("(Update) Should update a Concept if exists")
         void updateWhenExists() {
-            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
 
            when(conceptRepository.findById(concept.getId()))
                     .thenReturn(Optional.of(concept));
 
-            conceptService.updateOne(concept.getId(), conceptReqDTO);
+            conceptService.updateOne(concept.getId(), conceptDTO);
         }
 
         @Test
         @DisplayName("(Update) Should throw an exception if the Concept is not found")
         void updateWhenNotExists() {
-            final ConceptReqDTO conceptReqDTO = new ConceptReqDTO("Software");
+            final ConceptDTO conceptDTO = new ConceptDTO("Software");
             final long wrongConceptId = 2L;
 
            when(conceptRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
 
-            assertThrows(ConceptNotFoundException.class, () -> conceptService.updateOne(wrongConceptId, conceptReqDTO));
+            assertThrows(ConceptNotFoundException.class, () -> conceptService.updateOne(wrongConceptId, conceptDTO));
         }
     }
 

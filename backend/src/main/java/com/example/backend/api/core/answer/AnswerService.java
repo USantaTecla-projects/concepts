@@ -1,8 +1,6 @@
-package com.example.backend.api.core.answer.service;
+package com.example.backend.api.core.answer;
 
-import com.example.backend.api.core.answer.AnswerRepository;
-import com.example.backend.api.core.answer.IAnswerService;
-import com.example.backend.api.core.answer.dto.AnswerReqDTO;
+import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
@@ -16,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AnswerService implements IAnswerService {
+public class AnswerService {
 
     private final ConceptRepository conceptRepository;
     private final AnswerRepository answerRepository;
@@ -29,16 +27,15 @@ public class AnswerService implements IAnswerService {
         this.answerRepository = answerRepository;
     }
 
-    @Override
     public Answer create(
             final Concept concept,
-            final AnswerReqDTO answerReqDTO) {
-        String textFromDTO = answerReqDTO
-                .getTextOptional(answerReqDTO.getText())
+            final AnswerDTO answerDTO) {
+        String textFromDTO = answerDTO
+                .getTextOptional(answerDTO.getText())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in Answer DTO is mandatory"));
 
-        Boolean isCorrectFromDTO = answerReqDTO
-                .getIsCorrectOptional(answerReqDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = answerDTO
+                .getIsCorrectOptional(answerDTO.getIsCorrect())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in Answer DTO is mandatory"));
 
         Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO, concept.getId(), Collections.emptyList()));
@@ -49,7 +46,6 @@ public class AnswerService implements IAnswerService {
         return answer;
     }
 
-    @Override
     public Answer findOne(
             final Concept concept,
             final Long id) {
@@ -66,7 +62,6 @@ public class AnswerService implements IAnswerService {
         return answer;
     }
 
-    @Override
     public List<Answer> findAll(final Concept concept) {
         return Optional
                 .ofNullable(concept.getAnswers())
@@ -75,19 +70,18 @@ public class AnswerService implements IAnswerService {
                 ));
     }
 
-    @Override
     public void updateOne(
             final Concept concept,
             final Long id,
-            final AnswerReqDTO answerReqDTO) {
+            final AnswerDTO answerDTO) {
         Answer answer = findOne(concept, id);
 
-        String textFromDTO = answerReqDTO
-                .getTextOptional(answerReqDTO.getText())
+        String textFromDTO = answerDTO
+                .getTextOptional(answerDTO.getText())
                 .orElse(answer.getText());
 
-        Boolean isCorrectFromDTO = answerReqDTO
-                .getIsCorrectOptional(answerReqDTO.getIsCorrect())
+        Boolean isCorrectFromDTO = answerDTO
+                .getIsCorrectOptional(answerDTO.getIsCorrect())
                 .orElse(answer.getCorrect());
 
         answer.setText(textFromDTO);
@@ -96,7 +90,6 @@ public class AnswerService implements IAnswerService {
         answerRepository.save(answer);
     }
 
-    @Override
     public void removeOne(
             final Concept concept,
             final Long id) {

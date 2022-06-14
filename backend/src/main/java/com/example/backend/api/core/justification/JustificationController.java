@@ -1,15 +1,11 @@
 package com.example.backend.api.core.justification;
 
-import com.example.backend.api.core.answer.IAnswerService;
+import com.example.backend.api.core.answer.AnswerService;
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.concept.IConceptService;
+import com.example.backend.api.core.concept.ConceptService;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.dto.JustificationReqDTO;
-import com.example.backend.api.core.justification.dto.JustificationResDTO;
+import com.example.backend.api.core.justification.dto.JustificationDTO;
 import com.example.backend.api.core.justification.model.Justification;
-import com.example.backend.api.core.justification.util.JustificationAssembler;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,59 +15,53 @@ import java.util.List;
 @RequestMapping("/concepts/{conceptId}/answers/{answerId}/justifications")
 public class JustificationController {
 
-    private final JustificationAssembler justificationAssembler;
-    private final IConceptService conceptService;
-    private final IAnswerService answersService;
-    private final IJustificationsService justificationsService;
+    private final ConceptService conceptService;
+    private final AnswerService answersService;
+    private final JustificationService justificationService;
 
     public JustificationController(
-            JustificationAssembler justificationAssembler,
-            IConceptService conceptService,
-            IAnswerService answersService,
-            IJustificationsService justificationsService) {
-        this.justificationAssembler = justificationAssembler;
+            ConceptService conceptService,
+            AnswerService answersService,
+            JustificationService justificationsService) {
         this.conceptService = conceptService;
         this.answersService = answersService;
-        this.justificationsService = justificationsService;
+        this.justificationService = justificationsService;
     }
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public EntityModel<JustificationResDTO> create(
+    public Justification create(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
-            @RequestBody final JustificationReqDTO justificationReqDTO
+            @RequestBody final JustificationDTO justificationDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        Justification justification = justificationsService.create(concept.getId(), answer, justificationReqDTO);
 
-        return justificationAssembler.toModel(justification);
+        return justificationService.create(concept.getId(), answer, justificationDTO);
     }
 
     @GetMapping("/{justificationId}")
-    public EntityModel<JustificationResDTO> findOne(
+    public Justification findOne(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
             @PathVariable final Long justificationId
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        Justification justification = justificationsService.findOne(answer, justificationId);
 
-        return justificationAssembler.toModel(justification);
+        return justificationService.findOne(answer, justificationId);
     }
 
     @GetMapping("/")
-    public CollectionModel<EntityModel<JustificationResDTO>> findAll(
+    public List<Justification> findAll(
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId
     ){
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept,answerId);
-        List<Justification> justificationList = justificationsService.findAll(answer);
 
-        return justificationAssembler.toCollectionModel(justificationList);
+        return justificationService.findAll(answer);
     }
 
     @PutMapping("/{justificationId}")
@@ -80,11 +70,11 @@ public class JustificationController {
             @PathVariable final Long conceptId,
             @PathVariable final Long answerId,
             @PathVariable final Long justificationId,
-            @RequestBody final JustificationReqDTO justificationReqDTO
+            @RequestBody final JustificationDTO justificationDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        justificationsService.updateOne(answer, justificationId, justificationReqDTO);
+        justificationService.updateOne(answer, justificationId, justificationDTO);
     }
 
     @DeleteMapping("/{justificationId}")
@@ -96,6 +86,6 @@ public class JustificationController {
     ) {
         Concept concept = conceptService.findOne(conceptId);
         Answer answer = answersService.findOne(concept, answerId);
-        justificationsService.removeOne(answer, justificationId);
+        justificationService.removeOne(answer, justificationId);
     }
 }

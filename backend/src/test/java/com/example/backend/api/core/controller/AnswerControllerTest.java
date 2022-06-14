@@ -1,15 +1,13 @@
 package com.example.backend.api.core.controller;
 
 import com.example.backend.api.core.answer.AnswerController;
-import com.example.backend.api.core.answer.IAnswerService;
-import com.example.backend.api.core.answer.dto.AnswerReqDTO;
-import com.example.backend.api.core.answer.dto.AnswerResDTO;
+import com.example.backend.api.core.answer.AnswerService;
+import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.answer.util.AnswerAssembler;
-import com.example.backend.api.core.concept.IConceptService;
+import com.example.backend.api.core.concept.ConceptService;
 import com.example.backend.api.core.concept.model.Concept;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,8 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,11 +27,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,13 +44,10 @@ public class AnswerControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AnswerAssembler answerAssembler;
+    private AnswerService answerService;
 
     @MockBean
-    private IAnswerService answerService;
-
-    @MockBean
-    private IConceptService conceptService;
+    private ConceptService conceptService;
 
     @Nested
     @DisplayName("POST")
@@ -65,24 +55,19 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(Create) Should get 201 if the DTO is correct")
         void createWithCorrectDTO() throws Exception {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, Collections.emptyList());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.create(concept, answerReqDTO))
+            when(answerService.create(concept, answerDTO))
                     .thenReturn(answer);
 
-            when(answerAssembler.toModel(any(Answer.class)))
-                    .thenReturn(
-                            EntityModel.of(
-                                    new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect()),
-                                    linkTo(methodOn(AnswerController.class).findOne(answer.getConceptId(), answer.getId())).withSelfRel(),
-                                    linkTo(methodOn(AnswerController.class).findAll(answer.getConceptId())).withRel("answers")));
 
-            final String answerJsonDTO = mapObjectToJson(answerReqDTO);
+
+            final String answerJsonDTO = mapObjectToJson(answerDTO);
 
             mockMvc.perform(post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -90,15 +75,13 @@ public class AnswerControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("text", Matchers.is(answer.getText())))
                     .andExpect(jsonPath("id").exists())
-                    .andExpect(jsonPath("isCorrect", Matchers.is(answer.getCorrect())))
-                    .andExpect(jsonPath("_links.self").exists())
-                    .andExpect(jsonPath("_links.answers").exists());
+                    .andExpect(jsonPath("correct", Matchers.is(answer.getCorrect())));
         }
 
         @Test
         @DisplayName("Create) Should get 400 if the DTO is malformed")
         void createWithWrongDTO() throws Exception {
-            final AnswerReqDTO wrongConceptDTO = new AnswerReqDTO();
+            final AnswerDTO wrongConceptDTO = new AnswerDTO();
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
@@ -132,19 +115,11 @@ public class AnswerControllerTest {
             when(answerService.findOne(concept, answer.getId()))
                     .thenReturn(answer);
 
-            when(answerAssembler.toModel(any(Answer.class)))
-                    .thenReturn(
-                            EntityModel.of(
-                                    new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect()),
-                                    linkTo(methodOn(AnswerController.class).findOne(answer.getConceptId(), answer.getId())).withSelfRel(),
-                                    linkTo(methodOn(AnswerController.class).findAll(answer.getConceptId())).withRel("answers")));
 
             mockMvc.perform(get(BASE_URL + answer.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("id").exists())
-                    .andExpect(jsonPath("text", Matchers.is(answer.getText())))
-                    .andExpect(jsonPath("_links.self").exists())
-                    .andExpect(jsonPath("_links.answers").exists());
+                    .andExpect(jsonPath("text", Matchers.is(answer.getText())));
         }
 
         @Test
@@ -196,19 +171,10 @@ public class AnswerControllerTest {
             when(answerService.findAll(concept))
                     .thenReturn(concept.getAnswers());
 
-            when(answerAssembler.toCollectionModel(concept.getAnswers()))
-                    .thenReturn(
-                            CollectionModel.of(
-                                    concept.getAnswers()
-                                            .stream()
-                                            .map(answer -> EntityModel.of(new AnswerResDTO(answer.getId(), answer.getText(), answer.getCorrect())))
-                                            .toList())
-                    );
 
             mockMvc.perform(get(BASE_URL))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$._embedded").exists())
-                    .andExpect(jsonPath("$._embedded.answerResDTOList.size()", Matchers.is(concept.getAnswers().size())));
+                    .andExpect(jsonPath("$").isArray());
         }
 
         @Test
@@ -233,14 +199,14 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 204 if the justification is in the concept answers list")
         void updateWhenExists() throws Exception {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            String answerJsonDTO = mapObjectToJson(answerReqDTO);
+            String answerJsonDTO = mapObjectToJson(answerDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -251,7 +217,7 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 404 if the Answer is not in the database")
         void updateWhenNotExists() throws Exception {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
             final long wrongAnswerId = 99L;
 
@@ -259,9 +225,9 @@ public class AnswerControllerTest {
                     .thenReturn(concept);
 
             doThrow(new AnswerNotFoundException("The answer with id = " + wrongAnswerId + " has not been found"))
-                    .when(answerService).updateOne(concept, wrongAnswerId, answerReqDTO);
+                    .when(answerService).updateOne(concept, wrongAnswerId, answerDTO);
 
-            String answerJsonDTO = mapObjectToJson(answerReqDTO);
+            String answerJsonDTO = mapObjectToJson(answerDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + wrongAnswerId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -272,7 +238,7 @@ public class AnswerControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 404 if the answer does not belong to the concept answers list")
         void updateWhenNotBelongsToConcept() throws Exception {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID);
 
@@ -280,13 +246,13 @@ public class AnswerControllerTest {
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            String answerJsonDTO = mapObjectToJson(answerReqDTO);
+            String answerJsonDTO = mapObjectToJson(answerDTO);
 
             doThrow(
                     new AnswerNotBelongToConceptException(
                             "The answer with id = " + answer.getId() + " doesn't belong to the concept with id = " + concept.getId())
             )
-                    .when(answerService).updateOne(concept, answer.getId(), answerReqDTO);
+                    .when(answerService).updateOne(concept, answer.getId(), answerDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId())
                             .contentType(MediaType.APPLICATION_JSON)

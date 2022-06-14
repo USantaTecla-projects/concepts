@@ -9,7 +9,7 @@ import java.util.Optional;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JustificationReqDTO {
+public class JustificationDTO {
 
     private String text;
 

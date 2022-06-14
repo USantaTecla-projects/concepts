@@ -1,18 +1,17 @@
 package com.example.backend.api.core.controller;
 
 
-import com.example.backend.api.core.answer.IAnswerService;
+import com.example.backend.api.core.answer.AnswerService;
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.concept.IConceptService;
+import com.example.backend.api.core.concept.ConceptService;
 import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.IJustificationsService;
 import com.example.backend.api.core.justification.JustificationController;
-import com.example.backend.api.core.justification.dto.JustificationReqDTO;
+import com.example.backend.api.core.justification.JustificationService;
+import com.example.backend.api.core.justification.dto.JustificationDTO;
 import com.example.backend.api.core.justification.exception.model.JustificationDTOBadRequestException;
 import com.example.backend.api.core.justification.exception.model.JustificationNotBelongToAnswerException;
 import com.example.backend.api.core.justification.exception.model.JustificationNotFoundException;
 import com.example.backend.api.core.justification.model.Justification;
-import com.example.backend.api.core.justification.util.JustificationAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -30,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -50,16 +48,13 @@ public class JustificationControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private JustificationAssembler justificationAssembler;
+    private AnswerService answerService;
 
     @MockBean
-    private IAnswerService answerService;
+    private ConceptService conceptService;
 
     @MockBean
-    private IConceptService conceptService;
-
-    @MockBean
-    private IJustificationsService justificationsService;
+    private JustificationService justificationsService;
 
     @Nested
     @DisplayName("POST")
@@ -68,9 +63,20 @@ public class JustificationControllerTest {
         @Test
         @DisplayName("(Create) Should get 201 if the DTO is correct")
         void createWithCorrectDTO() throws Exception {
-            final JustificationReqDTO justificationReqDTO = new JustificationReqDTO("Software Justification", true, null);
-            final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
+            final Justification justification = new Justification(
+                    JUSTIFICATION_ID,
+                    "Software Justification",
+                    true,
+                    null,
+                    CONCEPT_ID,
+                    ANSWER_ID);
+            final Answer answer = new Answer(
+                    ANSWER_ID,
+                    "Software answer",
+                    true,
+                    CONCEPT_ID,
+                    new LinkedList<>(List.of(justification)));
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -79,13 +85,10 @@ public class JustificationControllerTest {
             when(answerService.findOne(concept, answer.getId()))
                     .thenReturn(answer);
 
-            when(justificationsService.create(concept.getId(), answer, justificationReqDTO))
+            when(justificationsService.create(concept.getId(), answer, justificationDTO))
                     .thenReturn(justification);
 
-            when(justificationAssembler.toModel(any(Justification.class)))
-                    .thenCallRealMethod();
-
-            final String justificationJsonDTO = mapObjectToJson(justificationReqDTO);
+            final String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
             mockMvc.perform(post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -93,16 +96,15 @@ public class JustificationControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("text", Matchers.is(justification.getText())))
                     .andExpect(jsonPath("id").exists())
-                    .andExpect(jsonPath("isCorrect", Matchers.is(justification.getCorrect())))
-                    .andExpect(jsonPath("_links.self").exists())
-                    .andExpect(jsonPath("_links.justifications").exists());
+                    .andExpect(jsonPath("correct", Matchers.is(justification.getCorrect())));
+
 
         }
 
         @Test
         @DisplayName("Create) Should get 400 if the DTO is malformed")
         void createWithWrongDTO() {
-            final JustificationReqDTO justificationReqDTO = new JustificationReqDTO();
+            final JustificationDTO justificationDTO = new JustificationDTO();
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
@@ -113,7 +115,7 @@ public class JustificationControllerTest {
             when(answerService.findOne(concept, answer.getId()))
                     .thenReturn(answer);
 
-            when(justificationsService.create(concept.getId(), answer, justificationReqDTO))
+            when(justificationsService.create(concept.getId(), answer, justificationDTO))
                     .thenThrow(new JustificationDTOBadRequestException("Field text in Justification DTO is mandatory"));
 
         }
@@ -138,15 +140,10 @@ public class JustificationControllerTest {
             when(justificationsService.findOne(answer, justification.getId()))
                     .thenReturn(justification);
 
-            when(justificationAssembler.toModel(any(Justification.class)))
-                    .thenCallRealMethod();
-
             mockMvc.perform(get(BASE_URL + justification.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("id").exists())
-                    .andExpect(jsonPath("text", Matchers.is(justification.getText())))
-                    .andExpect(jsonPath("_links.self").exists())
-                    .andExpect(jsonPath("_links.justifications").exists());
+                    .andExpect(jsonPath("text", Matchers.is(justification.getText())));
 
         }
 
@@ -211,22 +208,16 @@ public class JustificationControllerTest {
             when(justificationsService.findAll(answer))
                     .thenReturn(answer.getJustifications());
 
-            when(justificationAssembler.toModel(any(Justification.class)))
-                    .thenCallRealMethod();
-
-            when(justificationAssembler.toCollectionModel(any()))
-                    .thenCallRealMethod();
 
             mockMvc.perform(get(BASE_URL))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$._embedded").exists())
-                    .andExpect(jsonPath("$._embedded.justificationResDTOList.size()", Matchers.is(answer.getJustifications().size())));
+                    .andExpect(jsonPath("$").isArray());
 
         }
 
         @Test
         @DisplayName("(FindAll) Should get 404 if the answers justifications list is empty")
-        void findAllWhenDataNotExists() throws Exception {
+        void findAllWhenDataNotExists()  {
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
@@ -247,7 +238,7 @@ public class JustificationControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 204 if the justification is in the answer justifications list")
         void updateWhenExists() throws Exception {
-            final JustificationReqDTO justificationReqDTO = new JustificationReqDTO("Software Justification", true, null);
+            final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
@@ -258,7 +249,7 @@ public class JustificationControllerTest {
             when(answerService.findOne(concept, answer.getId()))
                     .thenReturn(answer);
 
-            String justificationJsonDTO = mapObjectToJson(justificationReqDTO);
+            String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + justification.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -269,7 +260,7 @@ public class JustificationControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 404 if the Answer is not in the database")
         void updateWhenNotExists() throws Exception {
-            final JustificationReqDTO justificationReqDTO = new JustificationReqDTO("Software Justification", true, null);
+            final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
             final long wrongJustificationId = 99L;
@@ -281,9 +272,9 @@ public class JustificationControllerTest {
                     .thenReturn(answer);
 
             doThrow(new JustificationNotFoundException("The justification with id = " + wrongJustificationId + " has not been found"))
-                    .when(justificationsService).updateOne(answer, wrongJustificationId, justificationReqDTO);
+                    .when(justificationsService).updateOne(answer, wrongJustificationId, justificationDTO);
 
-            String justificationJsonDTO = mapObjectToJson(justificationReqDTO);
+            String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + wrongJustificationId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -294,7 +285,7 @@ public class JustificationControllerTest {
         @Test
         @DisplayName("(UpdateOne) Should get 404 if the answer does not belong to the concept answers list")
         void updateWhenNotBelongsToConcept() throws Exception {
-            final JustificationReqDTO justificationReqDTO = new JustificationReqDTO("Software Justification", true, null);
+            final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
@@ -306,9 +297,9 @@ public class JustificationControllerTest {
                     .thenReturn(answer);
 
             doThrow(new JustificationNotBelongToAnswerException("The justification with id = " + justification.getId() + " doesn't belong to the answer with id = " + answer.getId()))
-                    .when(justificationsService).updateOne(answer, justification.getId(), justificationReqDTO);
+                    .when(justificationsService).updateOne(answer, justification.getId(), justificationDTO);
 
-            String justificationJsonDTO = mapObjectToJson(justificationReqDTO);
+            String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
             mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + justification.getId())
                             .contentType(MediaType.APPLICATION_JSON)

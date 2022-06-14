@@ -9,7 +9,7 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConceptReqDTO {
+public class ConceptDTO {
 
     private String text;
 

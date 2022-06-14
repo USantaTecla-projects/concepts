@@ -1,12 +1,12 @@
 package com.example.backend.api.core.service;
 
 import com.example.backend.api.core.answer.AnswerRepository;
-import com.example.backend.api.core.answer.dto.AnswerReqDTO;
+import com.example.backend.api.core.answer.dto.AnswerDTO;
 import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.answer.service.AnswerService;
+import com.example.backend.api.core.answer.AnswerService;
 import com.example.backend.api.core.concept.ConceptRepository;
 import com.example.backend.api.core.concept.model.Concept;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +30,10 @@ import static org.mockito.Mockito.when;
 public class AnswerServiceTest {
 
     @Mock
-    private AnswerRepository answerRepository;
+    private ConceptRepository conceptRepository;
 
     @Mock
-    private ConceptRepository conceptRepository;
+    private AnswerRepository answerRepository;
 
     @InjectMocks
     private AnswerService answerService;
@@ -46,14 +46,14 @@ public class AnswerServiceTest {
         @Test
         @DisplayName("(Create) Should create an Answer with a correct DTO")
         void createWithCorrectDTO() {
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Answer answer = new Answer(2L, "Software answer", true, 1L);
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
-            
+
             when(answerRepository.save(any(Answer.class)))
                     .thenReturn(answer);
 
-            Answer createdAnswer = answerService.create(concept, answerReqDTO);
+            Answer createdAnswer = answerService.create(concept, answerDTO);
 
 
             // The Answer is created correctly
@@ -71,11 +71,11 @@ public class AnswerServiceTest {
         @Test
         @DisplayName("(Create) Should not create an Answer with a wrong DTO")
         void createWithWrongDTO() {
-            final AnswerReqDTO wrongAnswerReqDTO = new AnswerReqDTO("");
+            final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
             final Answer answer = new Answer(2L, "Software answer", true, 1L);
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
 
-            assertThrows(AnswerDTOBadRequestException.class, () -> answerService.create(concept, wrongAnswerReqDTO));
+            assertThrows(AnswerDTOBadRequestException.class, () -> answerService.create(concept, wrongAnswerDTO));
         }
     }
 
@@ -151,22 +151,22 @@ public class AnswerServiceTest {
         void updateWhenExists() {
             final Answer answer = new Answer(2L, "Software answer", true, 1L);
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
             when(answerRepository.findById(answer.getId()))
                     .thenReturn(Optional.of(answer));
 
-            answerService.updateOne(concept, answer.getId(), answerReqDTO);
+            answerService.updateOne(concept, answer.getId(), answerDTO);
         }
 
         @Test
         @DisplayName("(Update) Should throw an exception if the Answer is not found")
         void updateWhenNotExists() {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-            final AnswerReqDTO answerReqDTO = new AnswerReqDTO("Software answer", true);
+            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final long wrongAnswerId = 99L;
 
-            assertThrows(AnswerNotFoundException.class, () -> answerService.updateOne(concept, wrongAnswerId, answerReqDTO));
+            assertThrows(AnswerNotFoundException.class, () -> answerService.updateOne(concept, wrongAnswerId, answerDTO));
         }
     }
 
