@@ -1,17 +1,17 @@
 package com.example.backend.api.core.controller;
 
 
-import com.example.backend.api.core.answer.AnswerService;
-import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.concept.ConceptService;
-import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.justification.JustificationController;
-import com.example.backend.api.core.justification.JustificationService;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
-import com.example.backend.api.core.justification.exception.model.JustificationDTOBadRequestException;
-import com.example.backend.api.core.justification.exception.model.JustificationNotBelongToAnswerException;
-import com.example.backend.api.core.justification.exception.model.JustificationNotFoundException;
-import com.example.backend.api.core.justification.model.Justification;
+import com.example.backend.api.resources.core.answer.AnswerService;
+import com.example.backend.api.resources.core.answer.model.Answer;
+import com.example.backend.api.resources.core.concept.ConceptService;
+import com.example.backend.api.resources.core.concept.model.Concept;
+import com.example.backend.api.resources.core.justification.JustificationController;
+import com.example.backend.api.resources.core.justification.JustificationService;
+import com.example.backend.api.resources.core.justification.dto.JustificationDTO;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationDTOBadRequestException;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationNotBelongToAnswerException;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationNotFoundException;
+import com.example.backend.api.resources.core.justification.model.Justification;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

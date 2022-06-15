@@ -1,11 +1,11 @@
 package com.example.backend.api.core.service;
 
-import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
-import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
-import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
-import com.example.backend.api.core.concept.model.Concept;
-import com.example.backend.api.core.concept.ConceptService;
+import com.example.backend.api.resources.core.concept.ConceptRepository;
+import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.core.concept.exception.model.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.core.concept.exception.model.ConceptNotFoundException;
+import com.example.backend.api.resources.core.concept.model.Concept;
+import com.example.backend.api.resources.core.concept.ConceptService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

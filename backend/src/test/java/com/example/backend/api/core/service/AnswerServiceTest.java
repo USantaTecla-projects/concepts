@@ -1,14 +1,14 @@
 package com.example.backend.api.core.service;
 
-import com.example.backend.api.core.answer.AnswerRepository;
-import com.example.backend.api.core.answer.dto.AnswerDTO;
-import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
-import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
-import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
-import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.answer.AnswerService;
-import com.example.backend.api.core.concept.ConceptRepository;
-import com.example.backend.api.core.concept.model.Concept;
+import com.example.backend.api.resources.core.answer.AnswerRepository;
+import com.example.backend.api.resources.core.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerDTOBadRequestException;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerNotBelongToConceptException;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerNotFoundException;
+import com.example.backend.api.resources.core.answer.model.Answer;
+import com.example.backend.api.resources.core.answer.AnswerService;
+import com.example.backend.api.resources.core.concept.ConceptRepository;
+import com.example.backend.api.resources.core.concept.model.Concept;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

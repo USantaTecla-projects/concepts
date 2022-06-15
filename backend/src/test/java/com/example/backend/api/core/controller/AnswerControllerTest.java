@@ -1,14 +1,14 @@
 package com.example.backend.api.core.controller;
 
-import com.example.backend.api.core.answer.AnswerController;
-import com.example.backend.api.core.answer.AnswerService;
-import com.example.backend.api.core.answer.dto.AnswerDTO;
-import com.example.backend.api.core.answer.exception.model.AnswerDTOBadRequestException;
-import com.example.backend.api.core.answer.exception.model.AnswerNotBelongToConceptException;
-import com.example.backend.api.core.answer.exception.model.AnswerNotFoundException;
-import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.concept.ConceptService;
-import com.example.backend.api.core.concept.model.Concept;
+import com.example.backend.api.resources.core.answer.AnswerController;
+import com.example.backend.api.resources.core.answer.AnswerService;
+import com.example.backend.api.resources.core.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerDTOBadRequestException;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerNotBelongToConceptException;
+import com.example.backend.api.resources.core.answer.exception.model.AnswerNotFoundException;
+import com.example.backend.api.resources.core.answer.model.Answer;
+import com.example.backend.api.resources.core.concept.ConceptService;
+import com.example.backend.api.resources.core.concept.model.Concept;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

@@ -1,8 +1,8 @@
 package com.example.backend.api.core.e2e;
 
-import com.example.backend.api.core.answer.dto.AnswerDTO;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
+import com.example.backend.api.resources.core.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.core.justification.dto.JustificationDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;

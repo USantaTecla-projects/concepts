@@ -1,11 +1,11 @@
 package com.example.backend.api.core.controller;
 
-import com.example.backend.api.core.concept.ConceptController;
-import com.example.backend.api.core.concept.ConceptService;
-import com.example.backend.api.core.concept.dto.ConceptDTO;
-import com.example.backend.api.core.concept.exception.model.ConceptDTOBadRequestException;
-import com.example.backend.api.core.concept.exception.model.ConceptNotFoundException;
-import com.example.backend.api.core.concept.model.Concept;
+import com.example.backend.api.resources.core.concept.ConceptController;
+import com.example.backend.api.resources.core.concept.ConceptService;
+import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.core.concept.exception.model.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.core.concept.exception.model.ConceptNotFoundException;
+import com.example.backend.api.resources.core.concept.model.Concept;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

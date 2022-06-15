@@ -1,14 +1,14 @@
 package com.example.backend.api.core.service;
 
-import com.example.backend.api.core.answer.AnswerRepository;
-import com.example.backend.api.core.answer.model.Answer;
-import com.example.backend.api.core.justification.JustificationRepository;
-import com.example.backend.api.core.justification.dto.JustificationDTO;
-import com.example.backend.api.core.justification.exception.model.JustificationDTOBadRequestException;
-import com.example.backend.api.core.justification.exception.model.JustificationNotBelongToAnswerException;
-import com.example.backend.api.core.justification.exception.model.JustificationNotFoundException;
-import com.example.backend.api.core.justification.model.Justification;
-import com.example.backend.api.core.justification.JustificationService;
+import com.example.backend.api.resources.core.answer.AnswerRepository;
+import com.example.backend.api.resources.core.answer.model.Answer;
+import com.example.backend.api.resources.core.justification.JustificationRepository;
+import com.example.backend.api.resources.core.justification.dto.JustificationDTO;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationDTOBadRequestException;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationNotBelongToAnswerException;
+import com.example.backend.api.resources.core.justification.exception.model.JustificationNotFoundException;
+import com.example.backend.api.resources.core.justification.model.Justification;
+import com.example.backend.api.resources.core.justification.JustificationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
