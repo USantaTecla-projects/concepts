@@ -3,6 +3,7 @@ package com.example.backend.api.core.justification.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name="justification")
 public class Justification {
 
     @Id
