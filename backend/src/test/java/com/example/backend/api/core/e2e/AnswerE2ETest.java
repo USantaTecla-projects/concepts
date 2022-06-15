@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static com.example.backend.util.GetAuthToken.getAuthCookie;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -18,13 +19,15 @@ public class AnswerE2ETest {
 
     public static int CONCEPT_ID = 1;
     public final String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/";
-
-
+    private static String authCookie;
 
     @BeforeAll
     static void setup() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8080;
+        RestAssured.baseURI = "https://localhost";
+        RestAssured.port = 8443;
+        RestAssured.useRelaxedHTTPSValidation();
+
+        authCookie = getAuthCookie();
         CONCEPT_ID = createConcept(new ConceptDTO("Software")).extract().path("id");
     }
 
@@ -35,9 +38,11 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Create) Should create an answer if the DTO is correct")
         void createWithCorrectDTO() {
+
             final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(answerDTO)
             .when()
@@ -55,6 +60,7 @@ public class AnswerE2ETest {
             final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(wrongAnswerDTO)
             .when()
@@ -77,6 +83,7 @@ public class AnswerE2ETest {
 
             // Check that the Answer is in the first Concept
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("conceptId", conceptId)
             .when()
@@ -194,6 +201,7 @@ public class AnswerE2ETest {
 
             // Update the Answer
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .pathParam("id", id)
                     .body(answerDTO2)
@@ -223,6 +231,7 @@ public class AnswerE2ETest {
             createConcept(conceptDTO1).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .pathParam("id", 9999)
                     .body(answerDTO1)
@@ -244,6 +253,7 @@ public class AnswerE2ETest {
             final int answerId = createAnswer(answerDTO, CONCEPT_ID).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("answerId", answerId)
             .when()
@@ -257,6 +267,7 @@ public class AnswerE2ETest {
         @DisplayName("(Remove) Should throw an Exception")
         void deleteWhenNotExits() {
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("answerId", 9999)
             .when()
@@ -277,6 +288,7 @@ public class AnswerE2ETest {
     private ValidatableResponse createAnswer(AnswerDTO answerDTO, int conceptId) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(answerDTO)
                 .when()
@@ -293,6 +305,7 @@ public class AnswerE2ETest {
     private static ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(conceptDTO)
                 .when()

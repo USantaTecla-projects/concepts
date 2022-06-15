@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static com.example.backend.util.GetAuthToken.getAuthCookie;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,11 +22,15 @@ public class JustificationE2ETest {
     public static int CONCEPT_ID = 1;
     public static int ANSWER_ID = 2;
     public final String BASE_URL = "/concepts/" + CONCEPT_ID + "/answers/" + ANSWER_ID + "/justifications/";
+    private static String authCookie;
 
     @BeforeAll
     static void setup() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8080;
+        RestAssured.baseURI = "https://localhost";
+        RestAssured.port = 8443;
+        RestAssured.useRelaxedHTTPSValidation();
+
+        authCookie = getAuthCookie();
         CONCEPT_ID = createConcept(new ConceptDTO("Software")).extract().path("id");
         ANSWER_ID = createAnswer(new AnswerDTO("Software answer", true), CONCEPT_ID).extract().path("id");
     }
@@ -41,11 +46,12 @@ public class JustificationE2ETest {
             final JustificationDTO justificationDTO = new JustificationDTO("Software justification", true, null);
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(justificationDTO)
-                    .when()
+            .when()
                     .post(BASE_URL)
-                    .then()
+            .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .contentType(ContentType.JSON)
                     .body("text", res -> equalTo("Software justification"))
@@ -58,11 +64,12 @@ public class JustificationE2ETest {
             final JustificationDTO wrongJustificationDTO = new JustificationDTO();
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(wrongJustificationDTO)
-                    .when()
+            .when()
                     .post(BASE_URL)
-                    .then()
+            .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
                     .contentType(ContentType.JSON)
                     .body("message", res -> equalTo("Field text in Justification DTO is mandatory"))
@@ -86,9 +93,9 @@ public class JustificationE2ETest {
                     .accept(ContentType.JSON)
                     .pathParams("conceptId", conceptId)
                     .pathParam("answerId", answerId)
-                    .when()
+            .when()
                     .get("/concepts/{conceptId}/answers/{answerId}")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("justifications[0].id", res -> is(justificationId));
 
@@ -109,9 +116,9 @@ public class JustificationE2ETest {
             given()
                     .accept(ContentType.JSON)
                     .pathParam("justificationId", justificationId)
-                    .when()
+            .when()
                     .get(BASE_URL + "{justificationId}")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo("Software justification"))
                     .body("correct", res -> equalTo(true))
@@ -126,9 +133,9 @@ public class JustificationE2ETest {
             given()
                     .accept(ContentType.JSON)
                     .pathParam("wrongJustificationId", wrongJustificationId)
-                    .when()
+            .when()
                     .get(BASE_URL + "{wrongJustificationId}")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.NOT_FOUND.value());
         }
 
@@ -149,9 +156,9 @@ public class JustificationE2ETest {
 
             given()
                     .accept(ContentType.JSON)
-                    .when()
+            .when()
                     .get(BASE_URL)
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("size()", greaterThanOrEqualTo(5));
         }
@@ -170,9 +177,9 @@ public class JustificationE2ETest {
                     .accept(ContentType.JSON)
                     .pathParams("conceptId", conceptId)
                     .pathParams("answerId", answerId)
-                    .when()
+            .when()
                     .get("/concepts/{conceptId}/answers/{answerId}/justifications/")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("isEmpty()", is(true));
 
@@ -198,13 +205,14 @@ public class JustificationE2ETest {
                     .pathParam("justificationId", justificationId)
             .when()
                     .get(BASE_URL + "{justificationId}")
-                    .then()
+            .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo(justificationDTO1.getText()))
                     .body("correct", res -> equalTo(justificationDTO1.getIsCorrect()));
 
             // Update the Answer
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .pathParam("justificationId", justificationId)
                     .body(justificationDTO2)
@@ -231,6 +239,7 @@ public class JustificationE2ETest {
             final JustificationDTO justificationDTO = new JustificationDTO("Software justification", true, null);
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .pathParam("justificationId", 9999)
                     .body(justificationDTO)
@@ -251,6 +260,7 @@ public class JustificationE2ETest {
             final int justificationId = createJustification(justificationDTO, CONCEPT_ID,ANSWER_ID).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("justificationId", justificationId)
             .when()
@@ -264,6 +274,7 @@ public class JustificationE2ETest {
         @DisplayName("(Remove) Should throw an Exception")
         void deleteWhenNotExits() {
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("justificationId", 9999)
             .when()
@@ -283,31 +294,34 @@ public class JustificationE2ETest {
     private static ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(conceptDTO)
-                        .when()
+                .when()
                         .post("/concepts/")
-                        .then();
+                .then();
     }
 
     private static ValidatableResponse createAnswer(AnswerDTO answerDTO, long conceptId) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(answerDTO)
-                        .when()
+                .when()
                         .post("/concepts/" + conceptId + "/answers/")
-                        .then();
+                .then();
     }
 
     private static ValidatableResponse createJustification(JustificationDTO justificationDTO, long conceptId, long answerId) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
-                        .body(justificationDTO)
+                .body(justificationDTO)
                         .when()
                         .post("/concepts/" + conceptId + "/answers/" + answerId + "/justifications/")
-                        .then();
+                .then();
     }
 
 }

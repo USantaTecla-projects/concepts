@@ -11,17 +11,22 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static com.example.backend.util.GetAuthToken.getAuthCookie;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class ConceptE2ETest {
 
     final String BASE_URL = "/concepts/";
+    private static String authCookie;
 
     @BeforeAll
     static void setup() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8080;
+        RestAssured.baseURI = "https://localhost";
+        RestAssured.port = 8443;
+        RestAssured.useRelaxedHTTPSValidation();
+
+        authCookie = getAuthCookie();
     }
 
     @Nested
@@ -33,6 +38,7 @@ public class ConceptE2ETest {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(conceptDTO)
             .when()
@@ -51,6 +57,7 @@ public class ConceptE2ETest {
             final ConceptDTO wrongConceptDTO = new ConceptDTO();
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .body(wrongConceptDTO)
             .when()
@@ -175,6 +182,7 @@ public class ConceptE2ETest {
                     .pathParam("id", id)
                     .body(conceptDTO2)
             .when()
+                    .cookie("AuthToken",authCookie)
                     .put(BASE_URL + "{id}")
             .then()
                     .statusCode(HttpStatus.NO_CONTENT.value());
@@ -199,6 +207,7 @@ public class ConceptE2ETest {
             final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .contentType("application/json")
                     .pathParam("id", id + 9999)
                     .body(conceptDTO2)
@@ -220,6 +229,7 @@ public class ConceptE2ETest {
             final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("id", id)
             .when()
@@ -237,6 +247,7 @@ public class ConceptE2ETest {
             final int id = createConcept(conceptDTO).extract().path("id");
 
             given()
+                    .cookie("AuthToken",authCookie)
                     .accept(ContentType.JSON)
                     .pathParam("id", id + 9854)
             .when()
@@ -256,6 +267,7 @@ public class ConceptE2ETest {
     private ValidatableResponse createConcept(ConceptDTO conceptDTO) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(conceptDTO)
                 .when()
@@ -273,6 +285,7 @@ public class ConceptE2ETest {
     private ValidatableResponse createAnswer(AnswerDTO answerDTO, int conceptId) {
         return
                 given()
+                        .cookie("AuthToken",authCookie)
                         .contentType("application/json")
                         .body(answerDTO)
                 .when()

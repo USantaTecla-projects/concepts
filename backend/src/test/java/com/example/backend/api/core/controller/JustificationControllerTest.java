@@ -1,6 +1,10 @@
 package com.example.backend.api.core.controller;
 
 
+import com.example.backend.api.resources.auth.configuration.AuthConfiguration;
+import com.example.backend.api.resources.auth.jwt.components.JwtRequestFilter;
+import com.example.backend.api.resources.auth.jwt.components.JwtTokenProvider;
+import com.example.backend.api.resources.auth.util.UserDetailsFinder;
 import com.example.backend.api.resources.core.answer.AnswerService;
 import com.example.backend.api.resources.core.answer.model.Answer;
 import com.example.backend.api.resources.core.concept.ConceptService;
@@ -12,10 +16,7 @@ import com.example.backend.api.resources.core.justification.exception.model.Just
 import com.example.backend.api.resources.core.justification.exception.model.JustificationNotBelongToAnswerException;
 import com.example.backend.api.resources.core.justification.exception.model.JustificationNotFoundException;
 import com.example.backend.api.resources.core.justification.model.Justification;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.example.backend.api.resources.user.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,12 +24,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.example.backend.util.MapObjectToJson.mapObjectToJson;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,6 +40,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JustificationController.class)
+@Import({
+        AuthConfiguration.class,
+        UserDetailsFinder.class,
+        JwtRequestFilter.class,
+        JwtTokenProvider.class,
+})
+@WithMockUser(username = "teacher", roles = "TEACHER")
 public class JustificationControllerTest {
 
     public final static long CONCEPT_ID = 1L;
@@ -55,6 +66,9 @@ public class JustificationControllerTest {
 
     @MockBean
     private JustificationService justificationsService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Nested
     @DisplayName("POST")
@@ -217,7 +231,7 @@ public class JustificationControllerTest {
 
         @Test
         @DisplayName("(FindAll) Should get 404 if the answers justifications list is empty")
-        void findAllWhenDataNotExists()  {
+        void findAllWhenDataNotExists() {
             final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
@@ -376,19 +390,5 @@ public class JustificationControllerTest {
                     .andExpect(status().isNotFound());
         }
 
-    }
-
-    /**
-     * Converts Object to JSON.
-     *
-     * @param object The object to be converted.
-     * @return A String with the Object as JSON.
-     * @throws JsonProcessingException Is thrown if the Object can't be parsed.
-     */
-    private String mapObjectToJson(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
-        return objectWriter.writeValueAsString(object);
     }
 }
