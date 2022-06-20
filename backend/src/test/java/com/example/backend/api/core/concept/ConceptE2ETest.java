@@ -152,7 +152,6 @@ public class ConceptE2ETest {
                     .body("", res -> hasKey("totalPages"));
         }
 
-        //TODO Create FindAll test when the database is empty (DELETE method needed)
     }
 
     @Nested

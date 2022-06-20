@@ -125,7 +125,7 @@ public class UserServiceTest {
 
     @Nested
     @DisplayName("PUT")
-    class ConceptPut {
+    class UserPut {
         @Test
         @DisplayName("(Update) Should update a Concept if exists")
         void updateWhenExists() {
@@ -154,7 +154,7 @@ public class UserServiceTest {
 
     @Nested
     @DisplayName("DELETE")
-    class ConceptDelete {
+    class UserDelete {
         @Test
         @DisplayName("(Delete) Should delete a Concept if exists")
         void deleteWhenExists() {
