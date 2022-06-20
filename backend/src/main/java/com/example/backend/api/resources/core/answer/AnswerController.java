@@ -36,13 +36,13 @@ public class AnswerController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{answerId}")
     public Answer findOne(
             @PathVariable final Long conceptId,
-            @PathVariable final Long id
+            @PathVariable final Long answerId
     ) {
         Concept concept = conceptService.findOne(conceptId);
-        return answersService.findOne(concept, id);
+        return answersService.findOne(concept, answerId);
     }
 
     @GetMapping("/")
@@ -53,24 +53,24 @@ public class AnswerController {
         return answersService.findAll(concept);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{answerId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void updateOne(
             @PathVariable final Long conceptId,
-            @PathVariable final Long id,
+            @PathVariable final Long answerId,
             @RequestBody final AnswerDTO answerDTO
     ) {
         Concept concept = conceptService.findOne(conceptId);
-        answersService.updateOne(concept, id, answerDTO);
+        answersService.updateOne(concept, answerId, answerDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{answerId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void removeOne(
             @PathVariable final Long conceptId,
-            @PathVariable final Long id
+            @PathVariable final Long answerId
     ) {
         Concept concept = conceptService.findOne(conceptId);
-        answersService.removeOne(concept, id);
+        answersService.removeOne(concept, answerId);
     }
 }

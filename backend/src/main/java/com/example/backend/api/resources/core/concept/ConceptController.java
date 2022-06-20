@@ -24,9 +24,9 @@ public class ConceptController {
 
     }
 
-    @GetMapping("/{id}")
-    public Concept findOne(@PathVariable final Long id) {
-        return conceptsService.findOne(id);
+    @GetMapping("/{conceptId}")
+    public Concept findOne(@PathVariable final Long conceptId) {
+        return conceptsService.findOne(conceptId);
     }
 
     @GetMapping("/")
@@ -34,16 +34,16 @@ public class ConceptController {
         return conceptsService.findAll(page);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{conceptId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void updateOne(@PathVariable final Long id, @RequestBody final ConceptDTO conceptDTO) {
-        conceptsService.updateOne(id, conceptDTO);
+    public void updateOne(@PathVariable final Long conceptId, @RequestBody final ConceptDTO conceptDTO) {
+        conceptsService.updateOne(conceptId, conceptDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{conceptId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void removeOne(@PathVariable final Long id) {
-        conceptsService.removeOne(id);
+    public void removeOne(@PathVariable final Long conceptId) {
+        conceptsService.removeOne(conceptId);
     }
 
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="answer")
+@Table(name = "answer")
 public class Answer {
 
     @Id
@@ -69,7 +69,7 @@ public class Answer {
         justifications.remove(justification);
     }
 
-    public boolean containsJustification(Justification justification){
+    public boolean containsJustification(Justification justification) {
         return justifications.contains(justification);
     }
 

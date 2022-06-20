@@ -57,7 +57,7 @@ public class AnswerE2ETest {
         @Test
         @DisplayName("(Create) Should not create an Answer if the DTO is malformed")
         void createWithWrongDTO() {
-            final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
+            final AnswerDTO wrongAnswerDTO = new AnswerDTO();
 
             given()
                     .cookie("AuthToken",authCookie)

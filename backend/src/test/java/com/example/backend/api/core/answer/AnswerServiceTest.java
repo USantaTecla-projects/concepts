@@ -71,7 +71,7 @@ public class AnswerServiceTest {
         @Test
         @DisplayName("(Create) Should not create an Answer with a wrong DTO")
         void createWithWrongDTO() {
-            final AnswerDTO wrongAnswerDTO = new AnswerDTO("");
+            final AnswerDTO wrongAnswerDTO = new AnswerDTO();
             final Answer answer = new Answer(2L, "Software answer", true, 1L);
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
 

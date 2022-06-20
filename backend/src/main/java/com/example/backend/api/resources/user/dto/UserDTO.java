@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.Optional;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
 
     private String username;
@@ -28,6 +28,5 @@ public class UserDTO {
                 .ofNullable(text)
                 .filter(t -> !t.isEmpty());
     }
-
 
 }

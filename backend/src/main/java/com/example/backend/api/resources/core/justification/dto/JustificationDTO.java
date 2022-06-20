@@ -17,7 +17,6 @@ public class JustificationDTO {
 
     private String error;
 
-
     public Optional<String> getTextOptional(final String text) {
         return Optional
                 .ofNullable(text)

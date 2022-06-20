@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.backend.api.resources.auth.jwt.util.SecurityCipher;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(
+			@NotNull HttpServletRequest request,
+			@NotNull HttpServletResponse response,
+			@NotNull FilterChain filterChain) throws ServletException, IOException {
 
 		try {
 			String token = getJwtToken(request, true);
@@ -60,12 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	}	
 
 	private String getJwtToken(HttpServletRequest request, boolean fromCookie) {
-		
-		if (fromCookie) {
-			return getJwtFromCookie(request);
-		} else {
-			return getJwtFromRequest(request);
-		}
+		return fromCookie ? getJwtFromCookie(request) : getJwtFromRequest(request);
 	}
 
 	private String getJwtFromRequest(HttpServletRequest request) {

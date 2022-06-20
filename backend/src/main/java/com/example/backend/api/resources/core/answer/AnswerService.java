@@ -27,6 +27,14 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
+    /**
+     * Create a new answer by a given DTO (if it is correct) in the given concept.
+     *
+     * @param concept   The concept where to store the answer.
+     * @param answerDTO The data object to create the new answer.
+     * @return The created answer.
+     * @author Cristian
+     */
     public Answer create(
             final Concept concept,
             final AnswerDTO answerDTO) {
@@ -46,35 +54,55 @@ public class AnswerService {
         return answer;
     }
 
+    /**
+     * Find an answer in the database. If the answer does not exist
+     * or does not belong to the concept, it throws an exception.
+     *
+     * @param concept  The concept where the answer should be.
+     * @param answerId The answer ID to look for.
+     * @return The answer that match the ID and is in the concept.
+     * @author Cristian
+     */
     public Answer findOne(
             final Concept concept,
-            final Long id) {
+            final Long answerId) {
 
         Answer answer = answerRepository
-                .findById(id)
-                .orElseThrow(() -> new AnswerNotFoundException("The answer with id = " + id + " has not been found"));
+                .findById(answerId)
+                .orElseThrow(() -> new AnswerNotFoundException("The answer with id = " + answerId + " has not been found"));
 
         if (!concept.containsAnswer(answer))
-            throw new AnswerNotBelongToConceptException(
-                    "The answer with id = " + id + " doesn't belong to the concept with id = " + concept.getId()
-            );
+            throw new AnswerNotBelongToConceptException("The answer with id = " + answerId + " doesn't belong to the concept with id = " + concept.getId());
 
         return answer;
     }
 
+    /**
+     * Find all the answers in the given concept.
+     *
+     * @param concept The concept where to look for the answers.
+     * @return A list of all the answers stored in the concept.
+     * @author Cristian
+     */
     public List<Answer> findAll(final Concept concept) {
         return Optional
                 .ofNullable(concept.getAnswers())
-                .orElseThrow(() -> new AnswerNotFoundException(
-                        "The concept with id = " + concept.getId() + " has no answers"
-                ));
+                .orElseThrow(() -> new AnswerNotFoundException("The concept with id = " + concept.getId() + " has no answers"));
     }
 
+    /**
+     * Update the data of the answer by the given ID, with the given DTO, in the given concept.
+     *
+     * @param concept   The concept where the answer should be.
+     * @param answerId  The answer ID to look for.
+     * @param answerDTO The data object to update the answer.
+     * @author Cristian
+     */
     public void updateOne(
             final Concept concept,
-            final Long id,
+            final Long answerId,
             final AnswerDTO answerDTO) {
-        Answer answer = findOne(concept, id);
+        Answer answer = findOne(concept, answerId);
 
         String textFromDTO = answerDTO
                 .getTextOptional(answerDTO.getText())
@@ -90,10 +118,17 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    /**
+     * Remove one answer by the given ID in the given concept.
+     *
+     * @param concept  The concept where the answer should be.
+     * @param answerId The answer ID to look for.
+     * @author Cristian
+     */
     public void removeOne(
             final Concept concept,
-            final Long id) {
-        Answer answer = findOne(concept, id);
+            final Long answerId) {
+        Answer answer = findOne(concept, answerId);
         concept.removeAnswer(answer);
 
         conceptRepository.save(concept);
