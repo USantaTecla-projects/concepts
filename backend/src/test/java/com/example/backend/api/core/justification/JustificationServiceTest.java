@@ -1,4 +1,4 @@
-package com.example.backend.api.core.service;
+package com.example.backend.api.core.justification;
 
 import com.example.backend.api.resources.core.answer.AnswerRepository;
 import com.example.backend.api.resources.core.answer.model.Answer;

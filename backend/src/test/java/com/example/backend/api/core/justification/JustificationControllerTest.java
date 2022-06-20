@@ -1,4 +1,4 @@
-package com.example.backend.api.core.controller;
+package com.example.backend.api.core.justification;
 
 
 import com.example.backend.api.resources.auth.configuration.AuthConfiguration;

@@ -1,4 +1,4 @@
-package com.example.backend.api.core.service;
+package com.example.backend.api.core.concept;
 
 import com.example.backend.api.resources.core.concept.ConceptRepository;
 import com.example.backend.api.resources.core.concept.dto.ConceptDTO;

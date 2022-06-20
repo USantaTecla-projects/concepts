@@ -1,4 +1,4 @@
-package com.example.backend.api.core.controller;
+package com.example.backend.api.core.answer;
 
 import com.example.backend.api.resources.auth.configuration.AuthConfiguration;
 import com.example.backend.api.resources.auth.jwt.components.JwtRequestFilter;

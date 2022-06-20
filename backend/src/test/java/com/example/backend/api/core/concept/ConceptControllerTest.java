@@ -1,4 +1,4 @@
-package com.example.backend.api.core.controller;
+package com.example.backend.api.core.concept;
 
 import com.example.backend.api.resources.auth.configuration.AuthConfiguration;
 import com.example.backend.api.resources.auth.jwt.components.JwtRequestFilter;
@@ -146,18 +146,6 @@ class ConceptControllerTest {
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.pageable").exists())
                     .andExpect(jsonPath("$.totalPages").isNumber());
-        }
-
-        @Test
-        @DisplayName("(FindAll) Should get 404 if there are no entities")
-        void findAllWhenDataNotExists() throws Exception {
-            final int wrongPageNumber = 99;
-
-            when(conceptService.findAll(wrongPageNumber))
-                    .thenThrow(new ConceptNotFoundException("The requested page doesn't exists"));
-
-            mockMvc.perform(get(BASE_URL + "?page=" + wrongPageNumber))
-                    .andExpect(status().isNotFound());
         }
     }
 

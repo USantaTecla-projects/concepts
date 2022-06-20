@@ -1,4 +1,4 @@
-package com.example.backend.api.core.service;
+package com.example.backend.api.core.answer;
 
 import com.example.backend.api.resources.core.answer.AnswerRepository;
 import com.example.backend.api.resources.core.answer.dto.AnswerDTO;

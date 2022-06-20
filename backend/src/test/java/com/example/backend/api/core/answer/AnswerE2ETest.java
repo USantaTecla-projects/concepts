@@ -1,4 +1,4 @@
-package com.example.backend.api.core.e2e;
+package com.example.backend.api.core.answer;
 
 import com.example.backend.api.resources.core.answer.dto.AnswerDTO;
 import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
