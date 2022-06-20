@@ -45,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser(username = "teacher", roles = "TEACHER")
 class ConceptControllerTest {
 
+    public final static long CONCEPT_ID = 1L;
     public static final String BASE_URL = "/concepts/";
     @Autowired
     private MockMvc mockMvc;
@@ -62,7 +63,7 @@ class ConceptControllerTest {
         @DisplayName("(Create) Should get 201 if the concept DTO is correct")
         void createWithCorrectDTO() throws Exception {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
-            final Concept concept = new Concept(1L, "Software", new LinkedList<>());
+            final Concept concept = new Concept(CONCEPT_ID, conceptDTO.getText(), new LinkedList<>());
 
             when(conceptService.create(conceptDTO))
                     .thenReturn(concept);
@@ -73,12 +74,12 @@ class ConceptControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(conceptJsonDTO))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.text", Matchers.is("Software")))
-                    .andExpect(jsonPath("$.id", Matchers.is(1)));
+                    .andExpect(jsonPath("$.text", Matchers.is(concept.getText())))
+                    .andExpect(jsonPath("$.id", Matchers.is(concept.getId().intValue())));
         }
 
         @Test
-        @DisplayName("Create) Should get 400 the concept DTO is malformed")
+        @DisplayName("Create) Should get 400 if the concept DTO is malformed")
         void createWithWrongDTO() throws Exception {
             final ConceptDTO wrongConceptDTO = new ConceptDTO();
 
@@ -98,10 +99,10 @@ class ConceptControllerTest {
     @DisplayName("GET")
     class ConceptGet {
         @Test
-        @DisplayName("(FindOne) Should get 200 when finding a Concept by a given id if exists")
+        @DisplayName("(FindOne) Should get 200 if if the concept by a given id exists")
         void findOneWhenExists() throws Exception {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
-            final Concept concept = new Concept(1L, "Software", new LinkedList<>());
+            final Concept concept = new Concept(CONCEPT_ID, conceptDTO.getText(), new LinkedList<>());
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
@@ -117,7 +118,7 @@ class ConceptControllerTest {
         }
 
         @Test
-        @DisplayName("(FindOne) Should get 404 when the given id doesn't exists")
+        @DisplayName("(FindOne) Should get 404 if the given id does not exist")
         void findOneWhenNotExists() throws Exception {
             final long wrongConceptId = 99L;
 
@@ -131,7 +132,7 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(FindAll) Should get 200 if there are entities")
         void findAllWhenDataExists() throws Exception {
-            final Concept concept1 = new Concept(1L, "Software", new LinkedList<>());
+            final Concept concept1 = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
             final Concept concept2 = new Concept(3L, "Hardware", new LinkedList<>());
             final Concept concept3 = new Concept(5L, "Functional Programming", new LinkedList<>());
             Page<Concept> conceptPage = new PageImpl<>(List.of(concept1, concept2, concept3));
@@ -154,10 +155,10 @@ class ConceptControllerTest {
     class ConceptPut {
 
         @Test
-        @DisplayName("(UpdateOne) Should get 204 updating the Concept")
+        @DisplayName("(UpdateOne) Should get 204 if the concept is updated")
         void updateWhenExists() throws Exception {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
-            final Concept concept = new Concept(1L, "Software", new LinkedList<>());
+            final Concept concept = new Concept(CONCEPT_ID, "Hardware", new LinkedList<>());
 
             String conceptJsonDTO = mapObjectToJson(conceptDTO);
 
@@ -168,7 +169,7 @@ class ConceptControllerTest {
         }
 
         @Test
-        @DisplayName("(UpdateOne) Should get 404 deleting the Concept")
+        @DisplayName("(UpdateOne) Should get 404 if the concept does not exist")
         void updateWhenNotExists() throws Exception {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
             final long wrongConceptId = 99L;
@@ -191,9 +192,8 @@ class ConceptControllerTest {
         @Test
         @DisplayName("(RemoveOne) Should get 204 if the concept exists")
         void deleteWhenExists() throws Exception {
-            final long conceptId = 1L;
 
-            mockMvc.perform(delete(BASE_URL + conceptId))
+            mockMvc.perform(delete(BASE_URL + CONCEPT_ID))
                     .andExpect(status().isNoContent());
         }
 

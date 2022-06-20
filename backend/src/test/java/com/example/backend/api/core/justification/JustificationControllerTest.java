@@ -80,9 +80,9 @@ public class JustificationControllerTest {
             final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Justification justification = new Justification(
                     JUSTIFICATION_ID,
-                    "Software Justification",
-                    true,
-                    null,
+                    justificationDTO.getText(),
+                    justificationDTO.getIsCorrect(),
+                    justificationDTO.getError(),
                     CONCEPT_ID,
                     ANSWER_ID);
             final Answer answer = new Answer(
