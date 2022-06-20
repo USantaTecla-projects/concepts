@@ -3,6 +3,7 @@ package com.example.backend.api.resources.user;
 
 import com.example.backend.api.resources.user.dto.UserDTO;
 import com.example.backend.api.resources.user.exception.model.UserDTOBadRequestException;
+import com.example.backend.api.resources.user.exception.model.UserNotFoundException;
 import com.example.backend.api.resources.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,7 @@ public class UserService {
 
     public User findOne(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("The user with id = " + userId + " has not been found"));
+                .orElseThrow(() -> new UserNotFoundException("The user with id = " + userId + " has not been found"));
     }
 
     public Page<User> findAll(int page) {

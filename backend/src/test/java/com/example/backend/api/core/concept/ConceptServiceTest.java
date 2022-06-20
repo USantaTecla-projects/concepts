@@ -6,6 +6,7 @@ import com.example.backend.api.resources.core.concept.exception.model.ConceptDTO
 import com.example.backend.api.resources.core.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.resources.core.concept.model.Concept;
 import com.example.backend.api.resources.core.concept.ConceptService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -46,7 +50,7 @@ class ConceptServiceTest {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
 
-           when(conceptRepository.save(any(Concept.class)))
+            when(conceptRepository.save(any(Concept.class)))
                     .thenReturn(concept);
 
             Concept createdConcept = conceptService.create(conceptDTO);
@@ -71,7 +75,7 @@ class ConceptServiceTest {
         void findOneThatExist() {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
-           when(conceptRepository.findById(concept.getId()))
+            when(conceptRepository.findById(concept.getId()))
                     .thenReturn(Optional.of(concept));
 
             final Concept foundConcept = conceptService.findOne(concept.getId());
@@ -95,7 +99,7 @@ class ConceptServiceTest {
             final int pageNumber = 0;
             final int pageSize = 5;
 
-           when(conceptRepository.findAll(PageRequest.of(pageNumber, pageSize)))
+            when(conceptRepository.findAll(PageRequest.of(pageNumber, pageSize)))
                     .thenReturn(conceptPage);
 
             Page<Concept> foundPage = conceptService.findAll(pageNumber);
@@ -108,7 +112,7 @@ class ConceptServiceTest {
             final int wrongPageNumber = 99;
             final int pageSize = 5;
 
-           when(conceptRepository.findAll(PageRequest.of(wrongPageNumber, pageSize)))
+            when(conceptRepository.findAll(PageRequest.of(wrongPageNumber, pageSize)))
                     .thenReturn(new PageImpl<>(Collections.emptyList()));
 
             Page<Concept> foundPage = conceptService.findAll(99);
@@ -126,7 +130,7 @@ class ConceptServiceTest {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
 
-           when(conceptRepository.findById(concept.getId()))
+            when(conceptRepository.findById(concept.getId()))
                     .thenReturn(Optional.of(concept));
 
             conceptService.updateOne(concept.getId(), conceptDTO);
@@ -138,7 +142,7 @@ class ConceptServiceTest {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
             final long wrongConceptId = 2L;
 
-           when(conceptRepository.findById(anyLong()))
+            when(conceptRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
 
             assertThrows(ConceptNotFoundException.class, () -> conceptService.updateOne(wrongConceptId, conceptDTO));
@@ -153,7 +157,7 @@ class ConceptServiceTest {
         void deleteWhenExists() {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>());
 
-           when(conceptRepository.findById(concept.getId()))
+            when(conceptRepository.findById(concept.getId()))
                     .thenReturn(Optional.of(concept));
 
             conceptService.removeOne(concept.getId());
@@ -164,7 +168,7 @@ class ConceptServiceTest {
         void deleteWhenNotExists() {
             final long wrongConceptId = 2L;
 
-           when(conceptRepository.findById(anyLong()))
+            when(conceptRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
 
             assertThrows(ConceptNotFoundException.class, () -> conceptService.removeOne(wrongConceptId));

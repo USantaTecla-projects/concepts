@@ -66,7 +66,6 @@ public class UserControllerTest {
             final UserDTO userDTO = new UserDTO("Cristian", "1234");
             final User user = new User(1L, userDTO.getUsername(), userDTO.getPassword(), new LinkedList<>(List.of("STUDENT")));
 
-
             when(userService.create(userDTO))
                     .thenReturn(user);
 
