@@ -1,12 +1,11 @@
 package com.example.backend.api.core.concept;
 
-import com.example.backend.api.resources.core.concept.ConceptRepository;
-import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
-import com.example.backend.api.resources.core.concept.exception.model.ConceptDTOBadRequestException;
-import com.example.backend.api.resources.core.concept.exception.model.ConceptNotFoundException;
-import com.example.backend.api.resources.core.concept.model.Concept;
-import com.example.backend.api.resources.core.concept.ConceptService;
-import org.junit.jupiter.api.BeforeAll;
+import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
+import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptNotFoundException;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.knowledge.concept.ConceptService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,12 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.LinkedList;

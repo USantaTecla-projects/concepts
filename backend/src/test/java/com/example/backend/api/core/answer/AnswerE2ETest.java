@@ -1,7 +1,7 @@
 package com.example.backend.api.core.answer;
 
-import com.example.backend.api.resources.core.answer.dto.AnswerDTO;
-import com.example.backend.api.resources.core.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.knowledge.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
