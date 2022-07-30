@@ -3,6 +3,7 @@ package com.example.backend.api.resources.knowledge.answer.model;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -62,6 +63,7 @@ public class Answer {
     }
 
     public void addJustification(Justification justification) {
+        if(this.justifications == null) this.justifications = new LinkedList<>();
         justifications.add(justification);
     }
 

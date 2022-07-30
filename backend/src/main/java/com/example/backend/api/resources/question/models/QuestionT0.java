@@ -6,11 +6,16 @@ import javax.persistence.*;
 
 @Entity
 public class QuestionT0 extends Question {
+
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    String type;
+    private String conceptText;
 
+    public QuestionT0() {
+    }
     @Override
     public void accept(Visitor visitor) {
         visitor.visitQuestionT0(this);
@@ -24,5 +29,19 @@ public class QuestionT0 extends Question {
         this.id = id;
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getConceptText() {
+        return conceptText;
+    }
+
+    public void setConceptText(String conceptText) {
+        this.conceptText = conceptText;
+    }
 }

@@ -17,7 +17,7 @@ public class ConceptService {
 
 
     public ConceptService(
-            ConceptRepository conceptRepository
+            final ConceptRepository conceptRepository
     ) {
         this.conceptRepository = conceptRepository;
     }
@@ -34,7 +34,9 @@ public class ConceptService {
                 .getTextOptional(conceptDTO.getText())
                 .orElseThrow(() -> new ConceptDTOBadRequestException("Field text in Concept DTO is mandatory"));
 
-        return conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
+        Concept concept = conceptRepository.save(new Concept(textFromDTO, Collections.emptyList()));
+
+        return concept;
     }
 
     /**
@@ -88,5 +90,6 @@ public class ConceptService {
     public void removeOne(Long conceptId) {
         Concept concept = findOne(conceptId);
         conceptRepository.delete(concept);
+
     }
 }

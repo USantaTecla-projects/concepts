@@ -3,6 +3,7 @@ package com.example.backend.api.resources.knowledge.concept.model;
 import com.example.backend.api.resources.knowledge.answer.model.Answer;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -44,6 +45,7 @@ public class Concept {
      * @param answer The Answer to add.
      */
     public void addAnswer(Answer answer) {
+        if(this.answers == null) this.answers = new LinkedList<>();
         answers.add(answer);
     }
 

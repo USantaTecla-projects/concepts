@@ -42,6 +42,12 @@ public class Justification {
         this.answerId = answerId;
     }
 
+    public Justification(String text, Boolean isCorrect, String error) {
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.error = error;
+    }
+
 
 
     public Justification() {
@@ -94,5 +100,17 @@ public class Justification {
 
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Justification{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", error='" + error + '\'' +
+                ", conceptId=" + conceptId +
+                ", answerId=" + answerId +
+                '}';
     }
 }

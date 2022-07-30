@@ -2,25 +2,32 @@ package com.example.backend.api.resources.question.models;
 
 import com.example.backend.api.resources.question.visitor.Visitor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-public class QuestionT1 extends Question {
+public class QuestionT3 extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String type;
+
     private String conceptText;
 
     private String incorrectAnswerText;
-    public QuestionT1() {
+
+    private String justificationText;
+
+    public QuestionT3() {
     }
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitQuestionT1(this);
+        visitor.visitQuestionT3(this);
     }
 
     public Long getId() {
@@ -53,5 +60,13 @@ public class QuestionT1 extends Question {
 
     public void setIncorrectAnswerText(String incorrectAnswerText) {
         this.incorrectAnswerText = incorrectAnswerText;
+    }
+
+    public String getJustificationText() {
+        return justificationText;
+    }
+
+    public void setJustificationText(String justificationText) {
+        this.justificationText = justificationText;
     }
 }

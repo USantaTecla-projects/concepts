@@ -19,10 +19,11 @@ public class AnswerService {
     private final ConceptRepository conceptRepository;
     private final AnswerRepository answerRepository;
 
+
     public AnswerService(
             final ConceptRepository conceptRepository,
             final AnswerRepository answerRepository
-    ) {
+    ){
         this.conceptRepository = conceptRepository;
         this.answerRepository = answerRepository;
     }
@@ -37,7 +38,8 @@ public class AnswerService {
      */
     public Answer create(
             final Concept concept,
-            final AnswerDTO answerDTO) {
+            final AnswerDTO answerDTO
+    ) {
         String textFromDTO = answerDTO
                 .getTextOptional(answerDTO.getText())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in Answer DTO is mandatory"));
@@ -47,9 +49,9 @@ public class AnswerService {
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in Answer DTO is mandatory"));
 
         Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO, concept.getId(), Collections.emptyList()));
-
         concept.addAnswer(answer);
         conceptRepository.save(concept);
+
 
         return answer;
     }
@@ -65,8 +67,8 @@ public class AnswerService {
      */
     public Answer findOne(
             final Concept concept,
-            final Long answerId) {
-
+            final Long answerId
+    ) {
         Answer answer = answerRepository
                 .findById(answerId)
                 .orElseThrow(() -> new AnswerNotFoundException("The answer with id = " + answerId + " has not been found"));
@@ -101,7 +103,8 @@ public class AnswerService {
     public void updateOne(
             final Concept concept,
             final Long answerId,
-            final AnswerDTO answerDTO) {
+            final AnswerDTO answerDTO
+    ) {
         Answer answer = findOne(concept, answerId);
 
         String textFromDTO = answerDTO
@@ -127,12 +130,13 @@ public class AnswerService {
      */
     public void removeOne(
             final Concept concept,
-            final Long answerId) {
+            final Long answerId
+    ) {
         Answer answer = findOne(concept, answerId);
         concept.removeAnswer(answer);
-
         conceptRepository.save(concept);
         answerRepository.delete(answer);
+
     }
 
 

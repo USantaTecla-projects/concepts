@@ -64,6 +64,7 @@ public class JustificationService {
         answer.addJustification(justification);
         answerRepository.save(answer);
 
+
         return justification;
     }
 
@@ -156,6 +157,7 @@ public class JustificationService {
 
         answerRepository.save(answer);
         justificationRepository.delete(justification);
+
     }
 
 
