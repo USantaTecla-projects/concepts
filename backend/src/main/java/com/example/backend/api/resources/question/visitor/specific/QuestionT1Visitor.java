@@ -51,5 +51,6 @@ public class QuestionT1Visitor {
         questionT1.setConceptId(conceptId);
         questionT1.setIncorrectAnswerText(incorrectAnswerText);
         questionT1.setAnswerId(answerId);
+        questionT1.setQuestionAsString(questionT1.questionAsString());
     }
 }

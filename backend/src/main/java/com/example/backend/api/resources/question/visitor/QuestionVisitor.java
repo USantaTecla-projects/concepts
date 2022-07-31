@@ -28,6 +28,7 @@ public class QuestionVisitor implements Visitor {
     public final QuestionT3Visitor questionT3Visitor;
 
     public final ConceptRepository conceptRepository;
+
     public final AnswerRepository answerRepository;
     public final JustificationRepository justificationRepository;
 

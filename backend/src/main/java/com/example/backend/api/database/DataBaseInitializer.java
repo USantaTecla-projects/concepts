@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-public class DataBaseUserInitializer implements CommandLineRunner {
+public class DataBaseInitializer implements CommandLineRunner {
 
     private final ConceptRepository conceptRepository;
     private final AnswerRepository answerRepository;
@@ -24,7 +24,7 @@ public class DataBaseUserInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataBaseUserInitializer(ConceptRepository conceptRepository, AnswerRepository answerRepository, JustificationRepository justificationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataBaseInitializer(ConceptRepository conceptRepository, AnswerRepository answerRepository, JustificationRepository justificationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.conceptRepository = conceptRepository;
         this.answerRepository = answerRepository;
         this.justificationRepository = justificationRepository;
@@ -40,46 +40,81 @@ public class DataBaseUserInitializer implements CommandLineRunner {
                 .save(new User(2L, "student", passwordEncoder.encode("1234"), List.of("STUDENT")));
 
 
+        Concept softwareConcept = conceptRepository.save(new Concept("el software"));
+        Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad"));
 
-        generateKnowledge(
-                "software",
-                "is a set of instructions, data or programs used to operate computers and execute specific tasks",
-                "software correct justification",
-                "software incorrect justification",
-                "is used to prepare ice cream",
-                "software correct justification",
-                "software incorrect justification"
-        );
+        Answer softwareIncorrectAnswer1 = answerRepository.save(new Answer(
+                "el conjunto de los programas",
+                false,
+                softwareConcept.getId()));
+        Answer softwareIncorrectAnswer2 = answerRepository.save(new Answer(
+                "la parte lógica de un sistema informático, o sea sin contemplar el hardware",
+                false,
+                softwareConcept.getId()));
+        Answer softwareIncorrectAnswer3 = answerRepository.save(new Answer(
+                "la información que suministra el desarrollador para manipular la información del usuario",
+                false,
+                softwareConcept.getId()));
 
-        generateKnowledge(
-                "hardware",
-                "is the physical parts of a computer and related devices",
-                "hardware correct justification",
-                "hardware incorrect justification",
-                "is software in the hard way",
-                "hardware correct justification",
-                "hardware incorrect justification"
-        );
+        Answer recursividadIncorrectAnswer1 = answerRepository.save(new Answer(
+                "la característica de las funciones que se llaman a sí mismas",
+                false,
+                recursividadConcept.getId()));
+        Answer recursividadIncorrectAnswer2 = answerRepository.save(new Answer(
+                "la característica de definiciones que se autorreferencian, directa o indirectamente",
+                true,
+                recursividadConcept.getId()));
 
-        generateKnowledge(
-                "Linux",
-                "is an operative system based on UNIX",
-                "Linux correct justification",
-                "Linux incorrect justification",
-                "is a Microsoft product",
-                "Linux correct justification",
-                "Linux incorrect justification"
-        );
+        Justification softwareJustification1 = justificationRepository.save(new Justification(
+                "no contempla los scripts de bases de datos (DDL, SQL), ficheros de configuración, imágenes (*.bmp, *.jpg, …) del interfaz gráfico de usuario, ficheros de datos (JSON, XML,DTD, XML Schema, …), de publicación (HTML, CSS, …), … y otros artefactos necesarios en el software que no son para programar, son configurar, publicar, …",
+                false,
+                softwareConcept.getId(),
+                softwareIncorrectAnswer1.getId()
+        ));
 
-        generateKnowledge(
-                "Haskell",
-                "is a pure functional language",
-                "Haskell correct justification",
-                "Haskell incorrect justification",
-                "is better than Java",
-                "Haskell correct justification",
-                "Haskell incorrect justification"
-        );
+        Justification softwareJustification2 = justificationRepository.save(new Justification(
+                "la definición es demasiado permisiva porque incluye firmware que no es software",
+                true,
+                softwareConcept.getId(),
+                softwareIncorrectAnswer2.getId()
+        ));
+
+        Justification softwareJustification3 = justificationRepository.save(new Justification(
+                "la definición es demasiado permisiva porque los datos de usuario (todos los ficheros generados por el software), no son hardware ni son software y están siendo incluidos en el software",
+                true,
+                softwareConcept.getId(),
+                softwareIncorrectAnswer2.getId()
+        ));
+
+        Justification recursividadJustification1 = justificationRepository.save(new Justification(
+                " no contempla la recursividad mutua",
+                false,
+                recursividadConcept.getId(),
+                recursividadIncorrectAnswer1.getId()
+        ));
+
+        Justification recursividadJustification2 = justificationRepository.save(new Justification(
+                "no contempla la recursividad de datos (listas, árboles, …), de imágenes (fractales), las fugas de Bach, las imágenes de Escher, los mantras budistas,...",
+                false,
+                recursividadConcept.getId(),
+                recursividadIncorrectAnswer1.getId()
+        ));
+
+
+        softwareIncorrectAnswer1.addJustification(softwareJustification1);
+        softwareIncorrectAnswer2.addJustification(softwareJustification2);
+        softwareIncorrectAnswer2.addJustification(softwareJustification3);
+        recursividadIncorrectAnswer1.addJustification(recursividadJustification1);
+        recursividadIncorrectAnswer1.addJustification(recursividadJustification2);
+
+        softwareConcept.addAnswer(softwareIncorrectAnswer1);
+        softwareConcept.addAnswer(softwareIncorrectAnswer2);
+        softwareConcept.addAnswer(softwareIncorrectAnswer3);
+        recursividadConcept.addAnswer(recursividadIncorrectAnswer1);
+        recursividadConcept.addAnswer(recursividadIncorrectAnswer2);
+
+        conceptRepository.save(softwareConcept);
+        conceptRepository.save(recursividadConcept);
 
 
     }

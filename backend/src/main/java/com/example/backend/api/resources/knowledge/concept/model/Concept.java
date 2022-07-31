@@ -14,7 +14,7 @@ public class Concept {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @OneToMany(cascade = CascadeType.ALL)

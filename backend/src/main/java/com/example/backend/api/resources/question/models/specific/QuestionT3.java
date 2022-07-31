@@ -36,6 +36,11 @@ public class QuestionT3 extends Question {
         visitor.generateQuestionT3(this, questionReferences);
     }
 
+    @Override
+    public String questionAsString() {
+        return "¿Es cierto que " + conceptText + " no es " + incorrectAnswerText + " porque " + justificationText + "?";
+    }
+
     public Long getId() {
         return id;
     }

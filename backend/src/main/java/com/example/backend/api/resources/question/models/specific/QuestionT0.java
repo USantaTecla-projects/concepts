@@ -21,13 +21,17 @@ public class QuestionT0 extends Question {
     private String conceptText;
 
 
-
     public QuestionT0() {
     }
 
     @Override
     public void accept(Visitor visitor, Map<QuestionType, List<Question>> questionReferences) {
         visitor.generateQuestionT0(this, questionReferences);
+    }
+
+    @Override
+    public String questionAsString() {
+        return "¿Qué es " + conceptText + "?";
     }
 
     public Long getId() {
@@ -53,6 +57,8 @@ public class QuestionT0 extends Question {
     public void setConceptText(String conceptText) {
         this.conceptText = conceptText;
     }
+
+
 
     @Override
     public String toString() {

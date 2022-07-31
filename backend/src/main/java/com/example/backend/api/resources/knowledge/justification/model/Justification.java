@@ -10,13 +10,13 @@ public class Justification {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @Column
     private Boolean isCorrect;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String error;
 
     @Column
@@ -53,6 +53,12 @@ public class Justification {
     public Justification() {
     }
 
+    public Justification(String text, Boolean isCorrect, Long conceptId, Long answerId) {
+        this.text = text;
+        this.isCorrect = isCorrect;
+        this.conceptId = conceptId;
+        this.answerId = answerId;
+    }
 
     public Long getId() {
         return id;

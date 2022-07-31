@@ -37,5 +37,6 @@ public class QuestionT0Visitor {
         questionT0.setType(QuestionType.TYPE0);
         questionT0.setConceptText(conceptText);
         questionT0.setConceptId(conceptId);
+        questionT0.setQuestionAsString(questionT0.questionAsString());
     }
 }

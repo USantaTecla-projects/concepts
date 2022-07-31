@@ -52,5 +52,6 @@ public class QuestionT2Visitor {
         questionT2.setConceptId(conceptId);
         questionT2.setAnswerText(answerText);
         questionT2.setAnswerId(answerId);
+        questionT2.setQuestionAsString(questionT2.questionAsString());
     }
 }

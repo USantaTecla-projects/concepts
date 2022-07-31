@@ -67,5 +67,6 @@ public class QuestionT3Visitor {
         questionT3.setAnswerId(answerId);
         questionT3.setConceptText(conceptText);
         questionT3.setConceptId(conceptId);
+        questionT3.setQuestionAsString(questionT3.questionAsString());
     }
 }

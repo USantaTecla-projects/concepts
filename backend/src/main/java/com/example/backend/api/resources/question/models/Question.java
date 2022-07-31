@@ -9,7 +9,11 @@ public abstract class Question {
 
     private QuestionType type;
 
+    public String questionAsString;
+
     public abstract void accept(Visitor visitor, Map<QuestionType, List<Question>> questionReferences);
+
+    public abstract String questionAsString();
 
     public QuestionType getType() {
         return type;
@@ -19,5 +23,11 @@ public abstract class Question {
         this.type = type;
     }
 
+    public String getQuestionAsString() {
+        return questionAsString;
+    }
 
+    public void setQuestionAsString(String questionAsString) {
+        this.questionAsString = questionAsString;
+    }
 }

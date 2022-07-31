@@ -31,6 +31,11 @@ public class QuestionT1 extends Question {
         visitor.generateQuestionT1(this, questionReferences);
     }
 
+    @Override
+    public String questionAsString() {
+        return "¿Por qué no es correcto afirmar que " + conceptText + " es " + incorrectAnswerText + "?";
+    }
+
     public Long getId() {
         return id;
     }
