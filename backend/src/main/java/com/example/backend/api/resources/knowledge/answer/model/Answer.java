@@ -23,7 +23,7 @@ public class Answer {
     @Column
     private Long conceptId;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Justification> justifications;
 
     public Answer() {
@@ -63,7 +63,7 @@ public class Answer {
     }
 
     public void addJustification(Justification justification) {
-        if(this.justifications == null) this.justifications = new LinkedList<>();
+        if (this.justifications == null) this.justifications = new LinkedList<>();
         justifications.add(justification);
     }
 

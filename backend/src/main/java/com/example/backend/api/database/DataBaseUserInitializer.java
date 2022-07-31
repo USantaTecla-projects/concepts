@@ -40,6 +40,7 @@ public class DataBaseUserInitializer implements CommandLineRunner {
                 .save(new User(2L, "student", passwordEncoder.encode("1234"), List.of("STUDENT")));
 
 
+
         generateKnowledge(
                 "software",
                 "is a set of instructions, data or programs used to operate computers and execute specific tasks",
@@ -73,11 +74,11 @@ public class DataBaseUserInitializer implements CommandLineRunner {
         generateKnowledge(
                 "Haskell",
                 "is a pure functional language",
-                "Linux correct justification",
-                "Linux incorrect justification",
+                "Haskell correct justification",
+                "Haskell incorrect justification",
                 "is better than Java",
-                "Linux correct justification",
-                "Linux incorrect justification"
+                "Haskell correct justification",
+                "Haskell incorrect justification"
         );
 
 

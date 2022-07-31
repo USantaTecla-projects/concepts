@@ -7,11 +7,19 @@ import com.example.backend.api.resources.question.dto.CreateExamDTO;
 import com.example.backend.api.resources.question.exception.model.NotEnoughDataException;
 import com.example.backend.api.resources.question.exception.model.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.question.models.*;
+import com.example.backend.api.resources.question.models.specific.QuestionT0;
+import com.example.backend.api.resources.question.models.specific.QuestionT1;
+import com.example.backend.api.resources.question.models.specific.QuestionT2;
+import com.example.backend.api.resources.question.models.specific.QuestionT3;
 import com.example.backend.api.resources.question.visitor.Visitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
@@ -19,6 +27,7 @@ import java.util.stream.Stream;
 @Service
 public class QuestionService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(QuestionService.class);
     public final ConceptRepository conceptRepository;
     public final AnswerRepository answerRepository;
     public final JustificationRepository justificationRepository;
@@ -52,13 +61,14 @@ public class QuestionService {
         if (numberOfQuestions > availableQuestions)
             throw new NotEnoughDataException(
                     "An exam with "
-                    + numberOfQuestions
-                    + " questions cannot be generated due to lack of knowledge, try with an exam with "
-                    + availableQuestions
-                    + " questions"
+                            + numberOfQuestions
+                            + " questions cannot be generated due to lack of knowledge, try with an exam with "
+                            + availableQuestions
+                            + " questions"
             );
 
         final List<Question> questions = new LinkedList<>();
+        final Map<QuestionType, List<Question>> questionReferences = initQuestionReferences();
         final int MAX = 3;
         final int MIN = 0;
         int randomNum;
@@ -66,13 +76,19 @@ public class QuestionService {
         while (questions.size() < numberOfQuestions) {
             randomNum = ThreadLocalRandom.current().nextInt(MIN, MAX + 1);
             Question question = createQuestion(randomNum);
+
             try {
-                question.accept(visitor);
+                question.accept(visitor, questionReferences);
                 questions.add(question);
+                questionReferences.get(question.getType()).add(question);
             } catch (Exception exception) {
-                System.err.println(exception.getMessage());
+                LOG.error(exception.getMessage());
             }
+
+
         }
+
+        System.out.println(questionReferences);
 
         return questions;
     }
@@ -97,9 +113,20 @@ public class QuestionService {
     private int getNumberOfAvailableNonRepeatedQuestions() {
         long type0 = conceptRepository.countAvailableType0Questions();
         long type1 = answerRepository.countAvailableType1Questions();
-        long type2 = answerRepository.count();
+        long type2 = answerRepository.countAvailableType2Questions();
         long type3 = justificationRepository.countAvailableType3Questions();
-        long availableQuestions = Stream.of(type0, type1, type2, type3).reduce(0L, Long::sum);
-        return (int) availableQuestions;
+        return Stream.of(type0, type1, type2, type3).reduce(0L, Long::sum).intValue();
+    }
+
+    private Map<QuestionType, List<Question>> initQuestionReferences() {
+        Map<QuestionType, List<Question>> questionReferences = new HashMap<>();
+        List<QuestionType> questionTypes = List.of(
+                QuestionType.TYPE0,
+                QuestionType.TYPE1,
+                QuestionType.TYPE2,
+                QuestionType.TYPE3
+        );
+        questionTypes.forEach(type -> questionReferences.put(type, new LinkedList<>()));
+        return questionReferences;
     }
 }

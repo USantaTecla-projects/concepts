@@ -17,7 +17,7 @@ public class Concept {
     @Column
     private String text;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers;
 
 

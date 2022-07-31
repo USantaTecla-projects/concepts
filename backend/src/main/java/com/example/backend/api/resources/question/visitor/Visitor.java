@@ -1,18 +1,22 @@
 package com.example.backend.api.resources.question.visitor;
 
-import com.example.backend.api.resources.question.models.QuestionT0;
-import com.example.backend.api.resources.question.models.QuestionT1;
-import com.example.backend.api.resources.question.models.QuestionT2;
-import com.example.backend.api.resources.question.models.QuestionT3;
+import com.example.backend.api.resources.question.models.*;
+import com.example.backend.api.resources.question.models.specific.QuestionT0;
+import com.example.backend.api.resources.question.models.specific.QuestionT1;
+import com.example.backend.api.resources.question.models.specific.QuestionT2;
+import com.example.backend.api.resources.question.models.specific.QuestionT3;
+
+import java.util.List;
+import java.util.Map;
 
 
 public interface Visitor {
 
-    void visitQuestionT0(QuestionT0 questionT0);
+    void generateQuestionT0(QuestionT0 questionT0, Map<QuestionType, List<Question>> questionReferences);
 
-    void visitQuestionT1(QuestionT1 questionT1);
+    void generateQuestionT1(QuestionT1 questionT1, Map<QuestionType, List<Question>> questionReferences);
 
-    void visitQuestionT2(QuestionT2 questionT2);
+    void generateQuestionT2(QuestionT2 questionT2, Map<QuestionType, List<Question>> questionReferences);
 
-    void visitQuestionT3(QuestionT3 questionT3);
+    void generateQuestionT3(QuestionT3 questionT3, Map<QuestionType, List<Question>> questionReferences);
 }
