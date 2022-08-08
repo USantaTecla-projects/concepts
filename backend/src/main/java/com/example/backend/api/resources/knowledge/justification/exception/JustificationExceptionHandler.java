@@ -1,11 +1,11 @@
 package com.example.backend.api.resources.knowledge.justification.exception;
 
 
+import com.example.backend.api.exception.dto.ExceptionDTO;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationDTOBadRequestException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationErrorNotProvidedException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToAnswerException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotFoundException;
-import com.example.backend.api.exception.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

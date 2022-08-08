@@ -1,6 +1,6 @@
 package com.example.backend.api.resources.question;
 
-import com.example.backend.api.resources.question.dto.CreateExamDTO;
+import com.example.backend.api.resources.question.dto.GetQuestionsDTO;
 import com.example.backend.api.resources.question.models.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class QuestionController {
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public List<Question> create(@RequestBody final CreateExamDTO createExamDTO) {
-        return questionService.create(createExamDTO);
+    public List<Question> create(@RequestBody final GetQuestionsDTO getQuestionsDTO) {
+        return questionService.create(getQuestionsDTO);
     }
 }

@@ -1,9 +1,9 @@
 package com.example.backend.api.resources.knowledge.answer.exception;
 
+import com.example.backend.api.exception.dto.ExceptionDTO;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerNotFoundException;
-import com.example.backend.api.exception.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

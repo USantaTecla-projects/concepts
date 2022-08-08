@@ -1,7 +1,6 @@
 package com.example.backend.api.resources.knowledge.answer;
 
 import com.example.backend.api.resources.knowledge.answer.model.Answer;
-import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerRepository extends CrudRepository<Answer, Long>, PagingAndSortingRepository<Answer, Long> {
     long countAnswerByIsCorrect(boolean value);
@@ -22,8 +22,8 @@ public interface AnswerRepository extends CrudRepository<Answer, Long>, PagingAn
     long countAvailableType2Questions();
 
     @Query(value = "SELECT * FROM answer a WHERE a.id NOT IN ?1 AND a.is_correct = ?2 LIMIT 1 OFFSET ?3", nativeQuery = true)
-    Answer findRandomAnswerBasedOnCorrect(List<Long> answersId, boolean isCorrect, int offset);
+    Optional<Answer> findRandomAnswerBasedOnCorrect(List<Long> answersId, boolean isCorrect, int offset);
 
     @Query(value = "SELECT * FROM answer a WHERE a.id NOT IN ?1 LIMIT 1 OFFSET ?2", nativeQuery = true)
-    Answer findRandomAnswer(List<Long> answersId, int offset);
+    Optional<Answer> findRandomAnswer(List<Long> answersId, int offset);
 }

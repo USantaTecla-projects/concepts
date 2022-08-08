@@ -9,7 +9,7 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateExamDTO {
+public class GetQuestionsDTO {
 
     private Integer numberOfQuestions;
 

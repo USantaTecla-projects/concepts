@@ -1,12 +1,12 @@
 package com.example.backend.api.core.answer;
 
 import com.example.backend.api.resources.knowledge.answer.AnswerRepository;
+import com.example.backend.api.resources.knowledge.answer.AnswerService;
 import com.example.backend.api.resources.knowledge.answer.dto.AnswerDTO;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerDTOBadRequestException;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerNotBelongToConceptException;
 import com.example.backend.api.resources.knowledge.answer.exception.model.AnswerNotFoundException;
 import com.example.backend.api.resources.knowledge.answer.model.Answer;
-import com.example.backend.api.resources.knowledge.answer.AnswerService;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import org.junit.jupiter.api.DisplayName;

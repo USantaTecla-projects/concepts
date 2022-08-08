@@ -1,10 +1,5 @@
 package com.example.backend.api.resources.auth.jwt;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.example.backend.api.resources.auth.jwt.components.JwtCookieManager;
 import com.example.backend.api.resources.auth.jwt.components.JwtTokenProvider;
 import com.example.backend.api.resources.auth.jwt.dto.AuthResponse;
@@ -20,6 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Service
 public class AuthService {

@@ -1,19 +1,23 @@
 package com.example.backend.api.resources.question.models;
 
-import com.example.backend.api.resources.question.visitor.Visitor;
+import com.example.backend.api.resources.question.filler.Filler;
+import com.example.backend.api.resources.question.type.QuestionType;
+import com.example.backend.api.resources.question.type.TypeData;
 
 import java.util.List;
-import java.util.Map;
 
 public abstract class Question {
 
     private QuestionType type;
 
-    public String questionAsString;
+    private boolean isFilled;
 
-    public abstract void accept(Visitor visitor, Map<QuestionType, List<Question>> questionReferences);
+    private String questionAsString;
+
+    public abstract void accept(Filler filler, List<Question> questions);
 
     public abstract String questionAsString();
+
 
     public QuestionType getType() {
         return type;
@@ -21,6 +25,14 @@ public abstract class Question {
 
     public void setType(QuestionType type) {
         this.type = type;
+    }
+
+    public boolean isFilled() {
+        return isFilled;
+    }
+
+    public void setFilled(boolean filled) {
+        isFilled = filled;
     }
 
     public String getQuestionAsString() {

@@ -1,8 +1,8 @@
 package com.example.backend.api.resources.knowledge.concept.exception;
 
-import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.exception.dto.ExceptionDTO;
 import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

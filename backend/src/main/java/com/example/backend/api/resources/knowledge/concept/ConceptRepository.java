@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConceptRepository extends CrudRepository<Concept, Long>, PagingAndSortingRepository<Concept, Long> {
 
@@ -13,5 +14,5 @@ public interface ConceptRepository extends CrudRepository<Concept, Long>, Paging
     long countAvailableType0Questions();
 
     @Query(value = "SELECT * FROM concept c WHERE c.id NOT IN ?1 LIMIT 1 OFFSET ?2", nativeQuery = true)
-    Concept findRandomConcept(List<Long> conceptsId, int offset);
+    Optional<Concept> findRandomConcept(List<Long> conceptsId, int offset);
 }

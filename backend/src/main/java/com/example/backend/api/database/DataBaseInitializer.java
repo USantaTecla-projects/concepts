@@ -56,11 +56,11 @@ public class DataBaseInitializer implements CommandLineRunner {
                 false,
                 softwareConcept.getId()));
 
-        Answer recursividadIncorrectAnswer1 = answerRepository.save(new Answer(
+        Answer recursividadIncorrectAnswer = answerRepository.save(new Answer(
                 "la característica de las funciones que se llaman a sí mismas",
                 false,
                 recursividadConcept.getId()));
-        Answer recursividadIncorrectAnswer2 = answerRepository.save(new Answer(
+        Answer recursividadCorrectAnswer = answerRepository.save(new Answer(
                 "la característica de definiciones que se autorreferencian, directa o indirectamente",
                 true,
                 recursividadConcept.getId()));
@@ -90,28 +90,28 @@ public class DataBaseInitializer implements CommandLineRunner {
                 " no contempla la recursividad mutua",
                 false,
                 recursividadConcept.getId(),
-                recursividadIncorrectAnswer1.getId()
+                recursividadIncorrectAnswer.getId()
         ));
 
         Justification recursividadJustification2 = justificationRepository.save(new Justification(
                 "no contempla la recursividad de datos (listas, árboles, …), de imágenes (fractales), las fugas de Bach, las imágenes de Escher, los mantras budistas,...",
                 false,
                 recursividadConcept.getId(),
-                recursividadIncorrectAnswer1.getId()
+                recursividadIncorrectAnswer.getId()
         ));
 
 
         softwareIncorrectAnswer1.addJustification(softwareJustification1);
         softwareIncorrectAnswer2.addJustification(softwareJustification2);
         softwareIncorrectAnswer2.addJustification(softwareJustification3);
-        recursividadIncorrectAnswer1.addJustification(recursividadJustification1);
-        recursividadIncorrectAnswer1.addJustification(recursividadJustification2);
+        recursividadIncorrectAnswer.addJustification(recursividadJustification1);
+        recursividadIncorrectAnswer.addJustification(recursividadJustification2);
 
         softwareConcept.addAnswer(softwareIncorrectAnswer1);
         softwareConcept.addAnswer(softwareIncorrectAnswer2);
         softwareConcept.addAnswer(softwareIncorrectAnswer3);
-        recursividadConcept.addAnswer(recursividadIncorrectAnswer1);
-        recursividadConcept.addAnswer(recursividadIncorrectAnswer2);
+        recursividadConcept.addAnswer(recursividadIncorrectAnswer);
+        recursividadConcept.addAnswer(recursividadCorrectAnswer);
 
         conceptRepository.save(softwareConcept);
         conceptRepository.save(recursividadConcept);

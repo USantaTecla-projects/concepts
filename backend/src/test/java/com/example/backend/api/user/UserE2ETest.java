@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import static com.example.backend.util.GetAuthToken.getAuthCookie;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
 
 public class UserE2ETest {
 

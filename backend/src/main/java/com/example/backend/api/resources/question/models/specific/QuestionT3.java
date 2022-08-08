@@ -1,8 +1,7 @@
 package com.example.backend.api.resources.question.models.specific;
 
 import com.example.backend.api.resources.question.models.Question;
-import com.example.backend.api.resources.question.models.QuestionType;
-import com.example.backend.api.resources.question.visitor.Visitor;
+import com.example.backend.api.resources.question.filler.Filler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Entity;
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 public class QuestionT3 extends Question {
@@ -32,8 +30,8 @@ public class QuestionT3 extends Question {
     }
 
     @Override
-    public void accept(Visitor visitor, Map<QuestionType, List<Question>> questionReferences) {
-        visitor.generateQuestionT3(this, questionReferences);
+    public void accept(Filler filler, List<Question> questions) {
+        filler.fillQuestion(this, questions);
     }
 
     @Override

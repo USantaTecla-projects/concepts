@@ -1,8 +1,6 @@
 package com.example.backend.api.resources.question.exception;
 
 import com.example.backend.api.exception.dto.ExceptionDTO;
-import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptNotFoundException;
 import com.example.backend.api.resources.question.exception.model.NotEnoughDataException;
 import com.example.backend.api.resources.question.exception.model.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.question.exception.model.QuestionNotFoundException;
