@@ -1,0 +1,19 @@
+:host {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #673ab7;
+}
+
+.card {
+  width: 25rem;
+  height: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    margin: 1rem;
+  }
+}

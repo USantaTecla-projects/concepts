@@ -1,0 +1,15 @@
+<form>
+  <mat-card-content class="content">
+    <ng-container *ngTemplateOutlet="formContent || defaultFormContent">
+    </ng-container>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <ng-container *ngTemplateOutlet="formActions || defaultFormActions">
+    </ng-container>
+  </mat-card-actions>
+</form>
+
+<ng-template #defaultFormContent>Default content</ng-template>
+
+<ng-template #defaultFormActions>Default actions</ng-template>
