@@ -1,0 +1,26 @@
+@startuml
+
+title Question Type Factory - Abstract Factory Pattern
+
+
+interface TypeFactory{
++createQuestion(): Question
++createFiller(): Filler
++createNumberOfAvailableQuestions(): TypeData
+}
+
+TypeFactory <|.down.Type0Factory 
+Type0Factory <.down. QuestionT0
+Type0Factory <.down. QuestionT0Filler
+
+TypeFactory <|.down.Type1Factory 
+Type1Factory  <.down. QuestionT1
+Type1Factory<.down. QuestionT1Filler 
+
+class TypeFactoryProvider { 
++getTypeAbstractFactories(): List<TypeFactory>
+}
+
+TypeFactory <.right. TypeFactoryProvider
+
+@enduml

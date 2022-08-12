@@ -1,0 +1,50 @@
+@startuml
+
+title Question Generation System
+
+interface Filler{
++fillQuestion(Question question, List<Question> questions): void
+}
+
+Filler<|.up. QuestionT0Filler 
+Filler<|.up. QuestionT1Filler 
+
+
+abstract class Question{
++accept(Filler filler, List<Question> questions): void
+}
+
+Question <|-up- QuestionT0
+Question <|-up- QuestionT1
+
+Filler <.left.Question
+
+interface TypeFactory{
++createQuestion(): Question
++createFiller(): Filler
++createNumberOfAvailableQuestions(): TypeData
+}
+
+TypeFactory <|.down.Type0Factory 
+Type0Factory <.down. QuestionT0
+Type0Factory <.down. QuestionT0Filler
+
+TypeFactory <|.down.Type1Factory 
+Type1Factory  <.down. QuestionT1
+Type1Factory<.down. QuestionT1Filler 
+
+class TypeFactoryProvider { 
++getTypeAbstractFactories(): List<TypeFactory>
+}
+
+TypeFactory <.right. TypeFactoryProvider
+
+class QuestionService{
+- typeAbstractFactories: List<TypeFactory>
++ createQuestions(): List<Question>
+}
+
+TypeFactoryProvider <-up- QuestionService
+
+
+@enduml

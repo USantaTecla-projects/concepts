@@ -1,0 +1,19 @@
+@startuml
+title Questions Generation - Sequence Diagram 
+ExamService -> QuestionService: Get list of n questions
+
+QuestionService -> TypeAbstractFactoryProvider: Get List of Types factories
+
+TypeAbstractFactoryProvider --> QuestionService: List of Types factories
+ 
+loop number of requested questions
+  QuestionService -> TypeFactory: Get Question 
+  TypeFactory --> QuestionService: Question
+  QuestionService -> TypeFactory: Get Filler 
+  TypeFactory --> QuestionService: Filler
+  QuestionService -> Filler: Fill Question
+  Filler --> QuestionService: Filled Question
+end
+
+QuestionService --> ExamService: List of n questions
+@enduml

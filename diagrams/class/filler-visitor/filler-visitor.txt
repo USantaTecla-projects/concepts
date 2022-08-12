@@ -1,0 +1,22 @@
+@startuml
+
+title Question Filler - Visitor Pattern
+
+interface Filler{
++fillQuestion(Question question, List<Question> questions): void
+}
+
+Filler<|.down. QuestionT0Filler 
+Filler<|.down. QuestionT1Filler 
+
+
+abstract class Question{
++accept(Filler filler, List<Question> questions): void
+}
+
+Question <|-down- QuestionT0
+Question <|-down- QuestionT1
+
+Filler <.right.Question
+
+@enduml
