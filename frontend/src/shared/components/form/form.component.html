@@ -1,0 +1,21 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div *ngFor="let input of formInputs">
+    <app-text-input
+      *ngIf="input.type === 'text'"
+      [label]="input.label"
+      [icon]="input.icon"
+      [placeholder]="input.placeholder"
+      (formControlChange)="onFormControlChange($event, input.label)">
+    </app-text-input>
+
+    <app-password-input
+      *ngIf="input.type === 'password'"
+      [label]="input.label"
+      (formControlChange)="onFormControlChange($event, input.label)">
+    </app-password-input>
+  </div>
+
+  <button class="action-button" mat-raised-button color="{{ actionButton.color }}">
+    {{ actionButton.message }}
+  </button>
+</form>

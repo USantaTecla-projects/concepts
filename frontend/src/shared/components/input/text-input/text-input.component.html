@@ -1,0 +1,10 @@
+<mat-form-field class="input-wrapper">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    placeholder="{{ placeholder }}"
+    [required]="required"
+    [formControl]="formControl"
+    (input)="onInput()" />
+  <mat-icon matSuffix>{{ icon }}</mat-icon>
+</mat-form-field>

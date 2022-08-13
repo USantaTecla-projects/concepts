@@ -1,0 +1,23 @@
+<mat-card class="card">
+  <mat-card-title class="title">Authentication</mat-card-title>
+
+  <mat-tab-group class="tab-group" dynamicHeight>
+    <mat-tab label="Login">
+      <app-form
+        class="form"
+        [formInputs]="loginForm.formInputs"
+        [actionButton]="loginForm.actionButton"
+        (formGroupSubmit)="onFormGroupSubmit($event,'login')">
+      </app-form>
+    </mat-tab>
+
+    <mat-tab label="Register">
+      <app-form
+        class="form"
+        [formInputs]="registerForm.formInputs"
+        [actionButton]="registerForm.actionButton"
+        (formGroupSubmit)="onFormGroupSubmit($event,'register')">
+      </app-form>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
