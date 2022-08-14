@@ -1,6 +1,7 @@
 package com.example.backend.api.resources.user.exception;
 
 import com.example.backend.api.exception.dto.ExceptionDTO;
+import com.example.backend.api.resources.user.exception.model.UserAlreadyExistsException;
 import com.example.backend.api.resources.user.exception.model.UserDTOBadRequestException;
 import com.example.backend.api.resources.user.exception.model.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,15 @@ public class UserExceptionHandler {
                 ZonedDateTime.now());
 
         return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {UserAlreadyExistsException.class})
+    public ResponseEntity<Object> UserAlreadyExistsException(UserAlreadyExistsException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(
+                exception.getMessage(),
+                HttpStatus.CONFLICT,
+                ZonedDateTime.now());
+
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
     }
 }

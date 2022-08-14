@@ -5,13 +5,13 @@
       [label]="input.label"
       [icon]="input.icon"
       [placeholder]="input.placeholder"
-      (formControlChange)="onFormControlChange($event, input.label)">
+      (formControlChange)="onFormControlChange($event, input.control)">
     </app-text-input>
 
     <app-password-input
       *ngIf="input.type === 'password'"
       [label]="input.label"
-      (formControlChange)="onFormControlChange($event, input.label)">
+      (formControlChange)="onFormControlChange($event, input.control)">
     </app-password-input>
   </div>
 

@@ -11,6 +11,7 @@ import { PasswordInputComponent } from './input/password-input/password-input.co
 import { TextInputComponent } from './input/text-input/text-input.component';
 import { FormComponent } from './form/form.component';
 import { BaseInputComponent } from './input/base-input.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [TextInputComponent, PasswordInputComponent, FormComponent, BaseInputComponent],
@@ -23,6 +24,7 @@ import { BaseInputComponent } from './input/base-input.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    RouterModule,
   ],
   exports: [PasswordInputComponent, TextInputComponent, FormComponent],
   providers: [

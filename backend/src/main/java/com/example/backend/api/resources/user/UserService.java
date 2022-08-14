@@ -2,14 +2,18 @@ package com.example.backend.api.resources.user;
 
 
 import com.example.backend.api.resources.user.dto.UserDTO;
+import com.example.backend.api.resources.user.exception.model.UserAlreadyExistsException;
 import com.example.backend.api.resources.user.exception.model.UserDTOBadRequestException;
 import com.example.backend.api.resources.user.exception.model.UserNotFoundException;
 import com.example.backend.api.resources.user.model.User;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,15 +37,30 @@ public class UserService {
      * @author Cristian
      */
     public User create(final UserDTO userDTO) {
+
         final String usernameFromDTO = userDTO
                 .getUsernameOptional(userDTO.getUsername())
                 .orElseThrow(() -> new UserDTOBadRequestException("Field username in User DTO is mandatory"));
 
+        final String emailFromDTO = userDTO
+                .getEmailOptional(userDTO.getEmail())
+                .orElseThrow(() -> new UserDTOBadRequestException("Field email in User DTO is mandatory"));
+
         final String passwordFromDTO = userDTO
                 .getPasswordOptional(userDTO.getPassword())
-                .orElseThrow(() -> new UserDTOBadRequestException("Field username in User DTO is mandatory"));
+                .orElseThrow(() -> new UserDTOBadRequestException("Field password in User DTO is mandatory"));
 
-        return userRepository.save(new User(usernameFromDTO, passwordEncoder.encode(passwordFromDTO), new LinkedList<>(List.of("STUDENT"))));
+        User userToSave = new User(
+                usernameFromDTO,
+                emailFromDTO,
+                passwordEncoder.encode(passwordFromDTO),
+                new LinkedList<>(List.of("STUDENT"))
+        );
+        try{
+            return userRepository.save(userToSave);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException){
+            throw new UserAlreadyExistsException("User with this email or username already exists");
+        }
     }
 
     /**

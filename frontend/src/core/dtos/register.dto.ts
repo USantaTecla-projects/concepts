@@ -1,6 +1,6 @@
-export interface User {
-  id: number;
+export interface RegisterDTO {
   username: string;
   email: string;
   password: string;
+  repeatedPassword: string;
 }

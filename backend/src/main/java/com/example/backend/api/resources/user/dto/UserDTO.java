@@ -13,10 +13,16 @@ public class UserDTO {
 
     private String username;
 
+    private String email;
+
     private String password;
 
     public Optional<String> getUsernameOptional(final String username) {
         return getTextOptional(username);
+    }
+
+    public Optional<String> getEmailOptional(final String email) {
+        return getTextOptional(email);
     }
 
     public Optional<String> getPasswordOptional(final String password) {

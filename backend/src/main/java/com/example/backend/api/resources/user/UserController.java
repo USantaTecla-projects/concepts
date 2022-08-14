@@ -19,7 +19,6 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public User create(@RequestBody final UserDTO userDTO) {
         return userService.create(userDTO);
-
     }
 
     @GetMapping("/{userId}")

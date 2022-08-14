@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { catchError, first, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LoginDTO } from 'src/core/dtos/login.dto';
-import { FormData } from 'src/core/interfaces/form-data.interface';
-import { FormValues } from 'src/core/interfaces/form-values.interface';
+import { RegisterDTO } from 'src/core/dtos/register.dto';
+import { FormData } from 'src/core/interfaces/form/form-data.interface';
 import { AuthenticationService } from 'src/core/services/authentication.service';
-import { mapFormValuesToData } from 'src/core/utils/form-data-mapper.util';
 import { LOGIN_FORM_DATA } from 'src/shared/data/form/login-form.data';
 import { REGISTER_FORM_DATA } from 'src/shared/data/form/register-form.data';
 
@@ -20,6 +19,8 @@ export class AuthenticationPage {
 
   registerForm: FormData = REGISTER_FORM_DATA;
 
+  isAuthenticated$: Observable<boolean> | undefined;
+
   constructor(
     private authenticationSrv: AuthenticationService,
     private snackBar: MatSnackBar,
@@ -27,27 +28,27 @@ export class AuthenticationPage {
   ) {}
 
   login(loginDTO: LoginDTO) {
-    this.authenticationSrv
-      .login(loginDTO)
-      .pipe(
-        first(),
-        catchError(error => {
-          this.openSnackBar('Incorrect credentials');
-          return error;
-        })
-      )
-      .subscribe(() => this.router.navigateByUrl('home'));
+    this.authenticationSrv.login(loginDTO).subscribe({
+      next: () => this.router.navigateByUrl('home'),
+      error: () => this.openSnackBar('Invalid credentials'),
+    });
   }
 
-  onFormGroupSubmit(formValues: FormValues, formGroup: string) {
-    if (formGroup === 'login') {
-      const loginDTO: LoginDTO = mapFormValuesToData<LoginDTO>(formValues);
-      return this.login(loginDTO);
-    }
+  register(registerDTO: RegisterDTO) {
+    const { password, repeatedPassword } = registerDTO;
 
-    if (formGroup === 'register') {
-      return;
-    }
+    if (password !== repeatedPassword) return this.openSnackBar('Password should coincide');
+
+    this.authenticationSrv.register(registerDTO).subscribe({
+      next: () => this.login({ username: registerDTO.username, password: registerDTO.password }),
+      error: message => this.openSnackBar(message),
+    });
+  }
+
+  onFormGroupSubmit(dto: LoginDTO | RegisterDTO, formGroup: string) {
+    if (formGroup === 'login') return this.login(dto as LoginDTO);
+
+    if (formGroup === 'register') return this.register(dto as RegisterDTO);
 
     this.openSnackBar('Something weird has happened');
   }

@@ -1,6 +1,7 @@
-import { InputType } from '../enums/input-type.enum';
+import { InputType } from 'src/core/enums/input-type.enum';
 
 export interface FormInput {
+  control: string;
   label: string;
   placeholder?: string;
   required?: boolean;
