@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <app-accordion-list-card
+    class="card"
+    [title]="'Concepts'"
+    [items$]="concepts$"
+    (itemSelect)="onConceptSelect($event)">
+  </app-accordion-list-card>
+
+  <app-accordion-list-card
+    class="card"
+    [title]="'Answers'"
+    [items$]="answers$"
+    (itemSelect)="onAnswerSelect($event)">
+  </app-accordion-list-card>
+
+  <app-accordion-list-card class="card" [title]="'Justifications'" [items$]="justifications$">
+  </app-accordion-list-card>
+</div>

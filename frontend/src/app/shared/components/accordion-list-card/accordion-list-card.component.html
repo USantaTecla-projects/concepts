@@ -1,0 +1,14 @@
+<mat-card class="card">
+  <mat-card-title-group class="card-title">
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content class="items" *ngIf="items$ | async as items">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let item of items" (opened)="selectItem(item.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ item.text | titlecase | shortText: 100 }}</mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
