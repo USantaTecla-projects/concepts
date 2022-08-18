@@ -40,28 +40,28 @@ public class DataBaseInitializer implements CommandLineRunner {
                 .save(new User(2L, "student", passwordEncoder.encode("1234"), List.of("STUDENT")));
 
 
-        Concept softwareConcept = conceptRepository.save(new Concept("el software"));
-        Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad"));
+        Concept softwareConcept = conceptRepository.save(new Concept("el software."));
+        Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad."));
 
         Answer softwareIncorrectAnswer1 = answerRepository.save(new Answer(
-                "el conjunto de los programas",
+                "el conjunto de los programas.",
                 false,
                 softwareConcept.getId()));
         Answer softwareIncorrectAnswer2 = answerRepository.save(new Answer(
-                "la parte lógica de un sistema informático, o sea sin contemplar el hardware",
+                "la parte lógica de un sistema informático, o sea sin contemplar el hardware.",
                 false,
                 softwareConcept.getId()));
         Answer softwareIncorrectAnswer3 = answerRepository.save(new Answer(
-                "la información que suministra el desarrollador para manipular la información del usuario",
+                "la información que suministra el desarrollador para manipular la información del usuario.",
                 false,
                 softwareConcept.getId()));
 
         Answer recursividadIncorrectAnswer = answerRepository.save(new Answer(
-                "la característica de las funciones que se llaman a sí mismas",
+                "la característica de las funciones que se llaman a sí mismas.",
                 false,
                 recursividadConcept.getId()));
         Answer recursividadCorrectAnswer = answerRepository.save(new Answer(
-                "la característica de definiciones que se autorreferencian, directa o indirectamente",
+                "la característica de definiciones que se autorreferencian, directa o indirectamente.",
                 true,
                 recursividadConcept.getId()));
 
@@ -73,21 +73,21 @@ public class DataBaseInitializer implements CommandLineRunner {
         ));
 
         Justification softwareJustification2 = justificationRepository.save(new Justification(
-                "la definición es demasiado permisiva porque incluye firmware que no es software",
+                "la definición es demasiado permisiva porque incluye firmware que no es software.",
                 true,
                 softwareConcept.getId(),
                 softwareIncorrectAnswer2.getId()
         ));
 
         Justification softwareJustification3 = justificationRepository.save(new Justification(
-                "la definición es demasiado permisiva porque los datos de usuario (todos los ficheros generados por el software), no son hardware ni son software y están siendo incluidos en el software",
+                "la definición es demasiado permisiva porque los datos de usuario (todos los ficheros generados por el software), no son hardware ni son software y están siendo incluidos en el software.",
                 true,
                 softwareConcept.getId(),
                 softwareIncorrectAnswer2.getId()
         ));
 
         Justification recursividadJustification1 = justificationRepository.save(new Justification(
-                " no contempla la recursividad mutua",
+                " no contempla la recursividad mutua.",
                 false,
                 recursividadConcept.getId(),
                 recursividadIncorrectAnswer.getId()

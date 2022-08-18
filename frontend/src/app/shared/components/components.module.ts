@@ -20,11 +20,12 @@ import { MatListModule } from '@angular/material/list';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { TreeComponent } from './tree/tree.component';
 import { AccordionListCardComponent } from './accordion-list-card/accordion-list-card.component';
-import { AccordionListItemComponent } from './accordion-list-card/accordion-list-item/accordion-list-item.component';
 import { CoreModule } from 'src/app/core/core.module';
+import { TextAreaComponent } from './input/text-area/text-area.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { CoreModule } from 'src/app/core/core.module';
     NavbarComponent,
     TreeComponent,
     AccordionListCardComponent,
-    AccordionListItemComponent,
+    TextAreaComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +55,7 @@ import { CoreModule } from 'src/app/core/core.module';
     MatListModule,
     MatTreeModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     CoreModule,
   ],
   exports: [
@@ -63,6 +65,7 @@ import { CoreModule } from 'src/app/core/core.module';
     NavbarComponent,
     TreeComponent,
     AccordionListCardComponent,
+    TextAreaComponent,
   ],
   providers: [
     {

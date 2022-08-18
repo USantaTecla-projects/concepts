@@ -28,6 +28,7 @@ export class AuthenticationPage {
   ) {}
 
   login(loginDTO: LoginDTO) {
+    console.log(loginDTO);
     this.authenticationSrv.login(loginDTO).subscribe({
       next: () => this.router.navigateByUrl(''),
       error: () => this.openSnackBar('Invalid credentials'),

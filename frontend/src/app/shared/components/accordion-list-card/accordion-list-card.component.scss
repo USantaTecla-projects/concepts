@@ -9,5 +9,44 @@
 
   .items {
     width: 100%;
+
+    .item-panel {
+      background-color: #673ab7;
+    }
+
+    .item-title {
+      color: #fff;
+    }
+
+    ::ng-deep .mat-expansion-panel-body {
+      background-color: white !important;
+    }
+
+    .container {
+      margin-top: 1rem;
+
+      .form-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+
+        .input {
+          width: 100%;
+        }
+      }
+      .form-container-large {
+        display: flex;
+        flex-direction: column;
+        .input,
+        .checkbox {
+          width: 100%;
+        }
+
+        .checkbox {
+          margin-left: 0.15rem;
+        }
+      }
+    }
   }
 }

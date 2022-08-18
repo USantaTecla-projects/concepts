@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Answer } from 'src/app/core/models/answer.model';
 import { Concept } from 'src/app/core/models/concept.model';
@@ -12,6 +12,8 @@ export class AccordionListCardComponent implements OnInit {
   @Input() title!: string;
 
   @Input() items$!: Observable<Concept[]>;
+
+  @Input() state$: Observable<string> = of('INIT');
 
   @Output() itemSelect: EventEmitter<Observable<number>> = new EventEmitter<Observable<number>>();
 

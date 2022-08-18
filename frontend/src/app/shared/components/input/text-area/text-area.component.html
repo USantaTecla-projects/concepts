@@ -1,11 +1,13 @@
 <mat-form-field class="input-wrapper">
   <mat-label>{{ label }}</mat-label>
-  <input
+  <textarea
+    class="text-area"
     matInput
     placeholder="{{ placeholder }}"
     value="Sushi"
     [required]="required"
     [formControl]="formControl"
-    (input)="onInput()" />
+    cdkTextareaAutosize
+    (input)="onInput()"></textarea>
   <mat-icon matSuffix>{{ icon }}</mat-icon>
 </mat-form-field>

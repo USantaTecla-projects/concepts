@@ -13,27 +13,19 @@ export class KnowledgeService {
   constructor(private httpClient: HttpClient) {}
 
   getAllConcepts() {
-    return this.httpClient
-      .get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) })
-      .pipe(
-        shareReplay(),
-        map(res => res.content)
-      );
+    return this.httpClient.get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) }).pipe(
+      shareReplay(),
+      map(res => res.content)
+    );
   }
 
   getAllAnswers(conceptId: number) {
-    return this.httpClient.get<Answer[]>(`concepts/${conceptId}/answers/`).pipe(
-      shareReplay(),
-      tap(res => console.log(res))
-    );
+    return this.httpClient.get<Answer[]>(`concepts/${conceptId}/answers/`).pipe(shareReplay());
   }
 
   getAllJustifications(conceptId: number, answerId: number) {
     return this.httpClient
       .get<Justification[]>(`concepts/${conceptId}/answers/${answerId}/justifications/`)
-      .pipe(
-        shareReplay(),
-        tap(res => console.log(res))
-      );
+      .pipe(shareReplay());
   }
 }

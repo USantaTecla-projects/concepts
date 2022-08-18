@@ -12,9 +12,14 @@
     class="card"
     [title]="'Answers'"
     [items$]="answers$"
+    [state$]="answersState$"
     (itemSelect)="onAnswerSelect($event)">
   </app-accordion-list-card>
 
-  <app-accordion-list-card class="card" [title]="'Justifications'" [items$]="justifications$">
+  <app-accordion-list-card
+    class="card"
+    [title]="'Justifications'"
+    [state$]="justificationsState$"
+    [items$]="justifications$">
   </app-accordion-list-card>
 </div>
