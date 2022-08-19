@@ -3,41 +3,20 @@
     <mat-card-title-group class="card-title">
       <mat-card-title>{{ title }}</mat-card-title>
     </mat-card-title-group>
-    <mat-card-content class="items" *ngIf="state === 'INIT' || state === 'NORMAL'; else noContent">
+    <mat-card-content class="items" *ngIf="state === 'init' || state === 'normal'; else noContent">
       <mat-accordion>
         <mat-expansion-panel class="item-panel" *ngFor="let item of items$ | async" (opened)="selectItem(item.id)">
           <mat-expansion-panel-header>
             <mat-panel-title class="item-title"> {{ item.text | titlecase | shortText: 100 }}</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="container">
-            <div class="form-container" *ngIf="title === 'Concepts'">
-              <app-text-input
-                class="input"
-                [label]="'Concept'"
-                [value]="item.text | titlecase"
-                [icon]="'book'"
-                [placeholder]="'Write the concept definition'">
-              </app-text-input>
-            </div>
-
-            <div class="form-container-large" *ngIf="title === 'Answers'">
-              <app-text-area
-                class="input"
-                [label]="'Answer'"
-                [value]="item.text | titlecase"
-                [placeholder]="'Write the answer for the concept'">
-              </app-text-area>
-              <mat-checkbox class="checkbox">Is correct</mat-checkbox>
-            </div>
-
-            <div class="form-container-large" *ngIf="title === 'Justifications'">
-              <app-text-area
-                class="input"
-                [label]="'Justification'"
-                [value]="item.text | titlecase"
-                [placeholder]="'Write the justification for the answer'">
-              </app-text-area>
-              <mat-checkbox class="checkbox">Is correct</mat-checkbox>
+            <div class="form-container">
+              <app-form
+                class="form"
+                [formInputs]="editForm.formInputs | setValueInForm: 0:item.text"
+                [actionButton]="editForm.actionButton"
+                (formSubmit)="editItem($event)">
+              </app-form>
             </div>
           </div>
         </mat-expansion-panel>
@@ -46,7 +25,7 @@
   </mat-card>
 
   <ng-template #noContent>
-    <mat-spinner *ngIf="state === 'LOADING'"></mat-spinner>
-    <span *ngIf="state === 'EMPTY'">No {{ title }} to display</span>
+    <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
+    <span *ngIf="state === 'empty'">No {{ title }} to display</span>
   </ng-template>
 </div>

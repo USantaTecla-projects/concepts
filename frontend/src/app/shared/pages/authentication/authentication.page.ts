@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { LoginDTO } from 'src/app/core/dtos/login.dto';
-import { RegisterDTO } from 'src/app/core/dtos/register.dto';
+import { LoginDTO } from 'src/app/core/dtos/auth/login.dto';
+import { RegisterDTO } from 'src/app/core/dtos/auth/register.dto';
 import { FormData } from 'src/app/shared/components/form/interfaces/form-data.interface';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { LOGIN_FORM_DATA } from 'src/app/shared/data/form/login-form.data';
@@ -28,7 +28,6 @@ export class AuthenticationPage {
   ) {}
 
   login(loginDTO: LoginDTO) {
-    console.log(loginDTO);
     this.authenticationSrv.login(loginDTO).subscribe({
       next: () => this.router.navigateByUrl(''),
       error: () => this.openSnackBar('Invalid credentials'),

@@ -5,21 +5,28 @@
     class="card"
     [title]="'Concepts'"
     [items$]="concepts$"
-    (itemSelect)="onConceptSelect($event)">
+    [editForm]="conceptForm"
+    (itemSelect)="onConceptSelect($event)"
+    (itemEdit)="onConceptEdit($event)">
   </app-accordion-list-card>
 
   <app-accordion-list-card
     class="card"
     [title]="'Answers'"
     [items$]="answers$"
+    [editForm]="answerForm"
     [state$]="answersState$"
-    (itemSelect)="onAnswerSelect($event)">
+    (itemSelect)="onAnswerSelect($event)"
+    (itemEdit)="onAnswerEdit($event)">
   </app-accordion-list-card>
 
   <app-accordion-list-card
     class="card"
     [title]="'Justifications'"
+    [editForm]="justificationForm"
     [state$]="justificationsState$"
-    [items$]="justifications$">
+    [items$]="justifications$"
+    (itemSelect)="onJustificationSelect($event)"
+    (itemEdit)="onJustificationEdit($event)">
   </app-accordion-list-card>
 </div>

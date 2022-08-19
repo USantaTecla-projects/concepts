@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { delay, EMPTY, first, mergeMap, Observable, of, tap } from 'rxjs';
+import { AnswerDTO } from 'src/app/core/dtos/knowledge/answer.dto';
+import { ConceptDTO } from 'src/app/core/dtos/knowledge/concept.dto';
+import { JustificationDTO } from 'src/app/core/dtos/knowledge/justification.dto';
+import { StateType } from 'src/app/core/enums/state.enum';
 import { Answer } from 'src/app/core/models/answer.model';
 import { Concept } from 'src/app/core/models/concept.model';
 import { Justification } from 'src/app/core/models/justification.model';
 import { KnowledgeService } from 'src/app/core/services/knowledge.service';
+import { FormData } from '../../components/form/interfaces/form-data.interface';
+import { KNOWLEDGE_FORM_DATA } from '../../data/form/knowledge.data';
 
 @Component({
   selector: 'app-concepts',
@@ -15,33 +21,44 @@ export class ConceptsComponent implements OnInit {
 
   answers$!: Observable<Answer[]>;
 
-  answersState$: Observable<string> = of('INIT');
-
   justifications$!: Observable<Justification[]>;
+
+  answersState$: Observable<string> = of('INIT');
 
   justificationsState$: Observable<string> = of('INIT');
 
+  conceptId!: number;
+
   answerId!: number;
 
-  conceptId!: number;
+  justificationId!: number;
+
+  conceptForm: FormData = KNOWLEDGE_FORM_DATA['concepts'];
+
+  answerForm: FormData = KNOWLEDGE_FORM_DATA['answers'];
+
+  justificationForm: FormData = KNOWLEDGE_FORM_DATA['justifications'];
 
   constructor(private knowledgeService: KnowledgeService) {}
 
   ngOnInit(): void {
-    this.concepts$ = this.knowledgeService.getAllConcepts();
+    this.concepts$ = this.knowledgeService.findAllConcepts();
+    this.answersState$ = of(StateType.EMPTY);
+    this.justificationsState$ = of(StateType.EMPTY);
   }
 
   onConceptSelect(conceptId$: Observable<number>) {
     conceptId$
       .pipe(
-        tap(() => (this.answersState$ = of('LOADING'))),
         first(),
-        tap(id => (this.conceptId = id)),
         mergeMap(id => {
-          return (this.answers$ = this.knowledgeService.getAllAnswers(id));
+          this.answersState$ = of(StateType.LOADING);
+          this.conceptId = id;
+          this.justifications$ = of([]);
+          return (this.answers$ = this.knowledgeService.findAllAnswers(id));
         }),
-        tap(answers => (this.answersState$ = !answers.length ? of('EMPTY') : of('NORMAL'))),
-        mergeMap(() => (this.justifications$ = of([])))
+        delay(300),
+        tap(answers => (this.answersState$ = !answers.length ? of(StateType.EMPTY) : of(StateType.NORMAL)))
       )
       .subscribe();
   }
@@ -49,14 +66,57 @@ export class ConceptsComponent implements OnInit {
   onAnswerSelect(answerId$: Observable<number>) {
     answerId$
       .pipe(
-        tap(() => (this.justificationsState$ = of('LOADING'))),
         first(),
-        tap(id => (this.answerId = id)),
-        delay(300),
-        mergeMap(() => {
-          return (this.justifications$ = this.knowledgeService.getAllJustifications(this.conceptId, this.answerId));
+        mergeMap(id => {
+          this.justificationsState$ = of(StateType.LOADING);
+          this.answerId = id;
+          return (this.justifications$ = this.knowledgeService.findAllJustifications(this.conceptId, this.answerId));
         }),
-        tap(justifications => (this.justificationsState$ = !justifications.length ? of('EMPTY') : of('NORMAL')))
+        delay(300),
+        tap(justifications => {
+          this.justificationsState$ = !justifications.length ? of(StateType.EMPTY) : of(StateType.NORMAL);
+        })
+      )
+      .subscribe();
+  }
+
+  onJustificationSelect(justificationId$: Observable<number>) {
+    justificationId$
+      .pipe(
+        first(),
+        tap(id => (this.justificationId = id))
+      )
+      .subscribe();
+  }
+
+  onConceptEdit(conceptDTO: ConceptDTO) {
+    this.knowledgeService
+      .updateConcept(this.conceptId, conceptDTO)
+      .pipe(
+        first(),
+        mergeMap(() => (this.concepts$ = this.knowledgeService.findAllConcepts()))
+      )
+      .subscribe();
+  }
+
+  onAnswerEdit(answerDTO: AnswerDTO) {
+    this.knowledgeService
+      .updateAnswer(this.conceptId, this.answerId, answerDTO)
+      .pipe(
+        first(),
+        mergeMap(() => (this.answers$ = this.knowledgeService.findAllAnswers(this.conceptId)))
+      )
+      .subscribe();
+  }
+
+  onJustificationEdit(justificationDTO: JustificationDTO) {
+    this.knowledgeService
+      .updateJustification(this.conceptId, this.answerId, this.justificationId, justificationDTO)
+      .pipe(
+        first(),
+        mergeMap(
+          () => (this.justifications$ = this.knowledgeService.findAllJustifications(this.conceptId, this.answerId))
+        )
       )
       .subscribe();
   }

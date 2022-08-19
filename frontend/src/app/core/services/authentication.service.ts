@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, first, map, Observable, ObservableInput, tap } from 'rxjs';
-import { LoginDTO } from '../dtos/login.dto';
-import { RegisterDTO } from '../dtos/register.dto';
-import { AuthResponse } from '../dtos/auth-response.dto';
+import { catchError, first, Observable, tap } from 'rxjs';
+import { AuthResponse } from '../dtos/auth/auth-response.dto';
+import { LoginDTO } from '../dtos/auth/login.dto';
+import { RegisterDTO } from '../dtos/auth/register.dto';
 import { User } from '../models/user.model';
 
 @Injectable({

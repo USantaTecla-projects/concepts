@@ -11,7 +11,7 @@ export class TextAreaComponent extends BaseInputComponent implements OnInit {
 
   @Input() label?: string;
 
-  @Input() value?: string;
+  @Input() value?: string | null;
 
   @Input() placeholder?: string;
 

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { InputType } from 'src/app/core/enums/input-type.enum';
 import { ActionButton } from './interfaces/action-button.interface';
 import { FormInput } from './interfaces/form-input.interface';
 
@@ -20,10 +21,11 @@ export class FormComponent<T> implements OnInit {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    const formGroup = this.formInputs.reduce(
-      (acc, input) => ({ ...acc, [input.control]: [''] }),
-      {}
-    );
+    const formGroup = this.formInputs.reduce((acc, input) => {
+      if (input.type === InputType.CHECKBOX) return { ...acc, [input.control]: [false] };
+
+      return { ...acc, [input.control]: [input.value] };
+    }, {});
     this.form = this.formBuilder.group(formGroup);
   }
 
