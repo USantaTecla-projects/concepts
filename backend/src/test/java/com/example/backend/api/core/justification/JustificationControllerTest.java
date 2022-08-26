@@ -80,8 +80,8 @@ public class JustificationControllerTest {
             final Justification justification = new Justification(
                     JUSTIFICATION_ID,
                     justificationDTO.getText(),
-                    justificationDTO.getIsCorrect(),
-                    justificationDTO.getError(),
+                    justificationDTO.getCorrect(),
+                    justificationDTO.getJustificationError(),
                     CONCEPT_ID,
                     ANSWER_ID);
             final Answer answer = new Answer(

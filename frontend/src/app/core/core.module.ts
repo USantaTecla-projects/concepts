@@ -5,10 +5,9 @@ import { AuthenticationInterceptor } from './interceptors/authentication.interce
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ShortTextPipe } from './pipes/short-text.pipe';
-import { SetValueInFormPipe } from './pipes/set-value-in-form.pipe';
 
 @NgModule({
-  declarations: [ShortTextPipe, SetValueInFormPipe],
+  declarations: [ShortTextPipe],
   imports: [CommonModule, HttpClientModule],
   providers: [
     {
@@ -23,6 +22,6 @@ import { SetValueInFormPipe } from './pipes/set-value-in-form.pipe';
     },
     IsLoggedGuard,
   ],
-  exports: [ShortTextPipe, SetValueInFormPipe],
+  exports: [ShortTextPipe],
 })
 export class CoreModule {}

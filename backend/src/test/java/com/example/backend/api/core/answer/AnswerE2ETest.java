@@ -197,7 +197,7 @@ public class AnswerE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo(answerDTO1.getText()))
-                    .body("correct", res -> equalTo(answerDTO1.getIsCorrect()));
+                    .body("correct", res -> equalTo(answerDTO1.getCorrect()));
 
             // Update the Answer
             given()
@@ -219,7 +219,7 @@ public class AnswerE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo(answerDTO2.getText()))
-                    .body("correct", res -> equalTo(answerDTO2.getIsCorrect()));
+                    .body("correct", res -> equalTo(answerDTO2.getCorrect()));
         }
 
         @Test

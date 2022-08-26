@@ -45,7 +45,7 @@ public class AnswerService {
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field text in Answer DTO is mandatory"));
 
         Boolean isCorrectFromDTO = answerDTO
-                .getIsCorrectOptional(answerDTO.getIsCorrect())
+                .getIsCorrectOptional(answerDTO.getCorrect())
                 .orElseThrow(() -> new AnswerDTOBadRequestException("Field isCorrect in Answer DTO is mandatory"));
 
         Answer answer = answerRepository.save(new Answer(textFromDTO, isCorrectFromDTO, concept.getId(), Collections.emptyList()));
@@ -112,7 +112,7 @@ public class AnswerService {
                 .orElse(answer.getText());
 
         Boolean isCorrectFromDTO = answerDTO
-                .getIsCorrectOptional(answerDTO.getIsCorrect())
+                .getIsCorrectOptional(answerDTO.getCorrect())
                 .orElse(answer.getCorrect());
 
         answer.setText(textFromDTO);

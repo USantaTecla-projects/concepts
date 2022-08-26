@@ -13,9 +13,9 @@ public class JustificationDTO {
 
     private String text;
 
-    private Boolean isCorrect;
+    private Boolean correct;
 
-    private String error;
+    private String justificationError;
 
     public Optional<String> getTextOptional(final String text) {
         return Optional

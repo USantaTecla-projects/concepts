@@ -37,7 +37,6 @@ export class KnowledgeService {
   }
 
   updateAnswer(conceptId: number, answerId: number, answerDTO: AnswerDTO) {
-    console.log(conceptId, answerId, answerDTO);
     return this.httpClient.put<Answer>(`concepts/${conceptId}/answers/${answerId}`, answerDTO).pipe(shareReplay());
   }
 

@@ -8,10 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { PasswordInputComponent } from './input/password-input/password-input.component';
-import { TextInputComponent } from './input/text-input/text-input.component';
-import { FormComponent } from './form/form.component';
-import { BaseInputComponent } from './input/base-input.component';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -22,22 +18,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { TreeComponent } from './tree/tree.component';
 import { AccordionListCardComponent } from './accordion-list-card/accordion-list-card.component';
 import { CoreModule } from 'src/app/core/core.module';
-import { TextAreaComponent } from './input/text-area/text-area.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
-  declarations: [
-    TextInputComponent,
-    PasswordInputComponent,
-    FormComponent,
-    BaseInputComponent,
-    NavbarComponent,
-    TreeComponent,
-    AccordionListCardComponent,
-    TextAreaComponent,
-  ],
+  declarations: [NavbarComponent, AccordionListCardComponent, LoadingComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -58,15 +44,7 @@ import { TextAreaComponent } from './input/text-area/text-area.component';
     MatCheckboxModule,
     CoreModule,
   ],
-  exports: [
-    PasswordInputComponent,
-    TextInputComponent,
-    FormComponent,
-    NavbarComponent,
-    TreeComponent,
-    AccordionListCardComponent,
-    TextAreaComponent,
-  ],
+  exports: [NavbarComponent, AccordionListCardComponent],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

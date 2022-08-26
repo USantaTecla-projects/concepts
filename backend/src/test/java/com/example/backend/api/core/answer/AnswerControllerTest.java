@@ -70,7 +70,7 @@ public class AnswerControllerTest {
         @DisplayName("(Create) Should get 201 if the DTO is correct")
         void createWithCorrectDTO() throws Exception {
             final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
-            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getIsCorrect(), CONCEPT_ID, Collections.emptyList());
+            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getCorrect(), CONCEPT_ID, Collections.emptyList());
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -212,7 +212,7 @@ public class AnswerControllerTest {
         @DisplayName("(UpdateOne) Should get 204 if the justification is in the concept answers list")
         void updateWhenExists() throws Exception {
             final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
-            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getIsCorrect(), CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getCorrect(), CONCEPT_ID);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
 
             when(conceptService.findOne(concept.getId()))
@@ -252,7 +252,7 @@ public class AnswerControllerTest {
         void updateWhenNotBelongsToConcept() throws Exception {
             final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
             final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>());
-            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getIsCorrect(), CONCEPT_ID);
+            final Answer answer = new Answer(ANSWER_ID, answerDTO.getText(), answerDTO.getCorrect(), CONCEPT_ID);
 
 
             when(conceptService.findOne(concept.getId()))

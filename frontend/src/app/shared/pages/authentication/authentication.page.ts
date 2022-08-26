@@ -1,31 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoginDTO } from 'src/app/core/dtos/auth/login.dto';
 import { RegisterDTO } from 'src/app/core/dtos/auth/register.dto';
-import { FormData } from 'src/app/shared/components/form/interfaces/form-data.interface';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { LOGIN_FORM_DATA } from 'src/app/shared/data/form/login-form.data';
-import { REGISTER_FORM_DATA } from 'src/app/shared/data/form/register-form.data';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-authentication',
   templateUrl: './authentication.page.html',
   styleUrls: ['./authentication.page.scss'],
 })
-export class AuthenticationPage {
-  loginForm: FormData = LOGIN_FORM_DATA;
+export class AuthenticationPage implements OnInit {
+  loginForm: FormGroup = new FormGroup({});
 
-  registerForm: FormData = REGISTER_FORM_DATA;
+  registerForm: FormGroup = new FormGroup({});
 
   isAuthenticated$: Observable<boolean> | undefined;
 
   constructor(
+    private formBldr: FormBuilder,
     private authenticationSrv: AuthenticationService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.formBldr.group({
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+    });
+
+    this.registerForm = this.formBldr.group({
+      username: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      password: [null, [Validators.required]],
+      repeatedPassword: [null, [Validators.required]],
+    });
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Close', { duration: 5000 });
+  }
 
   login(loginDTO: LoginDTO) {
     this.authenticationSrv.login(loginDTO).subscribe({
@@ -43,17 +60,5 @@ export class AuthenticationPage {
       next: () => this.login({ username: registerDTO.username, password: registerDTO.password }),
       error: message => this.openSnackBar(message),
     });
-  }
-
-  onFormSubmit(dto: LoginDTO | RegisterDTO, formGroup: string) {
-    if (formGroup === 'login') return this.login(dto as LoginDTO);
-
-    if (formGroup === 'register') return this.register(dto as RegisterDTO);
-
-    this.openSnackBar('Something weird has happened');
-  }
-
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 5000 });
   }
 }

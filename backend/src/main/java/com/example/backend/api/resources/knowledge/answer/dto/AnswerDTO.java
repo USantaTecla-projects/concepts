@@ -13,7 +13,7 @@ public class AnswerDTO {
 
     private String text;
 
-    private Boolean isCorrect;
+    private Boolean correct;
 
     public Optional<String> getTextOptional(final String text) {
         return Optional

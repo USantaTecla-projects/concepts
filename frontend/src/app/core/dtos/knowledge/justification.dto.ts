@@ -1,5 +1,5 @@
 export interface JustificationDTO {
   text: string;
-  isCorrect: boolean;
-  error: string;
+  correct: boolean;
+  justificationError: string;
 }

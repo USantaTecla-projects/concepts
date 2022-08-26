@@ -207,7 +207,7 @@ public class JustificationE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo(justificationDTO1.getText()))
-                    .body("correct", res -> equalTo(justificationDTO1.getIsCorrect()));
+                    .body("correct", res -> equalTo(justificationDTO1.getCorrect()));
 
             // Update the Answer
             given()
@@ -229,7 +229,7 @@ public class JustificationE2ETest {
             .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("text", res -> equalTo(justificationDTO2.getText()))
-                    .body("correct", res -> equalTo(justificationDTO2.getIsCorrect()));
+                    .body("correct", res -> equalTo(justificationDTO2.getCorrect()));
         }
 
         @Test

@@ -14,6 +14,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ConceptsComponent } from './concepts/concepts.page';
 
@@ -31,6 +34,9 @@ import { ConceptsComponent } from './concepts/concepts.page';
     MatGridListModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatChipsModule,
   ],
   exports: [AuthenticationPage],
 })

@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PagesModule } from 'src/app/shared/pages/pages.module';
 import { CoreModule } from 'src/app/core/core.module';
+import { ComponentsModule } from './shared/components/components.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, PagesModule, CoreModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ComponentsModule, PagesModule, CoreModule],
   exports: [],
   providers: [],
   bootstrap: [AppComponent],

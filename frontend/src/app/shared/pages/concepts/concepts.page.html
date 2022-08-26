@@ -1,32 +1,137 @@
-<app-navbar></app-navbar>
-
 <div class="container">
   <app-accordion-list-card
     class="card"
     [title]="'Concepts'"
-    [items$]="concepts$"
-    [editForm]="conceptForm"
+    [items]="conceptList.items$ | async"
+    [state]="conceptList.state$ | async"
     (itemSelect)="onConceptSelect($event)"
     (itemEdit)="onConceptEdit($event)">
+    <ng-template #formEdit let-item>
+      <form class="form" [formGroup]="editConceptForm" (ngSubmit)="onConceptEdit(editConceptForm.value)">
+        <mat-chip-list>
+          <mat-chip class="chip" color="primary" selected>Concept</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.text | titlecase}}</p>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Concept</mat-label>
+          <input matInput type="text" formControlName="text" placeholder="Concept text" />
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+
+        <div mat-dialog-actions>
+          <button
+            class="submit-button"
+            mat-raised-button
+            color="accent"
+            type="submit"
+            [disabled]="!editConceptForm.valid">
+            Update Concept
+          </button>
+        </div>
+      </form>
+    </ng-template>
   </app-accordion-list-card>
 
   <app-accordion-list-card
     class="card"
     [title]="'Answers'"
-    [items$]="answers$"
-    [editForm]="answerForm"
-    [state$]="answersState$"
+    [items]="answerList.items$ | async"
+    [state]="answerList.state$ | async"
     (itemSelect)="onAnswerSelect($event)"
     (itemEdit)="onAnswerEdit($event)">
+    <ng-template #formEdit let-item>
+      <form class="form" [formGroup]="editAnswerForm" (ngSubmit)="onAnswerEdit(editAnswerForm.value)">
+        <mat-chip-list>
+          <mat-chip class="chip" color="primary" selected>Answer</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.text | titlecase}}</p>
+
+        <mat-chip-list>
+          <mat-chip class="chip" color="accent" selected>Correct</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.correct ? 'Correct' : 'Incorrect'}}</p>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Answer</mat-label>
+          <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Answer text"></textarea>
+        </mat-form-field>
+
+        <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
+
+        <div mat-dialog-actions>
+          <button
+            class="submit-button"
+            mat-raised-button
+            color="accent"
+            type="submit"
+            [disabled]="!editAnswerForm.valid">
+            Update Answer
+          </button>
+        </div>
+      </form>
+    </ng-template>
   </app-accordion-list-card>
 
   <app-accordion-list-card
     class="card"
     [title]="'Justifications'"
-    [editForm]="justificationForm"
-    [state$]="justificationsState$"
-    [items$]="justifications$"
+    [items]="justificationList.items$ | async "
+    [state]="justificationList.state$ | async"
     (itemSelect)="onJustificationSelect($event)"
     (itemEdit)="onJustificationEdit($event)">
+    <ng-template #formEdit let-item>
+      <form
+        class="form"
+        [formGroup]="editJusitificationForm"
+        (ngSubmit)="onJustificationEdit(editJusitificationForm.value)">
+        <mat-chip-list>
+          <mat-chip class="chip" color="primary" selected>Answer</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.text | titlecase}}</p>
+
+        <mat-chip-list>
+          <mat-chip class="chip" color="accent" selected>Correct</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.correct ? 'Correct' : 'Incorrect'}}</p>
+
+        <mat-chip-list>
+          <mat-chip class="chip" color="warn" selected>Error</mat-chip>
+        </mat-chip-list>
+        <p class="item-text">{{item.error | titlecase}}</p>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Justification</mat-label>
+          <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Justification text"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Error</mat-label>
+          <textarea
+            matInput
+            formControlName="justificationError"
+            cdkTextareaAutosize
+            placeholder="Justification error"></textarea>
+        </mat-form-field>
+
+        <mat-checkbox
+          class="form-checkbox"
+          formControlName="correct"
+          (change)="disableError(editJusitificationForm.value.correct)">
+          Is Correct
+        </mat-checkbox>
+
+        <div mat-dialog-actions>
+          <button
+            class="submit-button"
+            mat-raised-button
+            color="accent"
+            type="submit"
+            [disabled]="!editJusitificationForm.valid">
+            Update Justification
+          </button>
+        </div>
+      </form>
+    </ng-template>
   </app-accordion-list-card>
 </div>

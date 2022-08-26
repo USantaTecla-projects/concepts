@@ -1,4 +1,4 @@
 export interface AnswerDTO {
   text: string;
-  isCorrect: boolean;
+  correct: boolean;
 }
