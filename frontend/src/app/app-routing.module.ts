@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IsLoggedGuard } from 'src/app/core/guards/is-logged.guard';
-import { AuthenticationPage } from 'src/app/shared/pages/authentication/authentication.page';
-import { HomePage } from 'src/app/shared/pages/home/home.page';
-import { ConceptsComponent } from './shared/pages/concepts/concepts.page';
 
 const routes: Routes = [
-  { path: '', component: ConceptsComponent, canActivate: [IsLoggedGuard] },
-  { path: 'auth', component: AuthenticationPage },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/feature/auth.module').then(m => m.AuthPageModule),
+  },
+  {
+    path: 'knowledge',
+    loadChildren: () => import('./knowledge/feature/knowledge-manager.module').then(m => m.KnowledgeManagerPageModule),
+  },
 ];
 
 @NgModule({

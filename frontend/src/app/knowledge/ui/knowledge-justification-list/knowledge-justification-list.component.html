@@ -1,0 +1,77 @@
+<mat-card class="card">
+  <mat-card-title-group class="card-title">
+    <mat-card-title>Justifications</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content class="justifications" *ngIf="state === 'normal'; else noAnswers">
+    <mat-accordion>
+      <mat-expansion-panel
+        class="justification-panel"
+        *ngFor="let justification of justifications"
+        (opened)="selectItem(justification.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="justification-title">
+            {{ justification.text | titlecase | shortText: 100 }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form
+          class="form"
+          [formGroup]="editJusitificationForm"
+          (ngSubmit)="onJustificationEdit(editJusitificationForm.value)">
+          <mat-chip-list>
+            <mat-chip class="chip" color="primary" selected>Answer</mat-chip>
+          </mat-chip-list>
+          <p class="justification-text">{{ justification.text | titlecase }}</p>
+
+          <mat-chip-list>
+            <mat-chip class="chip" color="accent" selected>Correct</mat-chip>
+          </mat-chip-list>
+          <p class="justification-text">{{ justification.correct ? 'Correct' : 'Incorrect' }}</p>
+
+          <mat-chip-list>
+            <mat-chip class="chip" color="warn" selected>Error</mat-chip>
+          </mat-chip-list>
+          <p class="justification-text">{{ justification.error | titlecase }}</p>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Justification</mat-label>
+            <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Justification text"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Error</mat-label>
+            <textarea
+              matInput
+              formControlName="justificationError"
+              cdkTextareaAutosize
+              placeholder="Justification error"></textarea>
+          </mat-form-field>
+
+          <mat-checkbox
+            class="form-checkbox"
+            formControlName="correct"
+            (change)="disableError(editJusitificationForm.value.correct)">
+            Is Correct
+          </mat-checkbox>
+
+          <div mat-dialog-actions>
+            <button
+              class="submit-button"
+              mat-raised-button
+              color="accent"
+              type="submit"
+              [disabled]="!editJusitificationForm.valid">
+              Update Justification
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #noAnswers>
+  <span *ngIf="state === 'init'">Select an answer to display its justifications</span>
+  <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
+  <span *ngIf="state === 'empty'">No justifications to display</span>
+</ng-template>

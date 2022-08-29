@@ -1,0 +1,50 @@
+<mat-card class="card">
+  <mat-card-title-group class="card-title">
+    <mat-card-title>Answers</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content class="answers" *ngIf="state === 'normal'; else noAnswers">
+    <mat-accordion>
+      <mat-expansion-panel class="answer-panel" *ngFor="let answer of answers" (opened)="selectItem(answer.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="answer-title"> {{ answer.text | titlecase | shortText: 100 }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form class="form" [formGroup]="editAnswerForm" (ngSubmit)="onAnswerEdit(editAnswerForm.value)">
+          <mat-chip-list>
+            <mat-chip class="chip" color="primary" selected>Answer</mat-chip>
+          </mat-chip-list>
+          <p class="answer-text">{{ answer.text | titlecase }}</p>
+
+          <mat-chip-list>
+            <mat-chip class="chip" color="accent" selected>Correct</mat-chip>
+          </mat-chip-list>
+          <p class="answer-text">{{ answer.correct ? 'Correct' : 'Incorrect' }}</p>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Answer</mat-label>
+            <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Answer text"></textarea>
+          </mat-form-field>
+
+          <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
+
+          <div mat-dialog-actions>
+            <button
+              class="submit-button"
+              mat-raised-button
+              color="accent"
+              type="submit"
+              [disabled]="!editAnswerForm.valid">
+              Update Answer
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #noAnswers>
+  <span *ngIf="state === 'init'">Select a concept to display its answers</span>
+  <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
+  <span *ngIf="state === 'empty'">No answers to display</span>
+</ng-template>

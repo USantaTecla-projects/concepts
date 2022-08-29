@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PagesModule } from 'src/app/shared/pages/pages.module';
-import { CoreModule } from 'src/app/core/core.module';
-import { ComponentsModule } from './shared/components/components.module';
+
+import { NavbarModule } from './shared/ui/navbar/navbar.module';
+import { ApiInterceptor } from './shared/utils/api.interceptor';
+import { ShortTextPipe } from './shared/utils/short-text.pipe';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ComponentsModule, PagesModule, CoreModule],
-  exports: [],
-  providers: [],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, SharedModule, NavbarModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true,
+    },
+  ],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}

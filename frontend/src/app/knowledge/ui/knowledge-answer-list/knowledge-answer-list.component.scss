@@ -1,0 +1,53 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .card-title {
+    margin-bottom: 1rem;
+  }
+
+  .answers {
+    width: 100%;
+
+    .answer-panel {
+      background-color: #673ab7;
+
+      .answer-title {
+        color: #fff;
+      }
+
+      ::ng-deep .mat-expansion-panel-body {
+        background-color: white !important;
+      }
+
+      .form {
+        width: 100%;
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .chip {
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .concept-text {
+          margin-left: 0.25rem;
+        }
+
+        .form-field {
+          width: 100%;
+        }
+
+        .form-checkbox {
+          margin-bottom: 1rem;
+        }
+
+        .submit-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

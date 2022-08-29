@@ -1,0 +1,7 @@
+<div class="container">
+  <app-knowledge-concept-list class="card" [concepts]="conceptStore.concepts$ | async"> </app-knowledge-concept-list>
+  <app-knowledge-answer-list class="card" [answers]="answerStore.answers$ | async"></app-knowledge-answer-list>
+  <app-knowledge-justification-list
+    class="card"
+    [justifications]="justificationStore.justifications$ | async"></app-knowledge-justification-list>
+</div>
