@@ -15,15 +15,37 @@ export interface Concept {
   providedIn: 'root',
 })
 export class ConceptStore {
-  private subject = new BehaviorSubject<Concept[]>([]);
+  private conceptsSubject = new BehaviorSubject<Concept[]>([]);
 
-  concepts$: Observable<Concept[]> = this.subject.asObservable();
+  concepts$: Observable<Concept[]> = this.conceptsSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
     this.loadConcepts();
   }
 
-  saveConcept(conceptId: number, cahnges: Partial<Concept>) {}
+  saveConcept(conceptID: number, changes: Partial<Concept>) {
+    const concepts = this.conceptsSubject.getValue();
+    const index = concepts.findIndex(concept => concept.id === conceptID);
+
+    const newConcept = {
+      ...concepts[index],
+      ...changes,
+    };
+
+    const newConcepts = [...concepts];
+    newConcepts[index] = newConcept;
+
+    this.conceptsSubject.next(newConcepts);
+
+    return this.httpClient.put(`concepts/${conceptID}`, newConcept).pipe(
+      catchError(error => {
+        const message = 'Could not update the concept';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      shareReplay()
+    );
+  }
 
   private loadConcepts() {
     return this.httpClient
@@ -35,7 +57,7 @@ export class ConceptStore {
           console.log(message, error);
           return throwError(() => error);
         }),
-        tap(concepts => this.subject.next(concepts))
+        tap(concepts => this.conceptsSubject.next(concepts))
       )
       .subscribe();
   }

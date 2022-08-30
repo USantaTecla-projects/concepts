@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError, shareReplay } from 'rxjs';
 import { State } from 'src/app/shared/utils/state.enum';
 import { Justification } from './justification.store';
 
@@ -32,7 +32,29 @@ export class AnswerStore {
     this.loadAnswers();
   }
 
-  saveAnswer(answerId: number, cahnges: Partial<Answer>) {}
+  saveAnswer(answerID: number, changes: Partial<Answer>) {
+    const answers = this.answersSubject.getValue();
+    const index = answers.findIndex(answer => answer.id === answerID);
+
+    const newAnswer = {
+      ...answers[index],
+      ...changes,
+    };
+
+    const newAnswers = [...answers];
+    newAnswers[index] = newAnswer;
+
+    this.answersSubject.next(newAnswers);
+
+    return this.httpClient.put(`concepts/${this.conceptID}/answers/${answerID}`, newAnswer).pipe(
+      catchError(error => {
+        const message = 'Could not update the answer';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      shareReplay()
+    );
+  }
 
   private loadAnswers() {
     this.stateSubject.next(State.INIT);

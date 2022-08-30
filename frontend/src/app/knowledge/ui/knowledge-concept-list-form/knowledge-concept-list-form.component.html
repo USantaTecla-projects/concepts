@@ -1,0 +1,18 @@
+<form class="form" [formGroup]="conceptForm" (ngSubmit)="saveConcept(concept.id)">
+  <mat-chip-list>
+    <mat-chip class="chip" color="primary" selected>Concept</mat-chip>
+  </mat-chip-list>
+  <p class="concept-text">{{ concept.text | titlecase | shortText: 100 }}</p>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Concept</mat-label>
+    <input matInput type="text" formControlName="text" placeholder="Concept text" />
+    <mat-icon matSuffix>book</mat-icon>
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button class="submit-button" mat-raised-button color="accent" type="submit" [disabled]="!conceptForm.valid">
+      Update Concept
+    </button>
+  </div>
+</form>

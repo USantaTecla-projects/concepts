@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 
 import { NavbarModule } from './shared/ui/navbar/navbar.module';
 import { ApiInterceptor } from './shared/utils/api.interceptor';
-import { ShortTextPipe } from './shared/utils/short-text.pipe';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({

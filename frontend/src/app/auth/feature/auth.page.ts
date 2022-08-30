@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 import { AuthService } from '../data-access/auth.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class AuthPage implements OnInit {
   constructor(
     private formBldr: FormBuilder,
     private authSrv: AuthService,
-    private snackBar: MatSnackBar,
+    private snackbarService: SnackbarService,
     private router: Router
   ) {}
 
@@ -38,25 +39,21 @@ export class AuthPage implements OnInit {
     });
   }
 
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 5000 });
-  }
-
   login(loginDTO: any) {
     this.authSrv.login(loginDTO).subscribe({
       next: () => this.router.navigateByUrl(''),
-      error: () => this.openSnackBar('Invalid credentials'),
+      error: () => this.snackbarService.openSnackBar('Invalid credentials'),
     });
   }
 
   register(registerDTO: any) {
     const { password, repeatedPassword } = registerDTO;
 
-    if (password !== repeatedPassword) return this.openSnackBar('Password should coincide');
+    if (password !== repeatedPassword) return this.snackbarService.openSnackBar('Password should coincide');
 
     this.authSrv.register(registerDTO).subscribe({
       next: () => this.login({ username: registerDTO.username, password: registerDTO.password }),
-      error: message => this.openSnackBar(message),
+      error: message => this.snackbarService.openSnackBar(message),
     });
   }
 }
