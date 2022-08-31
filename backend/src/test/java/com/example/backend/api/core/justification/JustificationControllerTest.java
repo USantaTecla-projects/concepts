@@ -81,7 +81,7 @@ public class JustificationControllerTest {
                     JUSTIFICATION_ID,
                     justificationDTO.getText(),
                     justificationDTO.getCorrect(),
-                    justificationDTO.getJustificationError(),
+                    justificationDTO.getError(),
                     CONCEPT_ID,
                     ANSWER_ID);
             final Answer answer = new Answer(

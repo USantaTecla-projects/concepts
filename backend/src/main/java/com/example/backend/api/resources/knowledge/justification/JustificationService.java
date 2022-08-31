@@ -50,7 +50,7 @@ public class JustificationService {
                 .orElseThrow(() -> new JustificationDTOBadRequestException("Field isCorrect in Justification DTO is mandatory"));
 
         String errorFromDTO = justificationDTO
-                .getErrorOptional(justificationDTO.getJustificationError())
+                .getErrorOptional(justificationDTO.getError())
                 .orElseGet(() -> {
                     if (!isCorrectFromDTO)
                         throw new JustificationDTOBadRequestException("Field error in Justification DTO is mandatory");
@@ -131,7 +131,7 @@ public class JustificationService {
                 .orElse(justification.getCorrect());
 
         String errorFromDTO = justificationDTO
-                .getErrorOptional(justificationDTO.getJustificationError())
+                .getErrorOptional(justificationDTO.getError())
                 .orElse(justification.getError());
 
         if (!isCorrectFromDTO && errorFromDTO == null)

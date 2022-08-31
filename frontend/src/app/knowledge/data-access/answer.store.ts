@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, tap, throwError, shareReplay } from 'rxjs';
-import { State } from 'src/app/shared/utils/state.enum';
+import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
+import { State } from 'src/app/shared/utils/enums/state.enum';
 import { Justification } from './justification.store';
 
 export interface Answer {
@@ -27,9 +27,14 @@ export class AnswerStore {
 
   constructor(private httpClient: HttpClient) {}
 
-  setConceptId(conceptID: number) {
+  setConceptID(conceptID: number) {
     this.conceptID = conceptID;
     this.loadAnswers();
+  }
+
+  removeConceptID() {
+    this.answersSubject.next([]);
+    this.stateSubject.next(State.INIT);
   }
 
   saveAnswer(answerID: number, changes: Partial<Answer>) {
@@ -53,6 +58,25 @@ export class AnswerStore {
         return throwError(() => error);
       }),
       shareReplay()
+    );
+  }
+
+  deleteAnswer(answerID: number) {
+    const answers = this.answersSubject.getValue();
+
+    const newAnswers = answers.filter(answer => answer.id !== answerID);
+
+    this.answersSubject.next(newAnswers);
+
+    return this.httpClient.delete(`concepts/${this.conceptID}/answers/${answerID}`).pipe(
+      catchError(error => {
+        const message = 'Could not delete the answer';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(() => {
+        if (newAnswers.length === 0) this.stateSubject.next(State.EMPTY);
+      })
     );
   }
 

@@ -1,4 +1,4 @@
-<form class="form" [formGroup]="justificationForm" (ngSubmit)="saveJustification(justification.id)">
+<form class="form" [formGroup]="justificationForm" (ngSubmit)="onSubmit($event.submitter.id, justification.id)">
   <mat-chip-list>
     <mat-chip class="chip" color="primary" selected>Answer</mat-chip>
   </mat-chip-list>
@@ -14,7 +14,7 @@
   <mat-chip-list>
     <mat-chip class="chip" color="warn" selected>Error</mat-chip>
   </mat-chip-list>
-  <p class="justification-text">{{ justification.error | titlecase }}</p>
+  <p class="justification-text">{{ !justification.correct ? (justification.error | titlecase) : 'No error' }}</p>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Justification</mat-label>
@@ -23,11 +23,7 @@
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Error</mat-label>
-    <textarea
-      matInput
-      formControlName="justificationError"
-      cdkTextareaAutosize
-      placeholder="Justification error"></textarea>
+    <textarea matInput formControlName="error" cdkTextareaAutosize placeholder="Justification error"></textarea>
   </mat-form-field>
 
   <mat-checkbox
@@ -37,8 +33,21 @@
     Is Correct
   </mat-checkbox>
 
-  <div mat-dialog-actions>
-    <button class="submit-button" mat-raised-button color="accent" type="submit" [disabled]="!justificationForm.valid">
+  <div mat-dialog-actions class="actions">
+    <button
+      class="delete-button"
+      mat-raised-button
+      color="warn"
+      type="submit"
+      (click)="openDeleteDialog(justification.id)">
+      Delete Justification
+    </button>
+    <button
+      class="save-button"
+      mat-raised-button
+      type="submit"
+      [disabled]="!justificationForm.valid"
+      (click)="onSubmit('update', justification.id)">
       Update Justification
     </button>
   </div>

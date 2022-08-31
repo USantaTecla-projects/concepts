@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
 import { NavbarModule } from './ui/navbar/navbar.module';
@@ -42,6 +43,7 @@ import { NavbarModule } from './ui/navbar/navbar.module';
     MatInputModule,
     MatToolbarModule,
     MatCheckboxModule,
+    MatDialogModule,
     NavbarModule,
   ],
 })

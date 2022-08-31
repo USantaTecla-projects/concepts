@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { State } from 'src/app/shared/utils/state.enum';
+import { State } from 'src/app/shared/utils/enums/state.enum';
 import { Answer, AnswerStore } from '../../data-access/answer.store';
 import { JustificationStore } from '../../data-access/justification.store';
 
@@ -23,6 +23,6 @@ export class KnowledgeAnswerListComponent implements OnInit {
   }
 
   selectAnswer(answerID: number) {
-    this.justificationStore.setAnswerId(answerID);
+    this.justificationStore.setAnswerID(this.answerStore.conceptID, answerID);
   }
 }

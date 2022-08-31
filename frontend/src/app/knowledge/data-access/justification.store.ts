@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, throwError, tap } from 'rxjs';
-import { State } from 'src/app/shared/utils/state.enum';
-import { Answer, AnswerStore } from './answer.store';
+import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
+import { State } from 'src/app/shared/utils/enums/state.enum';
 
 export interface Justification {
   id: number;
@@ -27,20 +26,65 @@ export class JustificationStore {
 
   answerID!: number;
 
-  constructor(private httpClient: HttpClient, private answerStore: AnswerStore) {}
+  constructor(private httpClient: HttpClient) {}
 
-  setAnswerId(answerID: number) {
-    this.conceptID = this.answerStore.conceptID;
+  setAnswerID(conceptID: number, answerID: number) {
+    this.conceptID = conceptID;
     this.answerID = answerID;
     this.loadJustifications();
   }
 
-  removeAnswerId() {
+  removeAnswerID() {
     this.justificationsSubject.next([]);
     this.stateSubject.next(State.INIT);
   }
 
-  saveJustification(answerId: number, cahnges: Partial<Answer>) {}
+  saveJustification(justificationID: number, changes: Partial<Justification>) {
+    const justifications = this.justificationsSubject.getValue();
+    const index = justifications.findIndex(justification => justification.id === justificationID);
+
+    const newJustification = {
+      ...justifications[index],
+      ...changes,
+    };
+
+    const newJustifications = [...justifications];
+    newJustifications[index] = newJustification;
+
+    this.justificationsSubject.next(newJustifications);
+
+    return this.httpClient
+      .put(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/${justificationID}`, newJustification)
+      .pipe(
+        catchError(error => {
+          const message = 'Could not update the answer';
+          console.log(message, error);
+          return throwError(() => error);
+        }),
+        shareReplay()
+      );
+  }
+
+  deleteJustification(justificationID: number) {
+    const justifications = this.justificationsSubject.getValue();
+
+    const newJustifications = justifications.filter(justification => justification.id !== justificationID);
+
+    this.justificationsSubject.next(newJustifications);
+
+    return this.httpClient
+      .delete(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/${justificationID}`)
+      .pipe(
+        catchError(error => {
+          const message = 'Could not delete the answer';
+          console.log(message, error);
+          return throwError(() => error);
+        }),
+        tap(() => {
+          if (newJustifications.length === 0) this.stateSubject.next(State.EMPTY);
+        })
+      );
+  }
 
   private loadJustifications() {
     this.stateSubject.next(State.LOADING);

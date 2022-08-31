@@ -29,7 +29,16 @@
     margin-bottom: 1rem;
   }
 
-  .submit-button {
-    width: 100%;
+  .actions {
+    display: flex;
+    justify-content: space-around;
+
+    .save-button {
+      width: 48%;
+    }
+
+    .delete-button {
+      width: 48%;
+    }
   }
 }

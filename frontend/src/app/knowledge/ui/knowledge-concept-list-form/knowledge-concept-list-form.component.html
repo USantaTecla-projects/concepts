@@ -1,4 +1,4 @@
-<form class="form" [formGroup]="conceptForm" (ngSubmit)="saveConcept(concept.id)">
+<form class="form" [formGroup]="conceptForm" (ngSubmit)="onSubmit($event.submitter.id, concept.id)">
   <mat-chip-list>
     <mat-chip class="chip" color="primary" selected>Concept</mat-chip>
   </mat-chip-list>
@@ -10,8 +10,16 @@
     <mat-icon matSuffix>book</mat-icon>
   </mat-form-field>
 
-  <div mat-dialog-actions>
-    <button class="submit-button" mat-raised-button color="accent" type="submit" [disabled]="!conceptForm.valid">
+  <div mat-dialog-actions class="actions">
+    <button class="delete-button" mat-raised-button color="warn" type="submit" (click)="openDeleteDialog(concept.id)">
+      Delete Concept
+    </button>
+    <button
+      class="save-button"
+      mat-raised-button
+      type="submit"
+      [disabled]="!conceptForm.valid"
+      (click)="onSubmit('update', concept.id)">
       Update Concept
     </button>
   </div>

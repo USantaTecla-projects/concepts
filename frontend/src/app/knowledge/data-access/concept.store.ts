@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, shareReplay, Observable, catchError, throwError, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwError } from 'rxjs';
 
+import { State } from 'src/app/shared/utils/enums/state.enum';
 import { Page } from 'src/app/shared/utils/page-response.dto';
 import { Answer } from './answer.store';
 
@@ -17,7 +18,11 @@ export interface Concept {
 export class ConceptStore {
   private conceptsSubject = new BehaviorSubject<Concept[]>([]);
 
+  private stateSubject = new BehaviorSubject<string>(State.INIT);
+
   concepts$: Observable<Concept[]> = this.conceptsSubject.asObservable();
+
+  state$: Observable<string> = this.stateSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
     this.loadConcepts();
@@ -47,6 +52,25 @@ export class ConceptStore {
     );
   }
 
+  deleteConcept(conceptID: number) {
+    const concepts = this.conceptsSubject.getValue();
+
+    const newConcepts = concepts.filter(concept => concept.id !== conceptID);
+
+    this.conceptsSubject.next(newConcepts);
+
+    return this.httpClient.delete(`concepts/${conceptID}`).pipe(
+      catchError(error => {
+        const message = 'Could not delete the concept';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(() => {
+        if (newConcepts.length === 0) this.stateSubject.next(State.EMPTY);
+      })
+    );
+  }
+
   private loadConcepts() {
     return this.httpClient
       .get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) })
@@ -57,7 +81,10 @@ export class ConceptStore {
           console.log(message, error);
           return throwError(() => error);
         }),
-        tap(concepts => this.conceptsSubject.next(concepts))
+        tap(concepts => {
+          this.conceptsSubject.next(concepts);
+          concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+        })
       )
       .subscribe();
   }

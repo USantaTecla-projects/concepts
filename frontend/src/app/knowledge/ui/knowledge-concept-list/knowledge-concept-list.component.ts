@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { State } from 'src/app/shared/utils/state.enum';
+import { State } from 'src/app/shared/utils/enums/state.enum';
 import { AnswerStore } from '../../data-access/answer.store';
-import { Concept } from '../../data-access/concept.store';
+import { Concept, ConceptStore } from '../../data-access/concept.store';
 import { JustificationStore } from '../../data-access/justification.store';
 
 @Component({
@@ -14,12 +14,16 @@ export class KnowledgeConceptListComponent implements OnInit {
 
   state: string = State.INIT;
 
-  constructor(private answerStore: AnswerStore, private justificationStore: JustificationStore) {}
+  constructor(
+    private conceptStore: ConceptStore,
+    private answerStore: AnswerStore,
+    private justificationStore: JustificationStore
+  ) {}
 
-  ngOnInit(): void {}
-
-  selectConcept(conceptID: number) {
-    this.answerStore.setConceptId(conceptID);
-    this.justificationStore.removeAnswerId();
+  ngOnInit(): void {
+    this.conceptStore.state$.subscribe({
+      next: value => (this.state = value),
+      error: error => console.log(error),
+    });
   }
 }
