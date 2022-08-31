@@ -59,7 +59,7 @@ export class KnowledgeAnswerListFormComponent implements OnInit {
     const dialogRef = this.dialog.open(KnowledgeDeleteDialogComponent, {
       width: '20rem',
       data: {
-        knowledgeItem: 'justification',
+        knowledgeItem: 'answer',
       },
     });
 

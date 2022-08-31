@@ -26,4 +26,9 @@ export class KnowledgeConceptListComponent implements OnInit {
       error: error => console.log(error),
     });
   }
+
+  selectConcept(conceptID: number) {
+    this.answerStore.setConceptID(conceptID);
+    this.justificationStore.removeAnswerID();
+  }
 }

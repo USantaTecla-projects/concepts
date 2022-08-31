@@ -2,7 +2,14 @@
   <mat-card-title-group class="card-title">
     <mat-card-title>Justifications</mat-card-title>
   </mat-card-title-group>
-  <mat-card-content class="justifications" *ngIf="state === 'normal'; else noAnswers">
+  <mat-card-content class="justifications" *ngIf="state === 'normal'; else noJustifications">
+    <mat-card class="add-justification">
+      <button mat-mini-fab class="add-button" color="warn">
+        <mat-icon>add</mat-icon>
+      </button>
+      <p>Add a new justification.</p>
+    </mat-card>
+
     <mat-accordion>
       <mat-expansion-panel class="justification-panel" *ngFor="let justification of justifications">
         <mat-expansion-panel-header>
@@ -16,7 +23,7 @@
   </mat-card-content>
 </mat-card>
 
-<ng-template #noAnswers>
+<ng-template #noJustifications>
   <span *ngIf="state === 'init'">Select an answer to display its justifications</span>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
   <span *ngIf="state === 'empty'">No justifications to display</span>

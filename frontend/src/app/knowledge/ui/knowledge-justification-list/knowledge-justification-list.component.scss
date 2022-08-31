@@ -21,5 +21,21 @@
         background-color: white !important;
       }
     }
+
+    .add-justification {
+      display: flex;
+      align-items: center;
+      background-color: #c62828;
+      color: white;
+      margin-bottom: 1rem;
+
+      .add-button {
+        margin-right: 1rem;
+      }
+
+      p {
+        font-weight: 500;
+      }
+    }
   }
 }

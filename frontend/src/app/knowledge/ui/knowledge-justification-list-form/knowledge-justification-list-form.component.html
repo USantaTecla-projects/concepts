@@ -5,7 +5,7 @@
   <p class="justification-text">{{ justification.text | titlecase }}</p>
 
   <mat-chip-list>
-    <mat-chip class="chip" color="accent" selected>Correct</mat-chip>
+    <mat-chip class="chip" color="accent" selected>Is correct?</mat-chip>
   </mat-chip-list>
   <p class="justification-text checkbox-source" [ngClass]="{ correct: justification.correct }">
     {{ justification.correct ? 'Correct' : 'Incorrect' }}

@@ -3,6 +3,13 @@
     <mat-card-title>Answers</mat-card-title>
   </mat-card-title-group>
   <mat-card-content class="answers" *ngIf="state === 'normal'; else noAnswers">
+    <mat-card class="add-answer">
+      <button mat-mini-fab class="add-button" color="warn">
+        <mat-icon>add</mat-icon>
+      </button>
+      <p>Add a new answer.</p>
+    </mat-card>
+
     <mat-accordion>
       <mat-expansion-panel class="answer-panel" *ngFor="let answer of answers" (opened)="selectAnswer(answer.id)">
         <mat-expansion-panel-header>
