@@ -37,6 +37,22 @@ export class AnswerStore {
     this.stateSubject.next(State.INIT);
   }
 
+  createAnswer(answer: any) {
+    return this.httpClient.post<Answer>(`concepts/${this.conceptID}/answers/`, answer).pipe(
+      catchError(error => {
+        const message = 'Could not create the answer';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(answer => {
+        const answers = this.answersSubject.getValue();
+        const newAnswers = [...answers, answer];
+        this.answersSubject.next(newAnswers);
+      }),
+      shareReplay()
+    );
+  }
+
   saveAnswer(answerID: number, changes: Partial<Answer>) {
     const answers = this.answersSubject.getValue();
     const index = answers.findIndex(answer => answer.id === answerID);

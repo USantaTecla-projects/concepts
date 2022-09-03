@@ -28,7 +28,23 @@ export class ConceptStore {
     this.loadConcepts();
   }
 
-  saveConcept(conceptID: number, changes: Partial<Concept>) {
+  createConcept(concept: Concept) {
+    return this.httpClient.post<Concept>(`concepts/`, concept).pipe(
+      catchError(error => {
+        const message = 'Could not create the concept';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(concept => {
+        const concepts = this.conceptsSubject.getValue();
+        const newConcepts = [...concepts, concept];
+        this.conceptsSubject.next(newConcepts);
+      }),
+      shareReplay()
+    );
+  }
+
+  updateConcept(conceptID: number, changes: Partial<Concept>) {
     const concepts = this.conceptsSubject.getValue();
     const index = concepts.findIndex(concept => concept.id === conceptID);
 

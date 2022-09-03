@@ -39,7 +39,25 @@ export class JustificationStore {
     this.stateSubject.next(State.INIT);
   }
 
-  saveJustification(justificationID: number, changes: Partial<Justification>) {
+  createJustification(justification: Justification) {
+    return this.httpClient
+      .post<Justification>(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/`, justification)
+      .pipe(
+        catchError(error => {
+          const message = 'Could not create the justification';
+          console.log(message, error);
+          return throwError(() => error);
+        }),
+        tap(justification => {
+          const justifications = this.justificationsSubject.getValue();
+          const newJustifications = [...justifications, justification];
+          this.justificationsSubject.next(newJustifications);
+        }),
+        shareReplay()
+      );
+  }
+
+  updateJustification(justificationID: number, changes: Partial<Justification>) {
     const justifications = this.justificationsSubject.getValue();
     const index = justifications.findIndex(justification => justification.id === justificationID);
 
