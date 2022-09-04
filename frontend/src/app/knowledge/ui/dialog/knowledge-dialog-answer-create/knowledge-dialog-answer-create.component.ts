@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Answer } from 'src/app/knowledge/data-access/answer.store';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
 
 @Component({
@@ -9,27 +9,14 @@ import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
   styleUrls: ['./knowledge-dialog-answer-create.component.scss'],
 })
 export class KnowledgeDialogAnswerCreateComponent implements OnInit {
-  answerForm: FormGroup = new FormGroup({});
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private dialogRef: MatDialogRef<KnowledgeDialogAnswerCreateComponent>,
-    private formBuilder: FormBuilder
+    private dialogRef: MatDialogRef<KnowledgeDialogAnswerCreateComponent>
   ) {}
 
-  ngOnInit(): void {
-    this.answerForm = this.formBuilder.group({
-      text: [null, [Validators.required]],
-      correct: [false],
-    });
-  }
+  ngOnInit(): void {}
 
-  onSubmit() {
-    const answerFormValue = this.answerForm.value;
-    this.dialogRef.close(answerFormValue);
-  }
-
-  onClose() {
-    this.dialogRef.close();
+  onAnswerCreate(newAnswer: Answer): void {
+    this.dialogRef.close(newAnswer);
   }
 }

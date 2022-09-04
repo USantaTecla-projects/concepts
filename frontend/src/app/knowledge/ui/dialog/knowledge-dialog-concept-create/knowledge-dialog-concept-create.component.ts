@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Concept } from 'src/app/knowledge/data-access/concept.store';
 import { DialogData } from '../../../utils/dialog-data.interface';
 
 @Component({
@@ -9,26 +10,14 @@ import { DialogData } from '../../../utils/dialog-data.interface';
   styleUrls: ['./knowledge-dialog-concept-create.component.scss'],
 })
 export class KnowledgeDialogCreateConceptComponent implements OnInit {
-  conceptForm: FormGroup = new FormGroup({});
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private dialogRef: MatDialogRef<KnowledgeDialogCreateConceptComponent>,
-    private formBuilder: FormBuilder
+    private dialogRef: MatDialogRef<KnowledgeDialogCreateConceptComponent>
   ) {}
 
-  ngOnInit(): void {
-    this.conceptForm = this.formBuilder.group({
-      text: [null, [Validators.required]],
-    });
-  }
+  ngOnInit(): void {}
 
-  onSubmit() {
-    const conceptFormValue = this.conceptForm.value;
-    this.dialogRef.close(conceptFormValue);
-  }
-
-  onClose() {
-    this.dialogRef.close();
+  onConceptCreate(newConcept: Concept) {
+    this.dialogRef.close(newConcept);
   }
 }

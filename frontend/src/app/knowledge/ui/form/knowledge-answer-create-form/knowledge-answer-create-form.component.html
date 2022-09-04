@@ -1,0 +1,13 @@
+<form class="form" [formGroup]="answerForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Answer</mat-label>
+    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Answer text"></textarea>
+  </mat-form-field>
+
+  <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
+
+  <div mat-dialog-actions class="actions">
+    <button class="save-button" mat-raised-button type="submit" [disabled]="!answerForm.valid">Create Answer</button>
+    <button class="close-button" mat-raised-button color="primary" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

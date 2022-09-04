@@ -1,25 +1,3 @@
-<form class="form" [formGroup]="justificationForm" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="outline" class="form-field">
-    <mat-label>Justification</mat-label>
-    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Justification text"></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="form-field">
-    <mat-label>Error</mat-label>
-    <textarea matInput formControlName="error" cdkTextareaAutosize placeholder="Justification error"></textarea>
-  </mat-form-field>
-
-  <mat-checkbox
-    class="form-checkbox"
-    formControlName="correct"
-    (change)="toggleErrorField(justificationForm.value.correct)">
-    Is Correct
-  </mat-checkbox>
-
-  <div mat-dialog-actions class="actions">
-    <button class="save-button" mat-raised-button type="submit" [disabled]="!justificationForm.valid">
-      Create Justification
-    </button>
-    <button class="close-button" mat-raised-button color="primary" type="button" (click)="onClose()">Cancel</button>
-  </div>
-</form>
+<h1 mat-dialog-title>Create {{ data.knowledgeItem }}</h1>
+<app-knowledge-justification-create-form
+  (createJustification)="onJustificationCreate($event)"></app-knowledge-justification-create-form>
