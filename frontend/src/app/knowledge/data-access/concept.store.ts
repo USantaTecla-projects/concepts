@@ -25,7 +25,7 @@ export class ConceptStore {
   state$: Observable<string> = this.stateSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
-    this.loadConcepts();
+    this.readConcepts();
   }
 
   createConcept(concept: Concept) {
@@ -87,7 +87,7 @@ export class ConceptStore {
     );
   }
 
-  private loadConcepts() {
+  private readConcepts() {
     return this.httpClient
       .get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) })
       .pipe(

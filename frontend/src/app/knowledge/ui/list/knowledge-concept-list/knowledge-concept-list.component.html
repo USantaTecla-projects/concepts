@@ -4,24 +4,39 @@
   </mat-card-title-group>
 
   <mat-card-content class="concepts" *ngIf="state === 'init' || state === 'normal'; else noConcepts">
-    <mat-card class="add-concept">
-      <button mat-mini-fab class="add-button" color="warn" (click)="openCreateDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
-      <p>Add a new concept.</p>
-    </mat-card>
+    <div class="actions">
+      <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
+        <button mat-mini-fab class="add-button" color="warn" (click)="onConceptCreate()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add concept</p>
+      </mat-card>
+
+      <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
+        <button mat-mini-fab class="delete-button" color="primary" (click)="onConceptDelete()">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete concept</p>
+      </mat-card>
+    </div>
 
     <mat-accordion class="accordion">
-      <mat-expansion-panel class="concept-panel" *ngFor="let concept of concepts" (opened)="selectConcept(concept.id)">
+      <mat-expansion-panel
+        class="concept-panel"
+        *ngFor="let concept of concepts"
+        (opened)="onConceptSelect(concept.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="concept-title"> {{ concept.text | titlecase }}</mat-panel-title>
         </mat-expansion-panel-header>
-        <app-knowledge-concept-update-form [concept]="concept"></app-knowledge-concept-update-form>
+        <app-knowledge-concept-update-form
+          [concept]="concept"
+          (updateConcept)="onConceptUpdate($event)"></app-knowledge-concept-update-form>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
 </mat-card>
 
+<!-- If the state is different that normal, display one of this-->
 <ng-template #noConcepts>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
   <span *ngIf="state === 'empty'">No concepts to display</span>

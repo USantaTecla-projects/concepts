@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AnswerStore } from 'src/app/knowledge/data-access/answer.store';
 import { Concept, ConceptStore } from 'src/app/knowledge/data-access/concept.store';
-import { JustificationStore } from 'src/app/knowledge/data-access/justification.store';
 import { State } from 'src/app/shared/utils/enums/state.enum';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-dialog-concept-create/knowledge-dialog-concept-create.component';
+import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
 
 @Component({
   selector: 'app-knowledge-concept-list',
@@ -15,15 +13,19 @@ import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-di
 export class KnowledgeConceptListComponent implements OnInit {
   @Input() concepts: Concept[] | null = [];
 
+  @Output() selectConcept: EventEmitter<number> = new EventEmitter();
+
+  @Output() createConcept: EventEmitter<Concept> = new EventEmitter();
+
+  @Output() updateConcept: EventEmitter<Concept> = new EventEmitter();
+
+  @Output() deleteConcept: EventEmitter<number> = new EventEmitter();
+
   state: string = State.INIT;
 
-  constructor(
-    public dialog: MatDialog,
-    private snackbarService: SnackbarService,
-    private conceptStore: ConceptStore,
-    private answerStore: AnswerStore,
-    private justificationStore: JustificationStore
-  ) {}
+  selectedConceptID!: number;
+
+  constructor(private conceptStore: ConceptStore, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.conceptStore.state$.subscribe({
@@ -32,19 +34,12 @@ export class KnowledgeConceptListComponent implements OnInit {
     });
   }
 
-  selectConcept(conceptID: number) {
-    this.answerStore.setConceptID(conceptID);
-    this.justificationStore.removeAnswerID();
+  onConceptSelect(conceptID: number): void {
+    this.selectedConceptID = conceptID;
+    this.selectConcept.emit(this.selectedConceptID);
   }
 
-  createConcept(conceptFormValue: any) {
-    this.conceptStore.createConcept(conceptFormValue).subscribe({
-      next: () => this.snackbarService.openSnackBar('Concept created.'),
-      error: () => this.snackbarService.openSnackBar('Error creating concept.'),
-    });
-  }
-
-  openCreateDialog() {
+  onConceptCreate(): void {
     const dialogRef = this.dialog.open(KnowledgeDialogCreateConceptComponent, {
       width: '30rem',
       data: {
@@ -53,7 +48,27 @@ export class KnowledgeConceptListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(conceptFormValue => {
-      if (conceptFormValue) this.createConcept(conceptFormValue);
+      if (conceptFormValue) {
+        const newConcept: Concept = { ...conceptFormValue };
+        this.createConcept.emit(newConcept);
+      }
+    });
+  }
+
+  onConceptUpdate(updatedConcept: Concept) {
+    this.updateConcept.emit(updatedConcept);
+  }
+
+  onConceptDelete(): void {
+    const dialogRef = this.dialog.open(KnowledgeDialogDeleteComponent, {
+      width: '20rem',
+      data: {
+        knowledgeItem: 'concept',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(deleteConcept => {
+      if (deleteConcept) this.deleteConcept.emit(this.selectedConceptID);
     });
   }
 }

@@ -22,26 +22,11 @@ export class JustificationStore {
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
-  conceptID!: number;
-
-  answerID!: number;
-
   constructor(private httpClient: HttpClient) {}
 
-  setAnswerID(conceptID: number, answerID: number) {
-    this.conceptID = conceptID;
-    this.answerID = answerID;
-    this.loadJustifications();
-  }
-
-  removeAnswerID() {
-    this.justificationsSubject.next([]);
-    this.stateSubject.next(State.INIT);
-  }
-
-  createJustification(justification: Justification) {
+  createJustification(conceptID: number, answerID: number, justification: Justification) {
     return this.httpClient
-      .post<Justification>(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/`, justification)
+      .post<Justification>(`concepts/${conceptID}/answers/${answerID}/justifications/`, justification)
       .pipe(
         catchError(error => {
           const message = 'Could not create the justification';
@@ -57,7 +42,23 @@ export class JustificationStore {
       );
   }
 
-  updateJustification(justificationID: number, changes: Partial<Justification>) {
+  readJustifications(conceptID: number, answerID: number) {
+    this.stateSubject.next(State.LOADING);
+
+    return this.httpClient.get<Justification[]>(`concepts/${conceptID}/answers/${answerID}/justifications/`).pipe(
+      catchError(error => {
+        const message = 'Could not load concepts';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(justifications => {
+        this.justificationsSubject.next(justifications);
+        justifications.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+      })
+    );
+  }
+
+  updateJustification(conceptID: number, answerID: number, justificationID: number, changes: Partial<Justification>) {
     const justifications = this.justificationsSubject.getValue();
     const index = justifications.findIndex(justification => justification.id === justificationID);
 
@@ -72,7 +73,7 @@ export class JustificationStore {
     this.justificationsSubject.next(newJustifications);
 
     return this.httpClient
-      .put(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/${justificationID}`, newJustification)
+      .put(`concepts/${conceptID}/answers/${answerID}/justifications/${justificationID}`, newJustification)
       .pipe(
         catchError(error => {
           const message = 'Could not update the answer';
@@ -83,43 +84,27 @@ export class JustificationStore {
       );
   }
 
-  deleteJustification(justificationID: number) {
+  deleteJustification(conceptID: number, answerID: number, justificationID: number) {
     const justifications = this.justificationsSubject.getValue();
 
     const newJustifications = justifications.filter(justification => justification.id !== justificationID);
 
     this.justificationsSubject.next(newJustifications);
 
-    return this.httpClient
-      .delete(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/${justificationID}`)
-      .pipe(
-        catchError(error => {
-          const message = 'Could not delete the answer';
-          console.log(message, error);
-          return throwError(() => error);
-        }),
-        tap(() => {
-          if (newJustifications.length === 0) this.stateSubject.next(State.EMPTY);
-        })
-      );
+    return this.httpClient.delete(`concepts/${conceptID}/answers/${answerID}/justifications/${justificationID}`).pipe(
+      catchError(error => {
+        const message = 'Could not delete the answer';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(() => {
+        if (newJustifications.length === 0) this.stateSubject.next(State.EMPTY);
+      })
+    );
   }
 
-  private loadJustifications() {
-    this.stateSubject.next(State.LOADING);
-
-    return this.httpClient
-      .get<Justification[]>(`concepts/${this.conceptID}/answers/${this.answerID}/justifications/`)
-      .pipe(
-        catchError(error => {
-          const message = 'Could not load concepts';
-          console.log(message, error);
-          return throwError(() => error);
-        }),
-        tap(justifications => {
-          this.justificationsSubject.next(justifications);
-          justifications.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
-        })
-      )
-      .subscribe();
+  resetJustificationList() {
+    this.justificationsSubject.next([]);
+    this.stateSubject.next(State.INIT);
   }
 }

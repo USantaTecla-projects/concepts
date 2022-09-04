@@ -23,22 +23,10 @@ export class AnswerStore {
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
-  conceptID!: number;
-
   constructor(private httpClient: HttpClient) {}
 
-  setConceptID(conceptID: number) {
-    this.conceptID = conceptID;
-    this.loadAnswers();
-  }
-
-  removeConceptID() {
-    this.answersSubject.next([]);
-    this.stateSubject.next(State.INIT);
-  }
-
-  createAnswer(answer: any) {
-    return this.httpClient.post<Answer>(`concepts/${this.conceptID}/answers/`, answer).pipe(
+  createAnswer(conceptID: number, answer: any) {
+    return this.httpClient.post<Answer>(`concepts/${conceptID}/answers/`, answer).pipe(
       catchError(error => {
         const message = 'Could not create the answer';
         console.log(message, error);
@@ -53,7 +41,23 @@ export class AnswerStore {
     );
   }
 
-  saveAnswer(answerID: number, changes: Partial<Answer>) {
+  readAnswers(conceptID: number) {
+    this.stateSubject.next(State.INIT);
+
+    return this.httpClient.get<Answer[]>(`concepts/${conceptID}/answers/`).pipe(
+      catchError(error => {
+        const message = 'Could not load concepts';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(answers => {
+        this.answersSubject.next(answers);
+        answers.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+      })
+    );
+  }
+
+  updateAnswer(conceptID: number, answerID: number, changes: Partial<Answer>) {
     const answers = this.answersSubject.getValue();
     const index = answers.findIndex(answer => answer.id === answerID);
 
@@ -67,7 +71,7 @@ export class AnswerStore {
 
     this.answersSubject.next(newAnswers);
 
-    return this.httpClient.put(`concepts/${this.conceptID}/answers/${answerID}`, newAnswer).pipe(
+    return this.httpClient.put(`concepts/${conceptID}/answers/${answerID}`, newAnswer).pipe(
       catchError(error => {
         const message = 'Could not update the answer';
         console.log(message, error);
@@ -77,14 +81,14 @@ export class AnswerStore {
     );
   }
 
-  deleteAnswer(answerID: number) {
+  deleteAnswer(conceptID: number, answerID: number) {
     const answers = this.answersSubject.getValue();
 
     const newAnswers = answers.filter(answer => answer.id !== answerID);
 
     this.answersSubject.next(newAnswers);
 
-    return this.httpClient.delete(`concepts/${this.conceptID}/answers/${answerID}`).pipe(
+    return this.httpClient.delete(`concepts/${conceptID}/answers/${answerID}`).pipe(
       catchError(error => {
         const message = 'Could not delete the answer';
         console.log(message, error);
@@ -94,24 +98,5 @@ export class AnswerStore {
         if (newAnswers.length === 0) this.stateSubject.next(State.EMPTY);
       })
     );
-  }
-
-  private loadAnswers() {
-    this.stateSubject.next(State.INIT);
-
-    return this.httpClient
-      .get<Answer[]>(`concepts/${this.conceptID}/answers/`)
-      .pipe(
-        catchError(error => {
-          const message = 'Could not load concepts';
-          console.log(message, error);
-          return throwError(() => error);
-        }),
-        tap(answers => {
-          this.answersSubject.next(answers);
-          answers.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
-        })
-      )
-      .subscribe();
   }
 }

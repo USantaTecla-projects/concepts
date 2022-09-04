@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Justification, JustificationStore } from 'src/app/knowledge/data-access/justification.store';
 import { State } from 'src/app/shared/utils/enums/state.enum';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
+import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
 import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowledge-dialog-justification-create/knowledge-dialog-justification-create.component';
 
 @Component({
@@ -10,16 +10,24 @@ import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowle
   templateUrl: './knowledge-justification-list.component.html',
   styleUrls: ['./knowledge-justification-list.component.scss'],
 })
-export class KnowledgeJustificationListComponent implements OnInit {
+export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   @Input() justifications: Justification[] | null = [];
+
+  @Input() resetList: boolean = false;
+
+  @Output() selectJustification: EventEmitter<number> = new EventEmitter();
+
+  @Output() createJustification: EventEmitter<Justification> = new EventEmitter();
+
+  @Output() updateJustification: EventEmitter<Justification> = new EventEmitter();
+
+  @Output() deleteJustification: EventEmitter<number> = new EventEmitter();
 
   state: string = State.INIT;
 
-  constructor(
-    private justificationStore: JustificationStore,
-    private snackbarService: SnackbarService,
-    private dialog: MatDialog
-  ) {}
+  selectedJustificationID!: number;
+
+  constructor(private justificationStore: JustificationStore, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.justificationStore.state$.subscribe({
@@ -28,23 +36,49 @@ export class KnowledgeJustificationListComponent implements OnInit {
     });
   }
 
-  createJustification(justificationFormValue: any) {
-    this.justificationStore.createJustification(justificationFormValue).subscribe({
-      next: () => this.snackbarService.openSnackBar('Justification created.'),
-      error: () => this.snackbarService.openSnackBar('Error creating justification.'),
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    const resetListChange = changes['resetList'];
+    if (resetListChange) {
+      this.selectedJustificationID = 0;
+    }
   }
 
-  openCreateDialog() {
+  onJustificationSelect(justificationID: number): void {
+    this.selectedJustificationID = justificationID;
+    this.selectJustification.emit(this.selectedJustificationID);
+  }
+
+  onJustificationCreate(): void {
     const dialogRef = this.dialog.open(KnowledgeDialogJustificationCreateComponent, {
       width: '30rem',
       data: {
-        knowledgeItem: 'concept',
+        knowledgeItem: 'justification',
       },
     });
 
-    dialogRef.afterClosed().subscribe(answerFormValue => {
-      if (answerFormValue) this.createJustification(answerFormValue);
+    dialogRef.afterClosed().subscribe(justificationFormValue => {
+      if (justificationFormValue) {
+        const newJustification: Justification = { ...justificationFormValue };
+        this.createJustification.emit(newJustification);
+      }
+    });
+  }
+
+  onJustificationUpdate(updatedJustification: Justification) {
+    console.log(updatedJustification);
+    this.updateJustification.emit(updatedJustification);
+  }
+
+  onJustificationDelete(): void {
+    const dialogRef = this.dialog.open(KnowledgeDialogDeleteComponent, {
+      width: '20rem',
+      data: {
+        knowledgeItem: 'justification',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(deleteJustification => {
+      if (deleteJustification) this.deleteJustification.emit(this.selectedJustificationID);
     });
   }
 }

@@ -1,8 +1,31 @@
 <h2>Knowledge Manager</h2>
 <div class="lists-container">
-  <app-knowledge-concept-list class="card" [concepts]="conceptStore.concepts$ | async"> </app-knowledge-concept-list>
-  <app-knowledge-answer-list class="card" [answers]="answerStore.answers$ | async"></app-knowledge-answer-list>
+  <app-knowledge-concept-list
+    class="card"
+    [concepts]="conceptStore.concepts$ | async"
+    (selectConcept)="onConceptSelect($event)"
+    (createConcept)="onConceptCreate($event)"
+    (updateConcept)="onConceptUpdate($event)"
+    (deleteConcept)="onConceptDelete($event)">
+  </app-knowledge-concept-list>
+
+  <app-knowledge-answer-list
+    class="card"
+    [answers]="answerStore.answers$ | async"
+    [resetList]="resetAnswerList"
+    (selectAnswer)="onAnswerSelect($event)"
+    (createAnswer)="onAnswerCreate($event)"
+    (updateAnswer)="onAnswerUpdate($event)"
+    (deleteAnswer)="onAnswerDelete($event)">
+  </app-knowledge-answer-list>
+
   <app-knowledge-justification-list
     class="card"
-    [justifications]="justificationStore.justifications$ | async"></app-knowledge-justification-list>
+    [justifications]="justificationStore.justifications$ | async"
+    [resetList]="resetJustificationList"
+    (selectJustification)="onJustificationSelect($event)"
+    (createJustification)="onJustificationCreate($event)"
+    (updateJustification)="onJustificationUpdate($event)"
+    (deleteJustification)="onJustificationDelete($event)">
+  </app-knowledge-justification-list>
 </div>

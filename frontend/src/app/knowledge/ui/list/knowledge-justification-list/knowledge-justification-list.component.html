@@ -3,27 +3,42 @@
     <mat-card-title>Justifications</mat-card-title>
   </mat-card-title-group>
   <mat-card-content class="justifications" *ngIf="state === 'normal'; else noJustifications">
-    <mat-card class="add-justification">
-      <button mat-mini-fab class="add-button" color="warn" (click)="openCreateDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
-      <p>Add a new justification.</p>
-    </mat-card>
+    <div class="actions">
+      <mat-card class="add-justification" [ngStyle]="{ width: !this.selectedJustificationID ? '100%' : '43%' }">
+        <button mat-mini-fab class="add-button" color="warn" (click)="onJustificationCreate()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add justification</p>
+      </mat-card>
+
+      <mat-card class="delete-justification" *ngIf="this.selectedJustificationID">
+        <button mat-mini-fab class="delete-button" color="primary" (click)="onJustificationDelete()">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete justification</p>
+      </mat-card>
+    </div>
 
     <mat-accordion>
-      <mat-expansion-panel class="justification-panel" *ngFor="let justification of justifications">
+      <mat-expansion-panel
+        class="justification-panel"
+        *ngFor="let justification of justifications"
+        (opened)="onJustificationSelect(justification.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="justification-title">
             {{ justification.text | titlecase | shortText: 100 }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <app-knowledge-justification-update-form
-          [justification]="justification"></app-knowledge-justification-update-form>
+          [justification]="justification"
+          (updateJustification)="onJustificationUpdate($event)">
+        </app-knowledge-justification-update-form>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
 </mat-card>
 
+<!-- If the state is different that normal, display one of this-->
 <ng-template #noJustifications>
   <span *ngIf="state === 'init'">Select an answer to display its justifications</span>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>

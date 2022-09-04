@@ -1,11 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActionType } from 'src/app/shared/utils/enums/action-type.enum';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { Answer, AnswerStore } from '../../../data-access/answer.store';
-import { JustificationStore } from '../../../data-access/justification.store';
-import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
+import { Answer } from '../../../data-access/answer.store';
 
 @Component({
   selector: 'app-knowledge-answer-update-form',
@@ -15,15 +11,11 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
 export class KnowledgeAnswerUpdateFormComponent implements OnInit {
   @Input() answer!: Answer;
 
+  @Output() updateAnswer: EventEmitter<Answer> = new EventEmitter();
+
   answerForm: FormGroup = new FormGroup({});
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService,
-    public dialog: MatDialog,
-    private answerStore: AnswerStore,
-    private justificationStore: JustificationStore
-  ) {}
+  constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.answerForm = this.formBuilder.group({
@@ -32,39 +24,11 @@ export class KnowledgeAnswerUpdateFormComponent implements OnInit {
     });
   }
 
-  onSubmit(action: string, answerID: number) {
-    if (action === ActionType.UPDATE) this.updateAnswer(answerID);
-    if (action === ActionType.DELETE) this.deleteAnswer(answerID);
-  }
-
-  updateAnswer(answerID: number) {
+  onSubmit(): void {
     const answerFormValue = this.answerForm.value;
-    this.answerStore.saveAnswer(answerID, answerFormValue).subscribe({
-      next: () => this.snackbarService.openSnackBar('Answer updated.'),
-      error: () => this.snackbarService.openSnackBar('Error updating answer.'),
-    });
-  }
-
-  deleteAnswer(answerID: number) {
-    this.answerStore.deleteAnswer(answerID).subscribe({
-      next: () => {
-        this.justificationStore.removeAnswerID();
-        this.snackbarService.openSnackBar('Concept deleted.');
-      },
-      error: () => this.snackbarService.openSnackBar('Error deleting concept.'),
-    });
-  }
-
-  openDeleteDialog(answerID: number) {
-    const dialogRef = this.dialog.open(KnowledgeDialogDeleteComponent, {
-      width: '20rem',
-      data: {
-        knowledgeItem: 'answer',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(deleteConcept => {
-      if (deleteConcept) this.deleteAnswer(answerID);
-    });
+    if (answerFormValue) {
+      const updatedAnswer: Answer = { ...answerFormValue };
+      this.updateAnswer.emit(updatedAnswer);
+    }
   }
 }

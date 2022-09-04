@@ -3,25 +3,37 @@
     <mat-card-title>Answers</mat-card-title>
   </mat-card-title-group>
   <mat-card-content class="answers" *ngIf="state === 'normal'; else noAnswers">
-    <mat-card class="add-answer">
-      <button mat-mini-fab class="add-button" color="warn" (click)="openCreateDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
-      <p>Add a new answer.</p>
-    </mat-card>
+    <div class="actions">
+      <mat-card class="add-answer" [ngStyle]="{ width: !this.selectedAnswerID ? '100%' : '43%' }">
+        <button mat-mini-fab class="add-button" color="warn" (click)="onAnswerCreate()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add answer</p>
+      </mat-card>
+
+      <mat-card class="delete-answer" *ngIf="this.selectedAnswerID">
+        <button mat-mini-fab class="delete-button" color="primary" (click)="onAnswerDelete()">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete answer</p>
+      </mat-card>
+    </div>
 
     <mat-accordion>
-      <mat-expansion-panel class="answer-panel" *ngFor="let answer of answers" (opened)="selectAnswer(answer.id)">
+      <mat-expansion-panel class="answer-panel" *ngFor="let answer of answers" (opened)="onAnswerSelect(answer.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="answer-title"> {{ answer.text | titlecase | shortText: 100 }}</mat-panel-title>
         </mat-expansion-panel-header>
 
-        <app-knowledge-answer-update-form [answer]="answer"></app-knowledge-answer-update-form>
+        <app-knowledge-answer-update-form
+          [answer]="answer"
+          (updateAnswer)="onAnswerUpdate($event)"></app-knowledge-answer-update-form>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
 </mat-card>
 
+<!-- If the state is different that normal, display one of this-->
 <ng-template #noAnswers>
   <span *ngIf="state === 'init'">Select a concept to display its answers</span>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>

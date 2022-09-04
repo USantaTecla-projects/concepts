@@ -1,9 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Justification, JustificationStore } from 'src/app/knowledge/data-access/justification.store';
-import { KnowledgeDialogDeleteComponent } from 'src/app/knowledge/ui/dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
-import { ActionType } from 'src/app/shared/utils/enums/action-type.enum';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 
 @Component({
@@ -14,14 +12,11 @@ import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 export class KnowledgeJustificationUpdateFormComponent implements OnInit {
   @Input() justification!: Justification;
 
+  @Output() updateJustification: EventEmitter<Justification> = new EventEmitter();
+
   justificationForm: FormGroup = new FormGroup({});
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService,
-    public dialog: MatDialog,
-    private justificationStore: JustificationStore
-  ) {}
+  constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.justificationForm = this.formBuilder.group({
@@ -33,43 +28,17 @@ export class KnowledgeJustificationUpdateFormComponent implements OnInit {
     });
   }
 
-  onSubmit(action: string, justificationID: number) {
-    if (action === ActionType.UPDATE) this.updateJustification(justificationID);
-    if (action === ActionType.DELETE) this.deleteJustification(justificationID);
-  }
-
-  updateJustification(justificationID: number) {
+  onSubmit(): void {
     const justificationFormValue = this.justificationForm.value;
-
-    this.justificationStore.updateJustification(justificationID, justificationFormValue).subscribe({
-      next: () => this.snackbarService.openSnackBar('Justification updated.'),
-      error: () => this.snackbarService.openSnackBar('Error updating justification.'),
-    });
+    if (justificationFormValue) {
+      const updatedJustification: Justification = { ...justificationFormValue };
+      this.updateJustification.emit(updatedJustification);
+    }
   }
 
-  deleteJustification(justificationID: number) {
-    this.justificationStore.deleteJustification(justificationID).subscribe({
-      next: () => this.snackbarService.openSnackBar('Concept deleted.'),
-      error: () => this.snackbarService.openSnackBar('Error deleting concept.'),
-    });
-  }
-
-  toggleErrorField(checked: boolean) {
+  toggleErrorField(checked: boolean): void {
     const errorControl = this.justificationForm.controls['error'];
     checked ? errorControl.disable() : errorControl.enable();
     this.justificationForm.controls['error'].setValue('');
-  }
-
-  openDeleteDialog(justificationID: number) {
-    const dialogRef = this.dialog.open(KnowledgeDialogDeleteComponent, {
-      width: '20rem',
-      data: {
-        knowledgeItem: 'justification',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(deleteConcept => {
-      if (deleteConcept) this.deleteJustification(justificationID);
-    });
   }
 }
