@@ -21,12 +21,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @CookieValue(name = "accessToken", required = false) String accessToken,
-            @CookieValue(name = "refreshToken", required = false) String refreshToken,
-            @RequestBody LoginRequest loginRequest) {
-
+            @CookieValue(name = "AccessToken", required = false) String accessToken,
+            @CookieValue(name = "RefreshToken", required = false) String refreshToken,
+            @RequestBody LoginRequest loginRequest
+    ) {
         return authService.login(loginRequest, accessToken, refreshToken);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refreshToken(
+            @CookieValue(name = "RefreshToken", required = false) String refreshToken
+    ) {
+
+        return authService.refresh(refreshToken);
+    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<AuthResponse> logout(HttpServletRequest request, HttpServletResponse response) {

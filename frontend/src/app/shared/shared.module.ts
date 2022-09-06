@@ -17,7 +17,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
-import { NavbarModule } from './ui/navbar/navbar.module';
+import { NavbarModule } from './feature/navbar/navbar.module';
 
 @NgModule({
   imports: [CommonModule, NavbarModule],

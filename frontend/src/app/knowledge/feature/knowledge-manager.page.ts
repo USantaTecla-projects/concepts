@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { Answer, AnswerStore } from '../data-access/answer.store';
-import { Concept, ConceptStore } from '../data-access/concept.store';
-import { Justification, JustificationStore } from '../data-access/justification.store';
+import { AnswerStore } from '../data-access/answer.store';
+import { ConceptStore } from '../data-access/concept.store';
+import { JustificationStore } from '../data-access/justification.store';
+import { Answer } from '../data-access/model/answer.model';
+import { Concept } from '../data-access/model/concept.model';
+import { Justification } from '../data-access/model/justification.model';
 
 @Component({
   selector: 'app-knowledge-manager',
@@ -34,7 +37,7 @@ export class KnowledgeManagerPage implements OnInit {
     this.resetAnswerList = true;
     this.answerStore.readAnswers(this.selectedConceptID).subscribe({
       next: () => (this.resetAnswerList = false),
-      error: error => console.log(error),
+      error: (err: Error) => console.log(err.message),
     });
     this.justificationStore.resetJustificationList();
   }
@@ -42,14 +45,14 @@ export class KnowledgeManagerPage implements OnInit {
   onConceptCreate(concept: Concept) {
     this.conceptStore.createConcept(concept).subscribe({
       next: () => this.snackbarService.openSnackBar('Concept created.'),
-      error: () => this.snackbarService.openSnackBar('Error creating concept.'),
+      error: (err: Error) => this.snackbarService.openSnackBar(err.message),
     });
   }
 
   onConceptUpdate(updatedConcept: Concept) {
     this.conceptStore.updateConcept(this.selectedConceptID, updatedConcept).subscribe({
       next: () => this.snackbarService.openSnackBar('Concept updated.'),
-      error: () => this.snackbarService.openSnackBar('Error updating concept.'),
+      error: (err: Error) => this.snackbarService.openSnackBar(err.message),
     });
   }
 

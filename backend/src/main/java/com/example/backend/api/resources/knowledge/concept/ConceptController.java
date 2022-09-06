@@ -20,8 +20,7 @@ public class ConceptController {
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
     public Concept create(@RequestBody final ConceptDTO conceptDTO) {
-        Concept concept = conceptsService.create(conceptDTO);
-        return concept;
+        return conceptsService.create(conceptDTO);
     }
 
     @GetMapping("/{conceptId}")

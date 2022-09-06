@@ -29,7 +29,7 @@ public class JwtTokenProvider {
 	@Value("${jwt.secret}")
 	private String jwtSecret;
 	
-	private static long JWT_EXPIRATION_IN_MS = 5400000;
+	private static long JWT_EXPIRATION_IN_MS = 1000;
 	private static Long REFRESH_TOKEN_EXPIRATION_MSEC = 10800000l;
 	
 	@Autowired
@@ -67,6 +67,7 @@ public class JwtTokenProvider {
 		} catch (IllegalArgumentException ex) {
 			LOG.debug("JWT claims string is empty");
 		}
+
 		return false;
 	}
 

@@ -21,9 +21,9 @@ public class UserController {
         return userService.create(userDTO);
     }
 
-    @GetMapping("/{userId}")
-    public User findOne(@PathVariable final Long userId) {
-        return userService.findOne(userId);
+    @GetMapping("/{username}")
+    public User findOne(@PathVariable final String username) {
+        return userService.findOneByUsername(username);
     }
 
     @GetMapping("/")

@@ -32,10 +32,12 @@ public class AuthService {
 
     private final JwtCookieManager cookieUtil;
 
-    public AuthService(AuthenticationManager authenticationManager,
-                       UserDetailsService userDetailsService,
-                       JwtTokenProvider jwtTokenProvider,
-                       JwtCookieManager cookieUtil) {
+    public AuthService(
+            AuthenticationManager authenticationManager,
+            UserDetailsService userDetailsService,
+            JwtTokenProvider jwtTokenProvider,
+            JwtCookieManager cookieUtil
+    ) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -43,8 +45,11 @@ public class AuthService {
 
     }
 
-    public ResponseEntity<AuthResponse> login(LoginRequest loginRequest, String encryptedAccessToken, String
-            encryptedRefreshToken) {
+    public ResponseEntity<AuthResponse> login(
+            LoginRequest loginRequest,
+            String encryptedAccessToken,
+            String encryptedRefreshToken
+    ) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -66,6 +71,7 @@ public class AuthService {
         if (!accessTokenValid && !refreshTokenValid) {
             newAccessToken = jwtTokenProvider.generateToken(user);
             newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
+
             addAccessTokenCookie(responseHeaders, newAccessToken);
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
@@ -82,12 +88,47 @@ public class AuthService {
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
 
-        AuthResponse loginResponse = new AuthResponse(AuthResponse.Status.SUCCESS,
-                "Auth successful. Tokens are created in cookie.");
+        AuthResponse loginResponse = new AuthResponse(
+                AuthResponse.Status.SUCCESS,
+                "Auth successful. Tokens are created in cookie."
+        );
 
+        System.out.println(responseHeaders);
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
+
+    public ResponseEntity<AuthResponse> refresh(String encryptedRefreshToken) {
+
+        String refreshToken = SecurityCipher.decrypt(encryptedRefreshToken);
+
+        boolean refreshTokenValid = jwtTokenProvider.validateToken(refreshToken);
+
+        if (!refreshTokenValid) {
+            AuthResponse loginResponse = new AuthResponse(
+                    AuthResponse.Status.FAILURE,
+                    "Invalid refresh token !"
+            );
+
+            return ResponseEntity.ok().body(loginResponse);
+        }
+
+        String username = jwtTokenProvider.getUsername(refreshToken);
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+
+        Token newAccessToken = jwtTokenProvider.generateToken(user);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil
+                .createAccessTokenCookie(newAccessToken.getTokenValue(), newAccessToken.getDuration()).toString());
+
+        AuthResponse loginResponse = new AuthResponse(
+                AuthResponse.Status.SUCCESS,
+                "Auth successful. Tokens are created in cookie."
+        );
+
+        return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+    }
+
 
     public String logout(HttpServletRequest request, HttpServletResponse response) {
 

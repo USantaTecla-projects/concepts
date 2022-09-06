@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Concept, ConceptStore } from 'src/app/knowledge/data-access/concept.store';
+import { ConceptStore } from 'src/app/knowledge/data-access/concept.store';
+import { Concept } from 'src/app/knowledge/data-access/model/concept.model';
 import { State } from 'src/app/shared/utils/enums/state.enum';
 import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-dialog-concept-create/knowledge-dialog-concept-create.component';
 import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';

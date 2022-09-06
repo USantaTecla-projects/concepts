@@ -2,14 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { State } from 'src/app/shared/utils/enums/state.enum';
-import { Justification } from './justification.store';
-
-export interface Answer {
-  id: number;
-  text: string;
-  correct: boolean;
-  justifications?: Justification[];
-}
+import { Answer } from './model/answer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +35,7 @@ export class AnswerStore {
   }
 
   readAnswers(conceptID: number) {
-    this.stateSubject.next(State.INIT);
+    this.stateSubject.next(State.LOADING);
 
     return this.httpClient.get<Answer[]>(`concepts/${conceptID}/answers/`).pipe(
       catchError(error => {

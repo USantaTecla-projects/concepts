@@ -6,14 +6,12 @@ import com.example.backend.api.resources.user.exception.model.UserAlreadyExistsE
 import com.example.backend.api.resources.user.exception.model.UserDTOBadRequestException;
 import com.example.backend.api.resources.user.exception.model.UserNotFoundException;
 import com.example.backend.api.resources.user.model.User;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,14 +64,27 @@ public class UserService {
     /**
      * Find a user in the database. If the user does not exist, it throws an exception.
      *
+     * @param username The username to look for.
+     * @return The user that match the username.
+     * @author Cristian
+     */
+    public User findOneByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("The user with username = " + username + " has not been found"));
+    }
+
+    /**
+     * Find a user in the database. If the user does not exist, it throws an exception.
+     *
      * @param userId The user ID to look for.
      * @return The user that match the ID.
      * @author Cristian
      */
-    public User findOne(Long userId) {
+    public User findOneById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("The user with id = " + userId + " has not been found"));
+                .orElseThrow(() -> new UserNotFoundException("The user with ID = " + userId + " has not been found"));
     }
+
 
     /**
      * Find a page of users in the database by the given page number.
@@ -95,7 +106,7 @@ public class UserService {
      * @author Cristian
      */
     public void updateOne(Long userId, UserDTO userDTO) {
-        User user = findOne(userId);
+        User user = findOneById(userId);
         String usernameFromDTO = userDTO
                 .getUsernameOptional(userDTO.getUsername())
                 .orElse(user.getUsername());
@@ -117,7 +128,7 @@ public class UserService {
      * @author Cristian
      */
     public void removeOne(Long userId) {
-        User user = findOne(userId);
+        User user = findOneById(userId);
         userRepository.delete(user);
     }
 }

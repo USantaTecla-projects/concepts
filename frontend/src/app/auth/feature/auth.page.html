@@ -3,71 +3,11 @@
 
   <mat-tab-group class="tab-group" dynamicHeight>
     <mat-tab label="Login">
-      <form class="form" [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Username</mat-label>
-          <input matInput type="text" formControlName="username" placeholder="Your username" />
-          <mat-icon matSuffix>person</mat-icon>
-          <mat-error *ngIf="loginForm.controls['username'].errors?.['required']">Username is required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Your password" />
-          <mat-icon matSuffix>lock</mat-icon>
-          <mat-error *ngIf="loginForm.controls['username'].errors?.['required']">Password is required</mat-error>
-        </mat-form-field>
-
-        <div mat-dialog-actions>
-          <button class="submit-button" mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
-            Login
-          </button>
-        </div>
-      </form>
+      <app-auth-login-form (loginUser)="onLoginUser($event)"></app-auth-login-form>
     </mat-tab>
+
     <mat-tab label="Register">
-      <form class="form" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Username</mat-label>
-          <input matInput type="text" formControlName="username" placeholder="Your username" />
-          <mat-icon matSuffix>person</mat-icon>
-          <mat-error *ngIf="registerForm.controls['username'].errors?.['required']">Username is required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Email</mat-label>
-          <input matInput type="text" formControlName="email" placeholder="Your email" />
-          <mat-icon matSuffix>person</mat-icon>
-          <mat-error *ngIf="registerForm.controls['email'].errors?.['required']">Email is required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Your password" />
-          <mat-icon matSuffix>lock</mat-icon>
-          <mat-error *ngIf="registerForm.controls['password'].errors?.['required']">Password is required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Repeat your password</mat-label>
-          <input matInput type="password" formControlName="repeatedPassword" placeholder="Your password again" />
-          <mat-icon matSuffix>lock</mat-icon>
-          <mat-error *ngIf="registerForm.controls['repeatedPassword'].errors?.['required']">
-            Password is required
-          </mat-error>
-        </mat-form-field>
-
-        <div mat-dialog-actions>
-          <button
-            class="submit-button"
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="!registerForm.valid">
-            Register
-          </button>
-        </div>
-      </form>
+      <app-auth-register-form (registerUser)="onRegisterUser($event)"></app-auth-register-form>
     </mat-tab>
   </mat-tab-group>
 </mat-card>

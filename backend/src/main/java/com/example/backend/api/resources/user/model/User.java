@@ -22,7 +22,6 @@ public class User {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<String> roles;
 
     public User() {

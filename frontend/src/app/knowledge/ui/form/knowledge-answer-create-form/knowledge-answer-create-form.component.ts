@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Answer } from 'src/app/knowledge/data-access/answer.store';
+import { Answer } from 'src/app/knowledge/data-access/model/answer.model';
 
 @Component({
   selector: 'app-knowledge-answer-create-form',

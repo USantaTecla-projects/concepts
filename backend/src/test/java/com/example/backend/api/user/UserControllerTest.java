@@ -107,7 +107,7 @@ public class UserControllerTest {
         void findOneWhenExists() throws Exception {
             final User user = new User(1L, "Cristian", "1234", new LinkedList<>(List.of("STUDENT")));
 
-            when(userService.findOne(user.getId()))
+            when(userService.findOneByUsername(user.getId()))
                     .thenReturn(user);
 
             mockMvc.perform(get(BASE_URL + user.getId()))
@@ -121,7 +121,7 @@ public class UserControllerTest {
         void findOneWhenNotExists() throws Exception {
             final long wrongUserId = 99L;
 
-            when(userService.findOne(wrongUserId))
+            when(userService.findOneByUsername(wrongUserId))
                     .thenThrow(new UserNotFoundException("The user with id = " + wrongUserId + " has not been found"));
 
             mockMvc.perform(get(BASE_URL + wrongUserId))

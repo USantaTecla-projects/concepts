@@ -82,7 +82,7 @@ public class UserServiceTest {
             when(userRepository.findById(user.getId()))
                     .thenReturn(Optional.of(user));
 
-            final User foundUser = userService.findOne(user.getId());
+            final User foundUser = userService.findOneByUsername(user.getId());
 
             assertEquals(user, foundUser);
         }
@@ -90,7 +90,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("(FindOne) Should throw an Exception with the given id")
         void findOneThatNotExist() {
-            assertThrows(UserNotFoundException.class, () -> userService.findOne(2L));
+            assertThrows(UserNotFoundException.class, () -> userService.findOneByUsername(2L));
         }
 
         @Test

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Justification, JustificationStore } from 'src/app/knowledge/data-access/justification.store';
+import { Justification } from 'src/app/knowledge/data-access/model/justification.model';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 
 @Component({

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Concept } from 'src/app/knowledge/data-access/concept.store';
+import { Concept } from 'src/app/knowledge/data-access/model/concept.model';
 import { DialogData } from '../../../utils/dialog-data.interface';
 
 @Component({

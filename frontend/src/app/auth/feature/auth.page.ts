@@ -4,7 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { AuthService } from '../data-access/auth.service';
+import { AuthStore } from '../data-access/auth.store';
+import { Credentials } from '../data-access/dto/credentials.dto';
+import { RegisterUserData } from '../data-access/dto/register-user.dto';
 
 @Component({
   selector: 'app-auth',
@@ -12,47 +14,24 @@ import { AuthService } from '../data-access/auth.service';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
-  loginForm: FormGroup = new FormGroup({});
-
   registerForm: FormGroup = new FormGroup({});
 
   isAuthenticated$: Observable<boolean> | undefined;
 
-  constructor(
-    private formBldr: FormBuilder,
-    private authSrv: AuthService,
-    private snackbarService: SnackbarService,
-    private router: Router
-  ) {}
+  constructor(private authStore: AuthStore, private snackbarService: SnackbarService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.loginForm = this.formBldr.group({
-      username: [null, [Validators.required]],
-      password: [null, [Validators.required]],
-    });
+  ngOnInit(): void {}
 
-    this.registerForm = this.formBldr.group({
-      username: [null, [Validators.required]],
-      email: [null, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-      password: [null, [Validators.required]],
-      repeatedPassword: [null, [Validators.required]],
-    });
-  }
-
-  login(loginDTO: any) {
-    this.authSrv.login(loginDTO).subscribe({
+  onLoginUser(credentials: Credentials): void {
+    this.authStore.login(credentials).subscribe({
       next: () => this.router.navigateByUrl(''),
       error: () => this.snackbarService.openSnackBar('Invalid credentials'),
     });
   }
 
-  register(registerDTO: any) {
-    const { password, repeatedPassword } = registerDTO;
-
-    if (password !== repeatedPassword) return this.snackbarService.openSnackBar('Password should coincide');
-
-    this.authSrv.register(registerDTO).subscribe({
-      next: () => this.login({ username: registerDTO.username, password: registerDTO.password }),
+  onRegisterUser(registerUserData: RegisterUserData): void {
+    this.authStore.register(registerUserData).subscribe({
+      next: () => this.onLoginUser({ ...registerUserData }),
       error: message => this.snackbarService.openSnackBar(message),
     });
   }

@@ -1,0 +1,31 @@
+.navbar {
+  height: 6vh;
+  display: flex;
+  justify-content: space-between;
+
+  .profile {
+    display: flex;
+
+    .profile-button {
+      border-color: #fff;
+    }
+
+    .logout-button {
+      margin-left: 1rem;
+    }
+  }
+
+  .button-content {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-right: 0.5rem;
+    }
+
+    .text {
+      font-size: 1rem;
+      margin-top: 0.25rem;
+    }
+  }
+}

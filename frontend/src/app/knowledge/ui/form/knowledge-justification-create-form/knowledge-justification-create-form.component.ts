@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Justification } from 'src/app/knowledge/data-access/justification.store';
+import { Justification } from 'src/app/knowledge/data-access/model/justification.model';
 
 @Component({
   selector: 'app-knowledge-justification-create-form',

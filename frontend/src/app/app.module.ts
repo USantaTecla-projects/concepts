@@ -6,14 +6,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NavbarModule } from './shared/ui/navbar/navbar.module';
+import { NavbarModule } from './shared/feature/navbar/navbar.module';
 import { ApiInterceptor } from './shared/utils/api.interceptor';
 import { SharedModule } from './shared/shared.module';
+import { AuthInterceptor } from './auth/utils/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, SharedModule, NavbarModule],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,

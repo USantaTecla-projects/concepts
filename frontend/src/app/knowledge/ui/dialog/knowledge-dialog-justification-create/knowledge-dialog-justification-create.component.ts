@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Justification } from 'src/app/knowledge/data-access/justification.store';
+import { Justification } from 'src/app/knowledge/data-access/model/justification.model';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
 
 @Component({

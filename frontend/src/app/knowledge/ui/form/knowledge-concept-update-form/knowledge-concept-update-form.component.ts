@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Concept } from '../../../data-access/concept.store';
+import { Concept } from 'src/app/knowledge/data-access/model/concept.model';
 
 @Component({
   selector: 'app-knowledge-concept-update-form',

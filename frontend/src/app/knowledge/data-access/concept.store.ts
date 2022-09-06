@@ -1,16 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwError } from 'rxjs';
 
 import { State } from 'src/app/shared/utils/enums/state.enum';
 import { Page } from 'src/app/shared/utils/page-response.dto';
-import { Answer } from './answer.store';
-
-export interface Concept {
-  id: number;
-  text: string;
-  answers?: Answer[];
-}
+import { Concept } from './model/concept.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +53,7 @@ export class ConceptStore {
     this.conceptsSubject.next(newConcepts);
 
     return this.httpClient.put(`concepts/${conceptID}`, newConcept).pipe(
-      catchError(error => {
+      catchError((error: HttpErrorResponse) => {
         const message = 'Could not update the concept';
         console.log(message, error);
         return throwError(() => error);
@@ -88,6 +82,8 @@ export class ConceptStore {
   }
 
   private readConcepts() {
+    this.stateSubject.next(State.LOADING);
+
     return this.httpClient
       .get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) })
       .pipe(
