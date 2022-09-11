@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { ConceptStore } from 'src/app/knowledge/data-access/concept.store';
 import { Concept } from 'src/app/knowledge/data-access/model/concept.model';
 import { State } from 'src/app/shared/utils/enums/state.enum';
+import { Page } from 'src/app/shared/utils/page-response.dto';
 import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-dialog-concept-create/knowledge-dialog-concept-create.component';
 import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
 
@@ -12,7 +14,9 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
   styleUrls: ['./knowledge-concept-list.component.scss'],
 })
 export class KnowledgeConceptListComponent implements OnInit {
-  @Input() concepts: Concept[] | null = [];
+  @Input() concepts!: Page<Concept> | null;
+
+  @Input() totalElements: number | null = 0;
 
   @Output() selectConcept: EventEmitter<number> = new EventEmitter();
 
@@ -21,6 +25,8 @@ export class KnowledgeConceptListComponent implements OnInit {
   @Output() updateConcept: EventEmitter<Concept> = new EventEmitter();
 
   @Output() deleteConcept: EventEmitter<number> = new EventEmitter();
+
+  @Output() getPage: EventEmitter<number> = new EventEmitter();
 
   state: string = State.INIT;
 
@@ -71,5 +77,10 @@ export class KnowledgeConceptListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(deleteConcept => {
       if (deleteConcept) this.deleteConcept.emit(this.selectedConceptID);
     });
+  }
+
+  onPageGet(page: PageEvent) {
+    const { pageIndex } = { ...page };
+    this.getPage.emit(pageIndex);
   }
 }

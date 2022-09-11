@@ -34,7 +34,7 @@ export class AnswerStore {
     );
   }
 
-  readAnswers(conceptID: number) {
+  getAnswers(conceptID: number) {
     this.stateSubject.next(State.LOADING);
 
     return this.httpClient.get<Answer[]>(`concepts/${conceptID}/answers/`).pipe(

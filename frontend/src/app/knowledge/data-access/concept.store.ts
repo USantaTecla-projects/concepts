@@ -10,19 +10,24 @@ import { Concept } from './model/concept.model';
   providedIn: 'root',
 })
 export class ConceptStore {
-  private conceptsSubject = new BehaviorSubject<Concept[]>([]);
+  private conceptsSubject = new BehaviorSubject<Page<Concept>>({
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    numberOfElements: 0,
+  });
 
   private stateSubject = new BehaviorSubject<string>(State.INIT);
 
-  concepts$: Observable<Concept[]> = this.conceptsSubject.asObservable();
+  concepts$: Observable<Page<Concept>> = this.conceptsSubject.asObservable();
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {
-    this.readConcepts();
+    this.getConcepts().subscribe();
   }
 
-  createConcept(concept: Concept) {
+  createConcept(concept: Concept): Observable<Concept> {
     return this.httpClient.post<Concept>(`concepts/`, concept).pipe(
       catchError(error => {
         const message = 'Could not create the concept';
@@ -30,29 +35,49 @@ export class ConceptStore {
         return throwError(() => error);
       }),
       tap(concept => {
-        const concepts = this.conceptsSubject.getValue();
-        const newConcepts = [...concepts, concept];
-        this.conceptsSubject.next(newConcepts);
+        const conceptsPage = this.conceptsSubject.getValue();
+        const { content, totalPages, totalElements, numberOfElements } = { ...conceptsPage };
+
+        let newPage = { ...conceptsPage };
+
+        if (content.length < 10) {
+          newPage = {
+            ...newPage,
+            content: [...content, concept],
+            numberOfElements: numberOfElements + 1,
+          };
+        }
+
+        newPage = {
+          ...newPage,
+          totalElements: totalElements + 1,
+          totalPages: totalPages + 1,
+        };
+
+        this.conceptsSubject.next(newPage);
       }),
       shareReplay()
     );
   }
 
-  updateConcept(conceptID: number, changes: Partial<Concept>) {
-    const concepts = this.conceptsSubject.getValue();
-    const index = concepts.findIndex(concept => concept.id === conceptID);
+  updateConcept(conceptID: number, changes: Partial<Concept>): Observable<Concept> {
+    const conceptsPage = this.conceptsSubject.getValue();
+    const { content } = { ...conceptsPage };
+
+    const index = content.findIndex(concept => concept.id === conceptID);
 
     const newConcept = {
-      ...concepts[index],
+      ...content[index],
       ...changes,
     };
 
-    const newConcepts = [...concepts];
-    newConcepts[index] = newConcept;
+    const newContent = [...content];
+    newContent[index] = newConcept;
 
-    this.conceptsSubject.next(newConcepts);
+    const newPage = { ...conceptsPage, content: newContent };
+    this.conceptsSubject.next(newPage);
 
-    return this.httpClient.put(`concepts/${conceptID}`, newConcept).pipe(
+    return this.httpClient.put<Concept>(`concepts/${conceptID}`, newConcept).pipe(
       catchError((error: HttpErrorResponse) => {
         const message = 'Could not update the concept';
         console.log(message, error);
@@ -62,42 +87,41 @@ export class ConceptStore {
     );
   }
 
-  deleteConcept(conceptID: number) {
-    const concepts = this.conceptsSubject.getValue();
+  deleteConcept(conceptID: number): Observable<Concept> {
+    const conceptsPage = this.conceptsSubject.getValue();
+    const { content } = { ...conceptsPage };
 
-    const newConcepts = concepts.filter(concept => concept.id !== conceptID);
+    const newContent = content.filter(concept => concept.id !== conceptID);
+    const newPage = { ...conceptsPage, content: newContent };
 
-    this.conceptsSubject.next(newConcepts);
+    this.conceptsSubject.next(newPage);
 
-    return this.httpClient.delete(`concepts/${conceptID}`).pipe(
+    return this.httpClient.delete<Concept>(`concepts/${conceptID}`).pipe(
       catchError(error => {
         const message = 'Could not delete the concept';
         console.log(message, error);
         return throwError(() => error);
       }),
       tap(() => {
-        if (newConcepts.length === 0) this.stateSubject.next(State.EMPTY);
+        if (newContent.length === 0) this.stateSubject.next(State.EMPTY);
       })
     );
   }
 
-  private readConcepts() {
+  getConcepts(nextPage: number = 0): Observable<Concept[]> {
     this.stateSubject.next(State.LOADING);
 
-    return this.httpClient
-      .get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', 0) })
-      .pipe(
-        map(res => res.content),
-        catchError(error => {
-          const message = 'Could not load concepts';
-          console.log(message, error);
-          return throwError(() => error);
-        }),
-        tap(concepts => {
-          this.conceptsSubject.next(concepts);
-          concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
-        })
-      )
-      .subscribe();
+    return this.httpClient.get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', nextPage) }).pipe(
+      catchError(error => {
+        const message = 'Could not load concepts';
+        console.log(message, error);
+        return throwError(() => error);
+      }),
+      tap(page => this.conceptsSubject.next(page)),
+      map(page => page.content),
+      tap(concepts => {
+        concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+      })
+    );
   }
 }

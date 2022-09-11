@@ -29,7 +29,7 @@ public class JwtTokenProvider {
 	@Value("${jwt.secret}")
 	private String jwtSecret;
 	
-	private static long JWT_EXPIRATION_IN_MS = 1000;
+	private static long JWT_EXPIRATION_IN_MS = 1000*60*60*12;
 	private static Long REFRESH_TOKEN_EXPIRATION_MSEC = 10800000l;
 	
 	@Autowired

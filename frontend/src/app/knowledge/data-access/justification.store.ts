@@ -36,7 +36,7 @@ export class JustificationStore {
       );
   }
 
-  readJustifications(conceptID: number, answerID: number) {
+  getJustifications(conceptID: number, answerID: number) {
     this.stateSubject.next(State.LOADING);
 
     return this.httpClient.get<Justification[]>(`concepts/${conceptID}/answers/${answerID}/justifications/`).pipe(

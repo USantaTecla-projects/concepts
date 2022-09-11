@@ -59,7 +59,7 @@ public class ConceptService {
      * @author Cristian
      */
     public Page<Concept> findAll(int page) {
-        int pageSize = 5;
+        int pageSize = 10;
         return conceptRepository.findAll(PageRequest.of(page, pageSize));
     }
 

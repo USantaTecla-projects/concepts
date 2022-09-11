@@ -35,7 +35,7 @@ export class KnowledgeManagerPage implements OnInit {
   onConceptSelect(conceptID: number) {
     this.selectedConceptID = conceptID;
     this.resetAnswerList = true;
-    this.answerStore.readAnswers(this.selectedConceptID).subscribe({
+    this.answerStore.getAnswers(this.selectedConceptID).subscribe({
       next: () => (this.resetAnswerList = false),
       error: (err: Error) => console.log(err.message),
     });
@@ -63,10 +63,14 @@ export class KnowledgeManagerPage implements OnInit {
     });
   }
 
+  onConceptPageGet(pageIndex: number) {
+    this.conceptStore.getConcepts(pageIndex).subscribe();
+  }
+
   onAnswerSelect(answerID: number) {
     this.selectedAnswerID = answerID;
     this.resetJustificationList = true;
-    this.justificationStore.readJustifications(this.selectedConceptID, this.selectedAnswerID).subscribe({
+    this.justificationStore.getJustifications(this.selectedConceptID, this.selectedAnswerID).subscribe({
       next: () => (this.resetJustificationList = false),
       error: error => console.log(error),
     });
