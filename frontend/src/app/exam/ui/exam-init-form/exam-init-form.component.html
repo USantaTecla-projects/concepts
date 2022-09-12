@@ -1,0 +1,13 @@
+<form class="form" [formGroup]="initExamForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Nº of questions</mat-label>
+    <input matInput type="text" formControlName="questionNumber" placeholder="Insert the number of questions" />
+    <mat-icon matSuffix>question_mark</mat-icon>
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button class="submit-button" mat-raised-button color="primary" type="submit" [disabled]="!initExamForm.valid">
+      Start
+    </button>
+  </div>
+</form>

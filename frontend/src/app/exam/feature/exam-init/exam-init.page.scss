@@ -1,0 +1,41 @@
+.tool-bar {
+  height: 10vh;
+  box-shadow: -17px 77px 73px -92px rgba(0, 0, 0, 0.53) inset;
+  -webkit-box-shadow: -17px 77px 73px -92px rgba(0, 0, 0, 0.53) inset;
+  -moz-box-shadow: -17px 77px 73px -92px rgba(0, 0, 0, 0.53) inset;
+
+  div {
+    padding: 0 1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.content {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .card {
+    width: 25rem;
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .title {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+
+    .info {
+      margin: 0 2rem;
+    }
+  }
+}

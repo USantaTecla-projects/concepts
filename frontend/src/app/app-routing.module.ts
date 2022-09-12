@@ -14,6 +14,10 @@ const routes: Routes = [
     path: 'knowledge',
     loadChildren: () => import('./knowledge/feature/knowledge-manager.module').then(m => m.KnowledgeManagerPageModule),
   },
+  {
+    path: 'exam',
+    loadChildren: () => import('./exam/feature/exam-shell/exam-shell.module').then(m => m.ExamShellModule),
+  },
 ];
 
 @NgModule({
