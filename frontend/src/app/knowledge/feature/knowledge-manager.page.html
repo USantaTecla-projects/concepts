@@ -4,7 +4,7 @@
 <div class="lists-container">
   <app-knowledge-concept-list
     class="card"
-    [concepts]="conceptStore.concepts$ | async"
+    [conceptsPage]="conceptStore.conceptsPage$ | async"
     (selectConcept)="onConceptSelect($event)"
     (createConcept)="onConceptCreate($event)"
     (updateConcept)="onConceptUpdate($event)"
@@ -14,7 +14,7 @@
 
   <app-knowledge-answer-list
     class="card"
-    [answers]="answerStore.answers$ | async"
+    [answersList]="answerStore.answersList$ | async"
     [resetList]="resetAnswerList"
     (selectAnswer)="onAnswerSelect($event)"
     (createAnswer)="onAnswerCreate($event)"
@@ -24,7 +24,7 @@
 
   <app-knowledge-justification-list
     class="card"
-    [justifications]="justificationStore.justifications$ | async"
+    [justificationsList]="justificationStore.justificationsList$ | async"
     [resetList]="resetJustificationList"
     (selectJustification)="onJustificationSelect($event)"
     (createJustification)="onJustificationCreate($event)"

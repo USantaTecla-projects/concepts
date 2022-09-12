@@ -12,7 +12,7 @@ import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowle
   styleUrls: ['./knowledge-justification-list.component.scss'],
 })
 export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
-  @Input() justifications: Justification[] | null = [];
+  @Input() justificationsList!: Justification[] | null;
 
   @Input() resetList: boolean = false;
 

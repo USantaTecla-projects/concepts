@@ -8,11 +8,11 @@ import { Justification } from './model/justification.model';
   providedIn: 'root',
 })
 export class JustificationStore {
-  private justificationsSubject = new BehaviorSubject<Justification[]>([]);
+  private justificationsListSubject = new BehaviorSubject<Justification[]>([]);
 
   private stateSubject = new BehaviorSubject<string>(State.INIT);
 
-  justifications$: Observable<Justification[]> = this.justificationsSubject.asObservable();
+  justificationsList$: Observable<Justification[]> = this.justificationsListSubject.asObservable();
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
@@ -28,9 +28,9 @@ export class JustificationStore {
           return throwError(() => error);
         }),
         tap(justification => {
-          const justifications = this.justificationsSubject.getValue();
+          const justifications = this.justificationsListSubject.getValue();
           const newJustifications = [...justifications, justification];
-          this.justificationsSubject.next(newJustifications);
+          this.justificationsListSubject.next(newJustifications);
         }),
         shareReplay()
       );
@@ -46,14 +46,14 @@ export class JustificationStore {
         return throwError(() => error);
       }),
       tap(justifications => {
-        this.justificationsSubject.next(justifications);
+        this.justificationsListSubject.next(justifications);
         justifications.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
       })
     );
   }
 
   updateJustification(conceptID: number, answerID: number, justificationID: number, changes: Partial<Justification>) {
-    const justifications = this.justificationsSubject.getValue();
+    const justifications = this.justificationsListSubject.getValue();
     const index = justifications.findIndex(justification => justification.id === justificationID);
 
     const newJustification = {
@@ -64,7 +64,7 @@ export class JustificationStore {
     const newJustifications = [...justifications];
     newJustifications[index] = newJustification;
 
-    this.justificationsSubject.next(newJustifications);
+    this.justificationsListSubject.next(newJustifications);
 
     return this.httpClient
       .put(`concepts/${conceptID}/answers/${answerID}/justifications/${justificationID}`, newJustification)
@@ -79,11 +79,11 @@ export class JustificationStore {
   }
 
   deleteJustification(conceptID: number, answerID: number, justificationID: number) {
-    const justifications = this.justificationsSubject.getValue();
+    const justifications = this.justificationsListSubject.getValue();
 
     const newJustifications = justifications.filter(justification => justification.id !== justificationID);
 
-    this.justificationsSubject.next(newJustifications);
+    this.justificationsListSubject.next(newJustifications);
 
     return this.httpClient.delete(`concepts/${conceptID}/answers/${answerID}/justifications/${justificationID}`).pipe(
       catchError(error => {
@@ -98,7 +98,7 @@ export class JustificationStore {
   }
 
   resetJustificationList() {
-    this.justificationsSubject.next([]);
+    this.justificationsListSubject.next([]);
     this.stateSubject.next(State.INIT);
   }
 }

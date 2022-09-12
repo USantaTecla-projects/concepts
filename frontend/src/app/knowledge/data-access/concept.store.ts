@@ -10,7 +10,7 @@ import { Concept } from './model/concept.model';
   providedIn: 'root',
 })
 export class ConceptStore {
-  private conceptsSubject = new BehaviorSubject<Page<Concept>>({
+  private conceptsPageSubject = new BehaviorSubject<Page<Concept>>({
     content: [],
     totalPages: 0,
     totalElements: 0,
@@ -19,7 +19,7 @@ export class ConceptStore {
 
   private stateSubject = new BehaviorSubject<string>(State.INIT);
 
-  concepts$: Observable<Page<Concept>> = this.conceptsSubject.asObservable();
+  conceptsPage$: Observable<Page<Concept>> = this.conceptsPageSubject.asObservable();
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
@@ -35,7 +35,7 @@ export class ConceptStore {
         return throwError(() => error);
       }),
       tap(concept => {
-        const conceptsPage = this.conceptsSubject.getValue();
+        const conceptsPage = this.conceptsPageSubject.getValue();
         const { content, totalPages, totalElements, numberOfElements } = { ...conceptsPage };
 
         let newPage = { ...conceptsPage };
@@ -54,14 +54,14 @@ export class ConceptStore {
           totalPages: totalPages + 1,
         };
 
-        this.conceptsSubject.next(newPage);
+        this.conceptsPageSubject.next(newPage);
       }),
       shareReplay()
     );
   }
 
   updateConcept(conceptID: number, changes: Partial<Concept>): Observable<Concept> {
-    const conceptsPage = this.conceptsSubject.getValue();
+    const conceptsPage = this.conceptsPageSubject.getValue();
     const { content } = { ...conceptsPage };
 
     const index = content.findIndex(concept => concept.id === conceptID);
@@ -75,7 +75,7 @@ export class ConceptStore {
     newContent[index] = newConcept;
 
     const newPage = { ...conceptsPage, content: newContent };
-    this.conceptsSubject.next(newPage);
+    this.conceptsPageSubject.next(newPage);
 
     return this.httpClient.put<Concept>(`concepts/${conceptID}`, newConcept).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -88,13 +88,13 @@ export class ConceptStore {
   }
 
   deleteConcept(conceptID: number): Observable<Concept> {
-    const conceptsPage = this.conceptsSubject.getValue();
+    const conceptsPage = this.conceptsPageSubject.getValue();
     const { content } = { ...conceptsPage };
 
     const newContent = content.filter(concept => concept.id !== conceptID);
     const newPage = { ...conceptsPage, content: newContent };
 
-    this.conceptsSubject.next(newPage);
+    this.conceptsPageSubject.next(newPage);
 
     return this.httpClient.delete<Concept>(`concepts/${conceptID}`).pipe(
       catchError(error => {
@@ -117,7 +117,7 @@ export class ConceptStore {
         console.log(message, error);
         return throwError(() => error);
       }),
-      tap(page => this.conceptsSubject.next(page)),
+      tap(page => this.conceptsPageSubject.next(page)),
       map(page => page.content),
       tap(concepts => {
         concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);

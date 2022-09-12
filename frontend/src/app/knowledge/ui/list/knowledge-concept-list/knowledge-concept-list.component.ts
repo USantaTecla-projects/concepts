@@ -14,7 +14,7 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
   styleUrls: ['./knowledge-concept-list.component.scss'],
 })
 export class KnowledgeConceptListComponent implements OnInit {
-  @Input() concepts!: Page<Concept> | null;
+  @Input() conceptsPage!: Page<Concept> | null;
 
   @Input() totalElements: number | null = 0;
 

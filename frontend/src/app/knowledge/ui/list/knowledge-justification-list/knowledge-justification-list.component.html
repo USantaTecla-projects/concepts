@@ -22,7 +22,7 @@
     <mat-accordion>
       <mat-expansion-panel
         class="justification-panel"
-        *ngFor="let justification of justifications"
+        *ngFor="let justification of justificationsList"
         (opened)="onJustificationSelect(justification.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="justification-title">

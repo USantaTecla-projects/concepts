@@ -20,7 +20,7 @@ export class AuthStore {
   AUTH_DATA: string = 'auth_data';
 
   constructor(private httpClient: HttpClient) {
-    this.isLoggedIn$ = this.user$.pipe(map(user => !!user));
+    this.isLoggedIn$ = this.user$.pipe(map(user => Boolean(user)));
 
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map(isLoggedIn => !isLoggedIn));
 
@@ -58,7 +58,7 @@ export class AuthStore {
   }
 
   checkUserRoleAdmin(): Observable<boolean> {
-    return this.user$.pipe(map(user => !!user?.roles.includes(Role.Teacher)));
+    return this.user$.pipe(map(user => Boolean(user?.roles.includes(Role.Teacher))));
   }
 
   private getUser(username: string): Observable<User> {

@@ -20,7 +20,7 @@
     </div>
 
     <mat-accordion>
-      <mat-expansion-panel class="answer-panel" *ngFor="let answer of answers" (opened)="onAnswerSelect(answer.id)">
+      <mat-expansion-panel class="answer-panel" *ngFor="let answer of answersList" (opened)="onAnswerSelect(answer.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="answer-title"> {{ answer.text | titlecase | shortText: 100 }}</mat-panel-title>
         </mat-expansion-panel-header>

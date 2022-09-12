@@ -8,11 +8,11 @@ import { Answer } from './model/answer.model';
   providedIn: 'root',
 })
 export class AnswerStore {
-  private answersSubject = new BehaviorSubject<Answer[]>([]);
+  private answersListSubject = new BehaviorSubject<Answer[]>([]);
 
   private stateSubject = new BehaviorSubject<string>(State.INIT);
 
-  answers$: Observable<Answer[]> = this.answersSubject.asObservable();
+  answersList$: Observable<Answer[]> = this.answersListSubject.asObservable();
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
@@ -26,9 +26,9 @@ export class AnswerStore {
         return throwError(() => error);
       }),
       tap(answer => {
-        const answers = this.answersSubject.getValue();
+        const answers = this.answersListSubject.getValue();
         const newAnswers = [...answers, answer];
-        this.answersSubject.next(newAnswers);
+        this.answersListSubject.next(newAnswers);
       }),
       shareReplay()
     );
@@ -44,14 +44,14 @@ export class AnswerStore {
         return throwError(() => error);
       }),
       tap(answers => {
-        this.answersSubject.next(answers);
+        this.answersListSubject.next(answers);
         answers.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
       })
     );
   }
 
   updateAnswer(conceptID: number, answerID: number, changes: Partial<Answer>) {
-    const answers = this.answersSubject.getValue();
+    const answers = this.answersListSubject.getValue();
     const index = answers.findIndex(answer => answer.id === answerID);
 
     const newAnswer = {
@@ -62,7 +62,7 @@ export class AnswerStore {
     const newAnswers = [...answers];
     newAnswers[index] = newAnswer;
 
-    this.answersSubject.next(newAnswers);
+    this.answersListSubject.next(newAnswers);
 
     return this.httpClient.put(`concepts/${conceptID}/answers/${answerID}`, newAnswer).pipe(
       catchError(error => {
@@ -75,11 +75,11 @@ export class AnswerStore {
   }
 
   deleteAnswer(conceptID: number, answerID: number) {
-    const answers = this.answersSubject.getValue();
+    const answers = this.answersListSubject.getValue();
 
     const newAnswers = answers.filter(answer => answer.id !== answerID);
 
-    this.answersSubject.next(newAnswers);
+    this.answersListSubject.next(newAnswers);
 
     return this.httpClient.delete(`concepts/${conceptID}/answers/${answerID}`).pipe(
       catchError(error => {

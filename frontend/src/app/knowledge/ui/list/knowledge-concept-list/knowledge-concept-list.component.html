@@ -6,7 +6,7 @@
   <div class="paginator">
     <mat-paginator
       [showFirstLastButtons]="true"
-      [length]="concepts!.totalElements"
+      [length]="conceptsPage!.totalElements"
       [pageSize]="10"
       (page)="onPageGet($event)">
     </mat-paginator>
@@ -32,7 +32,7 @@
     <mat-accordion class="accordion">
       <mat-expansion-panel
         class="concept-panel"
-        *ngFor="let concept of concepts!.content"
+        *ngFor="let concept of conceptsPage!.content"
         (opened)="onConceptSelect(concept.id)">
         <mat-expansion-panel-header>
           <mat-panel-title class="concept-title"> {{ concept.text | titlecase }}</mat-panel-title>

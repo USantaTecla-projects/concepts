@@ -12,7 +12,7 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
   styleUrls: ['./knowledge-answer-list.component.scss'],
 })
 export class KnowledgeAnswerListComponent implements OnInit, OnChanges {
-  @Input() answers: Answer[] | null = [];
+  @Input() answersList!: Answer[] | null;
 
   @Input() resetList: boolean = false;
 
