@@ -101,7 +101,7 @@ public class JustificationService {
      */
     public List<Justification> findAll(Answer answer) {
         return Optional
-                .ofNullable(answer.getJustifications())
+                .ofNullable(answer.getJustificationList())
                 .orElseThrow(() -> new AnswerNotFoundException(
                         "The answer with id = " + answer.getId() + " has no justifications"
                 ));

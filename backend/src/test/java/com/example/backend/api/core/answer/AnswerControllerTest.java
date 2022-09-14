@@ -181,7 +181,7 @@ public class AnswerControllerTest {
                     .thenReturn(concept);
 
             when(answerService.findAll(concept))
-                    .thenReturn(concept.getAnswers());
+                    .thenReturn(concept.getAnswerList());
 
 
             mockMvc.perform(get(BASE_URL))

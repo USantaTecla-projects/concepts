@@ -3,7 +3,7 @@
     <button mat-button routerLink="">
       <div class="button-content"><mat-icon class="icon">home</mat-icon> <span class="text">Home</span></div>
     </button>
-    <button mat-button>
+    <button mat-button routerLink="/exam/init">
       <div class="button-content"><mat-icon class="icon">description</mat-icon> <span class="text">Exams</span></div>
     </button>
     <button mat-button routerLink="/knowledge" *ngIf="authStore.checkUserRoleAdmin() | async">

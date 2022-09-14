@@ -219,7 +219,7 @@ public class JustificationControllerTest {
                     .thenReturn(answer);
 
             when(justificationsService.findAll(answer))
-                    .thenReturn(answer.getJustifications());
+                    .thenReturn(answer.getJustificationList());
 
 
             mockMvc.perform(get(BASE_URL))

@@ -18,7 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
-import { NavbarModule } from './feature/navbar/navbar.module';
+import { NavbarModule } from './components/navbar/navbar.module';
 
 @NgModule({
   imports: [CommonModule, NavbarModule],

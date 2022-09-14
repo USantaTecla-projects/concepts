@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, tap, Observable, shareReplay, BehaviorSubject, catchError, of, mergeMap } from 'rxjs';
-import { AuthResponse } from './dto/auth-response.dto';
-import { Credentials } from './dto/credentials.dto';
-import { RegisterUserData } from './dto/register-user.dto';
-import { Role } from './enum/role.enum';
-import { User } from './model/user.model';
+import { AuthResponse } from '../interfaces/dto/auth-response.dto';
+import { Credentials } from '../interfaces/dto/credentials.dto';
+import { RegisterUserData } from '../interfaces/dto/register-user.dto';
+import { Role } from '../interfaces/enum/role.enum';
+import { User } from '../interfaces/model/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {

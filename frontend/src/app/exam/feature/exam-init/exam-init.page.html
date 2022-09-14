@@ -9,7 +9,7 @@
 
     <mat-card-content class="info">
       <p>Insert the number of questions that you want to answer in your exam.</p>
-      <app-exam-init-form></app-exam-init-form>
+      <app-exam-init-form (startExam)="onExamStart($event)"></app-exam-init-form>
     </mat-card-content>
   </mat-card>
 </div>

@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, Observable, throwError, tap, BehaviorSubject, switchMap } from 'rxjs';
 import { AuthStore } from '../data-access/auth.store';
-import { AuthResponse } from '../data-access/dto/auth-response.dto';
+import { AuthResponse } from '../interfaces/dto/auth-response.dto';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

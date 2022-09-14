@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NavbarModule } from './shared/feature/navbar/navbar.module';
+import { NavbarModule } from './shared/components/navbar/navbar.module';
 import { ApiInterceptor } from './shared/utils/api.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { AuthInterceptor } from './auth/utils/auth.interceptor';

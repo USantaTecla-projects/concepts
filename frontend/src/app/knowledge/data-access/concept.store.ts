@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwError } from 'rxjs';
 
-import { State } from 'src/app/shared/utils/enums/state.enum';
-import { Page } from 'src/app/shared/utils/page-response.dto';
-import { Concept } from './model/concept.model';
+import { State } from 'src/app/shared/interfaces/enums/state.enum';
+import { Page } from 'src/app/shared/interfaces/page-response.dto';
+import { Concept } from '../interfaces/concept.model';
 
 @Injectable({
   providedIn: 'root',

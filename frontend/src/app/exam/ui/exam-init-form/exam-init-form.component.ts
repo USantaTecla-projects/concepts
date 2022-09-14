@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenerateExamData } from '../../interfaces/dto/generate-exam.dto';
 
 @Component({
   selector: 'app-exam-init-form',
@@ -7,13 +8,23 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./exam-init-form.component.scss'],
 })
 export class ExamInitFormComponent implements OnInit {
-  @Output() initExam: EventEmitter<number> = new EventEmitter();
+  @Output() startExam: EventEmitter<GenerateExamData> = new EventEmitter();
 
-  initExamForm: FormGroup = new FormGroup({});
+  startExamForm: FormGroup = new FormGroup({});
 
-  constructor() {}
+  constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.startExamForm = this.formBuilder.group({
+      numberOfQuestions: [null, [Validators.required, Validators.min(1)]],
+    });
+  }
 
-  onSubmit() {}
+  onSubmit() {
+    const startExamFormValue = this.startExamForm.value;
+    if (startExamFormValue) {
+      const generateExamData: GenerateExamData = { ...startExamFormValue };
+      this.startExam.emit(generateExamData);
+    }
+  }
 }

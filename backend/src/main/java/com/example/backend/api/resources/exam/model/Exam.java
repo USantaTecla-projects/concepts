@@ -7,17 +7,17 @@ import java.util.List;
 
 public class Exam {
 
-    private List<Question> questions;
+    private List<Question> questionList;
 
-    public Exam(List<Question> questions) {
-        this.questions = questions;
+    public Exam(List<Question> questionList) {
+        this.questionList = questionList;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Question> getQuestionList() {
+        return questionList;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
     }
 }

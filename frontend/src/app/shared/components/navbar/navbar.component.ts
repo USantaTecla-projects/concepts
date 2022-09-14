@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
-import { Role } from 'src/app/auth/data-access/enum/role.enum';
 
 @Component({
   selector: 'app-navbar',

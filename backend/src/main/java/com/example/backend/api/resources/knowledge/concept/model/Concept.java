@@ -1,6 +1,7 @@
 package com.example.backend.api.resources.knowledge.concept.model;
 
 import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -18,21 +19,22 @@ public class Concept {
     private String text;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Answer> answers;
+    @JsonIgnore
+    private List<Answer> answerList;
 
 
     public Concept() {
     }
 
-    public Concept(Long id, String text, List<Answer> answers) {
+    public Concept(Long id, String text, List<Answer> answerList) {
         this.id = id;
         this.text = text;
-        this.answers = answers;
+        this.answerList = answerList;
     }
 
-    public Concept(String text, List<Answer> answers) {
+    public Concept(String text, List<Answer> answerList) {
         this.text = text;
-        this.answers = answers;
+        this.answerList = answerList;
     }
 
     public Concept(String text) {
@@ -45,8 +47,8 @@ public class Concept {
      * @param answer The Answer to add.
      */
     public void addAnswer(Answer answer) {
-        if(this.answers == null) this.answers = new LinkedList<>();
-        answers.add(answer);
+        if(this.answerList == null) this.answerList = new LinkedList<>();
+        answerList.add(answer);
     }
 
     /**
@@ -55,7 +57,7 @@ public class Concept {
      * @param answer The Answer to remove.
      */
     public void removeAnswer(Answer answer) {
-        answers.remove(answer);
+        answerList.remove(answer);
     }
 
     /**
@@ -65,7 +67,7 @@ public class Concept {
      * @return True if is in the list, else false.
      */
     public boolean containsAnswer(Answer answer) {
-        return answers.contains(answer);
+        return answerList.contains(answer);
     }
 
     public Long getId() {
@@ -84,12 +86,12 @@ public class Concept {
         this.text = text;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<Answer> getAnswerList() {
+        return answerList;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class Concept {
         return "Concept{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                ", answers=" + answers +
+                ", answers=" + answerList +
                 '}';
     }
 }

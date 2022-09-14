@@ -65,10 +65,10 @@ public class JustificationServiceTest {
 
             // The justification is added to the Concept
             assertEquals(
-                    answer.getJustifications().get(0).getText(),
+                    answer.getJustificationList().get(0).getText(),
                     justification.getText()
             );
-            assertEquals(answer.getJustifications().get(0).getAnswerId(), answer.getId());
+            assertEquals(answer.getJustificationList().get(0).getAnswerId(), answer.getId());
         }
 
         @Test
@@ -132,7 +132,7 @@ public class JustificationServiceTest {
             final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
 
             List<Justification> justificationList = justificationService.findAll(answer);
-            assertEquals(justificationList.size(), answer.getJustifications().size());
+            assertEquals(justificationList.size(), answer.getJustificationList().size());
         }
 
         @Test

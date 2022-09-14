@@ -1,0 +1,3 @@
+<ng-container *ngFor="let question of (examStore.exam$ | async)!.questionList">
+  <app-exam-question-renderer [componentType]="question.type"></app-exam-question-renderer>
+</ng-container>

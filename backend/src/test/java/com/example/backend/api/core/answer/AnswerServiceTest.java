@@ -62,10 +62,10 @@ public class AnswerServiceTest {
 
             // The Answer is added to the Concept
             assertEquals(
-                    concept.getAnswers().get(0).getText(),
+                    concept.getAnswerList().get(0).getText(),
                     answer.getText()
             );
-            assertEquals(concept.getAnswers().get(0).getConceptId(), concept.getId());
+            assertEquals(concept.getAnswerList().get(0).getConceptId(), concept.getId());
         }
 
         @Test
@@ -128,7 +128,7 @@ public class AnswerServiceTest {
             final Concept concept = new Concept(1L, "Software", new LinkedList<>(List.of(answer)));
 
             List<Answer> answerList = answerService.findAll(concept);
-            assertEquals(answerList.size(), concept.getAnswers().size());
+            assertEquals(answerList.size(), concept.getAnswerList().size());
         }
 
         @Test

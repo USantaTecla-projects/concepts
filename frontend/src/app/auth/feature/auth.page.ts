@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 import { AuthStore } from '../data-access/auth.store';
-import { Credentials } from '../data-access/dto/credentials.dto';
-import { RegisterUserData } from '../data-access/dto/register-user.dto';
+import { Credentials } from '../interfaces/dto/credentials.dto';
+import { RegisterUserData } from '../interfaces/dto/register-user.dto';
 
 @Component({
   selector: 'app-auth',

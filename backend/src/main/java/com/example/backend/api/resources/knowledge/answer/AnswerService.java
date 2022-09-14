@@ -88,7 +88,7 @@ public class AnswerService {
      */
     public List<Answer> findAll(final Concept concept) {
         return Optional
-                .ofNullable(concept.getAnswers())
+                .ofNullable(concept.getAnswerList())
                 .orElseThrow(() -> new AnswerNotFoundException("The concept with id = " + concept.getId() + " has no answers"));
     }
 

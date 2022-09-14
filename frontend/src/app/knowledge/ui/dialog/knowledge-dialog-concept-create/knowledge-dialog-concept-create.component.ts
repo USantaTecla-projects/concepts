@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Concept } from 'src/app/knowledge/data-access/model/concept.model';
+import { Concept } from 'src/app/knowledge/interfaces/concept.model';
 import { DialogData } from '../../../utils/dialog-data.interface';
 
 @Component({

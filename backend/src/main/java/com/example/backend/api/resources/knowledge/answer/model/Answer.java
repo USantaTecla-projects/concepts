@@ -1,6 +1,7 @@
 package com.example.backend.api.resources.knowledge.answer.model;
 
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -24,7 +25,8 @@ public class Answer {
     private Long conceptId;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Justification> justifications;
+    @JsonIgnore
+    private List<Justification> justificationList;
 
     public Answer() {
     }
@@ -36,19 +38,19 @@ public class Answer {
         this.conceptId = conceptId;
     }
 
-    public Answer(String text, Boolean isCorrect, Long conceptId, List<Justification> justifications) {
+    public Answer(String text, Boolean isCorrect, Long conceptId, List<Justification> justificationList) {
         this.text = text;
         this.isCorrect = isCorrect;
         this.conceptId = conceptId;
-        this.justifications = justifications;
+        this.justificationList = justificationList;
     }
 
-    public Answer(Long id, String text, Boolean isCorrect, Long conceptId, List<Justification> justifications) {
+    public Answer(Long id, String text, Boolean isCorrect, Long conceptId, List<Justification> justificationList) {
         this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
         this.conceptId = conceptId;
-        this.justifications = justifications;
+        this.justificationList = justificationList;
     }
 
     public Answer(String text, Boolean isCorrect, Long conceptId) {
@@ -63,16 +65,16 @@ public class Answer {
     }
 
     public void addJustification(Justification justification) {
-        if (this.justifications == null) this.justifications = new LinkedList<>();
-        justifications.add(justification);
+        if (this.justificationList == null) this.justificationList = new LinkedList<>();
+        justificationList.add(justification);
     }
 
     public void removeJustification(Justification justification) {
-        justifications.remove(justification);
+        justificationList.remove(justification);
     }
 
     public boolean containsJustification(Justification justification) {
-        return justifications.contains(justification);
+        return justificationList.contains(justification);
     }
 
     public Long getId() {
@@ -107,11 +109,11 @@ public class Answer {
         this.conceptId = conceptId;
     }
 
-    public List<Justification> getJustifications() {
-        return justifications;
+    public List<Justification> getJustificationList() {
+        return justificationList;
     }
 
-    public void setJustifications(List<Justification> justification) {
-        this.justifications = justification;
+    public void setJustificationList(List<Justification> justification) {
+        this.justificationList = justification;
     }
 }
