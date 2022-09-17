@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
 import { QuestionHostDirective } from '../../utils/question-host.directive';
-import { ExamQuestionType1Component } from '../question/exam-question-type1/exam-question-type1.component';
 import { ExamQuestionComponent } from '../question/exam-question.component';
 
 @Component({
@@ -10,6 +9,8 @@ import { ExamQuestionComponent } from '../question/exam-question.component';
 })
 export class ExamQuestionRendererComponent implements OnInit {
   @Input() componentType!: Type<ExamQuestionComponent>;
+
+  @Input() question!: any;
 
   @ViewChild(QuestionHostDirective, { static: true }) questionHost!: QuestionHostDirective;
 
@@ -23,5 +24,6 @@ export class ExamQuestionRendererComponent implements OnInit {
     const viewContainerRef = this.questionHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<ExamQuestionComponent>(this.componentType);
+    componentRef.instance.question = this.question;
   }
 }

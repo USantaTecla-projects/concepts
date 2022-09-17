@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegisterUserData } from '../../interfaces/dto/register-user.dto';
+import { RegisterUserData } from '../../types/dto/register-user.dto';
 
 @Component({
   selector: 'app-auth-register-form',

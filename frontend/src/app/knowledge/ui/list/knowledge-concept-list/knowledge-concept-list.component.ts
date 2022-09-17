@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ConceptStore } from 'src/app/knowledge/data-access/concept.store';
-import { Concept } from 'src/app/knowledge/interfaces/concept.model';
+import { Concept } from 'src/app/knowledge/types/concept.model';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
 import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-dialog-concept-create/knowledge-dialog-concept-create.component';

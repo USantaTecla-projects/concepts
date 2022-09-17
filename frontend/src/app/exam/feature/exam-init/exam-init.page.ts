@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { GenerateExamData } from '../../interfaces/dto/generate-exam.dto';
+import { GenerateExamData } from '../../types/dto/generate-exam.dto';
 import { ExamStore } from '../../data-access/exam.store';
 
 @Component({

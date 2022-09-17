@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
-import { Answer } from '../interfaces/answer.model';
+import { Answer } from '../types/answer.model';
 
 @Injectable({
   providedIn: 'root',

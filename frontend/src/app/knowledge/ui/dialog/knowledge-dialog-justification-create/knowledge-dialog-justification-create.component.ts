@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Justification } from 'src/app/knowledge/interfaces/justification.model';
+import { Justification } from 'src/app/knowledge/types/justification.model';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
 
 @Component({

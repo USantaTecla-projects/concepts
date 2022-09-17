@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Answer } from 'src/app/knowledge/interfaces/answer.model';
+import { Answer } from 'src/app/knowledge/types/answer.model';
 
 @Component({
   selector: 'app-knowledge-answer-update-form',

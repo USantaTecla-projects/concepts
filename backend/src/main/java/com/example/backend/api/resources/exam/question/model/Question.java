@@ -2,13 +2,14 @@ package com.example.backend.api.resources.exam.question.model;
 
 import com.example.backend.api.resources.exam.question.filler.Filler;
 import com.example.backend.api.resources.exam.type.QuestionType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
 public abstract class Question {
 
     private QuestionType type;
-
+    @JsonIgnore
     private boolean isFilled;
 
     private String questionAsString;

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap, catchError, first, Observable, throwError, shareReplay, map } from 'rxjs';
-import { ExamData } from '../interfaces/dto/exam.dto';
-import { GenerateExamData } from '../interfaces/dto/generate-exam.dto';
-import { Exam } from '../interfaces/model/exam.model';
+import { ExamData } from '../types/dto/exam.dto';
+import { GenerateExamData } from '../types/dto/generate-exam.dto';
+import { Exam } from '../types/model/exam.model';
 import { QuestionMapperService } from './question-mapper.service';
 
 @Injectable({

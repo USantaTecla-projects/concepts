@@ -3,9 +3,9 @@ import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
 import { AnswerStore } from '../data-access/answer.store';
 import { ConceptStore } from '../data-access/concept.store';
 import { JustificationStore } from '../data-access/justification.store';
-import { Answer } from '../interfaces/answer.model';
-import { Concept } from '../interfaces/concept.model';
-import { Justification } from '../interfaces/justification.model';
+import { Answer } from '../types/answer.model';
+import { Concept } from '../types/concept.model';
+import { Justification } from '../types/justification.model';
 
 @Component({
   selector: 'app-knowledge-manager',

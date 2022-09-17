@@ -1,3 +1,3 @@
 export interface ExamQuestionComponent {
-  data: any;
+  question: any;
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
-import { Justification } from '../interfaces/justification.model';
+import { Justification } from '../types/justification.model';
 
 @Injectable({
   providedIn: 'root',

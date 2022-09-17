@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Answer } from 'src/app/knowledge/interfaces/answer.model';
+import { Answer } from 'src/app/knowledge/types/answer.model';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
 import { AnswerStore } from '../../../data-access/answer.store';
 import { KnowledgeDialogAnswerCreateComponent } from '../../dialog/knowledge-dialog-answer-create/knowledge-dialog-answer-create.component';

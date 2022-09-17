@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { JustificationStore } from 'src/app/knowledge/data-access/justification.store';
-import { Justification } from 'src/app/knowledge/interfaces/justification.model';
+import { Justification } from 'src/app/knowledge/types/justification.model';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
 import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
 import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowledge-dialog-justification-create/knowledge-dialog-justification-create.component';

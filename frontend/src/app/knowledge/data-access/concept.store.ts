@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwEr
 
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
-import { Concept } from '../interfaces/concept.model';
+import { Concept } from '../types/concept.model';
 
 @Injectable({
   providedIn: 'root',
