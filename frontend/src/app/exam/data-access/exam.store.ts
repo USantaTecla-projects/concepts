@@ -10,9 +10,11 @@ import { QuestionMapperService } from './question-mapper.service';
   providedIn: 'root',
 })
 export class ExamStore {
-  private examSubject = new BehaviorSubject<Exam>({ questionList: [] });
+  private emptyExamSubject = new BehaviorSubject<Exam>({ questionList: [] });
 
-  exam$: Observable<Exam> = this.examSubject.asObservable();
+  emptyExam$: Observable<Exam> = this.emptyExamSubject.asObservable();
+
+  repliedQuestions: any[] = [];
 
   constructor(private httpClient: HttpClient, private questionMapperService: QuestionMapperService) {}
 
@@ -24,8 +26,13 @@ export class ExamStore {
         return throwError(() => error);
       }),
       map(examData => this.questionMapperService.mapQuestions(examData)),
-      tap(exam => this.examSubject.next(exam)),
+      tap(exam => this.emptyExamSubject.next(exam)),
       shareReplay()
     );
+  }
+
+  replyQuestion(question: any) {
+    this.repliedQuestions.push(question);
+    console.log(this.repliedQuestions);
   }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { AnswerStore } from '../data-access/answer.store';
+import { DefinitionStore } from '../data-access/definition.store';
 import { ConceptStore } from '../data-access/concept.store';
 import { JustificationStore } from '../data-access/justification.store';
-import { Answer } from '../types/answer.model';
+import { Definition } from '../types/definition.model';
 import { Concept } from '../types/concept.model';
 import { Justification } from '../types/justification.model';
 
@@ -15,17 +15,17 @@ import { Justification } from '../types/justification.model';
 export class KnowledgeManagerPage implements OnInit {
   private selectedConceptID!: number;
 
-  private selectedAnswerID!: number;
+  private selectedDefinitionID!: number;
 
   private selectedJustificationID!: number;
 
-  resetAnswerList: boolean = false;
+  resetDefinitionList: boolean = false;
 
   resetJustificationList: boolean = false;
 
   constructor(
     public conceptStore: ConceptStore,
-    public answerStore: AnswerStore,
+    public definitionStore: DefinitionStore,
     public justificationStore: JustificationStore,
     private snackbarService: SnackbarService
   ) {}
@@ -34,9 +34,9 @@ export class KnowledgeManagerPage implements OnInit {
 
   onConceptSelect(conceptID: number) {
     this.selectedConceptID = conceptID;
-    this.resetAnswerList = true;
-    this.answerStore.getAnswers(this.selectedConceptID).subscribe({
-      next: () => (this.resetAnswerList = false),
+    this.resetDefinitionList = true;
+    this.definitionStore.getDefinitions(this.selectedConceptID).subscribe({
+      next: () => (this.resetDefinitionList = false),
       error: (err: Error) => console.log(err.message),
     });
     this.justificationStore.resetJustificationList();
@@ -58,7 +58,11 @@ export class KnowledgeManagerPage implements OnInit {
 
   onConceptDelete(conceptID: number) {
     this.conceptStore.deleteConcept(conceptID).subscribe({
-      next: () => this.snackbarService.openSnackBar('Concept deleted.'),
+      next: () => {
+        this.snackbarService.openSnackBar('Concept deleted.');
+        this.definitionStore.resetDefinitionList();
+        this.justificationStore.resetJustificationList();
+      },
       error: () => this.snackbarService.openSnackBar('Error deleting concept.'),
     });
   }
@@ -67,33 +71,38 @@ export class KnowledgeManagerPage implements OnInit {
     this.conceptStore.getConcepts(pageIndex).subscribe();
   }
 
-  onAnswerSelect(answerID: number) {
-    this.selectedAnswerID = answerID;
+  onDefinitionSelect(definitionID: number) {
+    this.selectedDefinitionID = definitionID;
     this.resetJustificationList = true;
-    this.justificationStore.getJustifications(this.selectedConceptID, this.selectedAnswerID).subscribe({
+    this.justificationStore.getJustifications(this.selectedConceptID, this.selectedDefinitionID).subscribe({
       next: () => (this.resetJustificationList = false),
       error: error => console.log(error),
     });
   }
 
-  onAnswerCreate(answer: Answer) {
-    this.answerStore.createAnswer(this.selectedConceptID, answer).subscribe({
-      next: () => this.snackbarService.openSnackBar('Answer created.'),
-      error: () => this.snackbarService.openSnackBar('Error creating answer.'),
+  onDefinitionCreate(definition: Definition) {
+    this.definitionStore.createDefinition(this.selectedConceptID, definition).subscribe({
+      next: () => this.snackbarService.openSnackBar('Definition created.'),
+      error: () => this.snackbarService.openSnackBar('Error creating definition.'),
     });
   }
 
-  onAnswerUpdate(updatedAnswer: Answer) {
-    this.answerStore.updateAnswer(this.selectedConceptID, this.selectedAnswerID, updatedAnswer).subscribe({
-      next: () => this.snackbarService.openSnackBar('Answer updated.'),
-      error: () => this.snackbarService.openSnackBar('Error updating answer.'),
-    });
+  onDefinitionUpdate(updatedDefinition: Definition) {
+    this.definitionStore
+      .updateDefinition(this.selectedConceptID, this.selectedDefinitionID, updatedDefinition)
+      .subscribe({
+        next: () => this.snackbarService.openSnackBar('Definition updated.'),
+        error: () => this.snackbarService.openSnackBar('Error updating definition.'),
+      });
   }
 
-  onAnswerDelete(answerID: number) {
-    this.answerStore.deleteAnswer(this.selectedConceptID, answerID).subscribe({
-      next: () => this.snackbarService.openSnackBar('Concept deleted.'),
-      error: () => this.snackbarService.openSnackBar('Error deleting concept.'),
+  onDefinitionDelete(definitionID: number) {
+    this.definitionStore.deleteDefinition(this.selectedConceptID, definitionID).subscribe({
+      next: () => {
+        this.snackbarService.openSnackBar('Definition deleted.');
+        this.justificationStore.resetJustificationList();
+      },
+      error: () => this.snackbarService.openSnackBar('Error deleting definition.'),
     });
   }
 
@@ -103,7 +112,7 @@ export class KnowledgeManagerPage implements OnInit {
 
   onJustificationCreate(justification: Justification) {
     this.justificationStore
-      .createJustification(this.selectedConceptID, this.selectedAnswerID, justification)
+      .createJustification(this.selectedConceptID, this.selectedDefinitionID, justification)
       .subscribe({
         next: () => this.snackbarService.openSnackBar('Justification created.'),
         error: () => this.snackbarService.openSnackBar('Error creating justification.'),
@@ -114,7 +123,7 @@ export class KnowledgeManagerPage implements OnInit {
     this.justificationStore
       .updateJustification(
         this.selectedConceptID,
-        this.selectedAnswerID,
+        this.selectedDefinitionID,
         this.selectedJustificationID,
         updatedJustification
       )
@@ -126,7 +135,7 @@ export class KnowledgeManagerPage implements OnInit {
 
   onJustificationDelete(justificationID: number) {
     this.justificationStore
-      .deleteJustification(this.selectedConceptID, this.selectedAnswerID, justificationID)
+      .deleteJustification(this.selectedConceptID, this.selectedDefinitionID, justificationID)
       .subscribe({
         next: () => this.snackbarService.openSnackBar('Justification deleted.'),
         error: () => this.snackbarService.openSnackBar('Error deleting justification.'),

@@ -1,6 +1,6 @@
 package com.example.backend.api.core.concept;
 
-import com.example.backend.api.resources.knowledge.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.knowledge.definition.dto.DefinitionDTO;
 import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -110,10 +110,10 @@ public class ConceptE2ETest {
         @DisplayName("(FindOne) Should find the created Answer in the Concept")
         void checkThatAnswerIsInConcept(){
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
-            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+            final DefinitionDTO definitionDTO = new DefinitionDTO("Software answer", true);
 
             final int conceptId = createConcept(conceptDTO).extract().path("id");
-            final int answerId = createAnswer(answerDTO,conceptId).extract().path("id");
+            final int answerId = createAnswer(definitionDTO,conceptId).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -277,16 +277,16 @@ public class ConceptE2ETest {
     /**
      * Create an Answer in a Concept by its id.
      *
-     * @param answerDTO The Answer to be created.
+     * @param definitionDTO The Answer to be created.
      * @param conceptId The Concept id where the Answer should be created.
      * @return The response body.
      */
-    private ValidatableResponse createAnswer(AnswerDTO answerDTO, int conceptId) {
+    private ValidatableResponse createAnswer(DefinitionDTO definitionDTO, int conceptId) {
         return
                 given()
                         .cookie("AuthToken",authCookie)
                         .contentType("application/json")
-                        .body(answerDTO)
+                        .body(definitionDTO)
                 .when()
                         .post("/concepts/" + conceptId + "/answers/")
                 .then();

@@ -1,0 +1,24 @@
+<form class="form" [formGroup]="definitionForm" (ngSubmit)="onSubmit()">
+  <mat-chip-list>
+    <mat-chip class="chip" color="primary" selected>Definition</mat-chip>
+  </mat-chip-list>
+  <p class="definition-text">{{ definition.text | titlecase }}</p>
+
+  <mat-chip-list>
+    <mat-chip class="chip" color="accent" selected>Is correct?</mat-chip>
+  </mat-chip-list>
+  <p class="definition-text checkbox-source" [ngClass]="{ correct: definition.correct }">
+    {{ definition.correct ? 'Correct' : 'Incorrect' }}
+  </p>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Definition</mat-label>
+    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Definition text"></textarea>
+  </mat-form-field>
+
+  <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
+
+  <button class="save-button" mat-raised-button type="submit" color="primary" [disabled]="!definitionForm.valid">
+    Update Definition
+  </button>
+</form>

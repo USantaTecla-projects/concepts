@@ -1,7 +1,7 @@
 package com.example.backend.api.resources.knowledge.justification;
 
-import com.example.backend.api.resources.knowledge.answer.AnswerService;
-import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.example.backend.api.resources.knowledge.definition.DefinitionService;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptService;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import com.example.backend.api.resources.knowledge.justification.dto.JustificationDTO;
@@ -12,80 +12,80 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/concepts/{conceptId}/answers/{answerId}/justifications")
+@RequestMapping("/concepts/{conceptID}/definitions/{definitionID}/justifications")
 public class JustificationController {
 
     private final ConceptService conceptService;
-    private final AnswerService answersService;
+    private final DefinitionService definitionService;
     private final JustificationService justificationService;
 
     public JustificationController(
             ConceptService conceptService,
-            AnswerService answersService,
+            DefinitionService definitionService,
             JustificationService justificationsService) {
         this.conceptService = conceptService;
-        this.answersService = answersService;
+        this.definitionService = definitionService;
         this.justificationService = justificationsService;
     }
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
     public Justification create(
-            @PathVariable final Long conceptId,
-            @PathVariable final Long answerId,
+            @PathVariable final Long conceptID,
+            @PathVariable final Long definitionID,
             @RequestBody final JustificationDTO justificationDTO
     ) {
-        Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.findOne(concept, answerId);
+        Concept concept = conceptService.findOne(conceptID);
+        Definition definition = definitionService.findOne(concept, definitionID);
 
-        return justificationService.create(concept.getId(), answer, justificationDTO);
+        return justificationService.create(concept.getId(), definition, justificationDTO);
     }
 
-    @GetMapping("/{justificationId}")
+    @GetMapping("/{justificationID}")
     public Justification findOne(
-            @PathVariable final Long conceptId,
-            @PathVariable final Long answerId,
-            @PathVariable final Long justificationId
+            @PathVariable final Long conceptID,
+            @PathVariable final Long definitionID,
+            @PathVariable final Long justificationID
     ) {
-        Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.findOne(concept, answerId);
+        Concept concept = conceptService.findOne(conceptID);
+        Definition definition = definitionService.findOne(concept, definitionID);
 
-        return justificationService.findOne(answer, justificationId);
+        return justificationService.findOne(definition, justificationID);
     }
 
     @GetMapping("/")
     public List<Justification> findAll(
-            @PathVariable final Long conceptId,
-            @PathVariable final Long answerId
+            @PathVariable final Long conceptID,
+            @PathVariable final Long definitionID
     ){
-        Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.findOne(concept,answerId);
+        Concept concept = conceptService.findOne(conceptID);
+        Definition definition = definitionService.findOne(concept,definitionID);
 
-        return justificationService.findAll(answer);
+        return justificationService.findAll(definition);
     }
 
-    @PutMapping("/{justificationId}")
+    @PutMapping("/{justificationID}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void updateOne(
-            @PathVariable final Long conceptId,
-            @PathVariable final Long answerId,
-            @PathVariable final Long justificationId,
+            @PathVariable final Long conceptID,
+            @PathVariable final Long definitionID,
+            @PathVariable final Long justificationID,
             @RequestBody final JustificationDTO justificationDTO
     ) {
-        Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.findOne(concept, answerId);
-        justificationService.updateOne(answer, justificationId, justificationDTO);
+        Concept concept = conceptService.findOne(conceptID);
+        Definition definition = definitionService.findOne(concept, definitionID);
+        justificationService.updateOne(definition, justificationID, justificationDTO);
     }
 
-    @DeleteMapping("/{justificationId}")
+    @DeleteMapping("/{justificationID}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void removeOne(
-            @PathVariable final Long conceptId,
-            @PathVariable final Long answerId,
-            @PathVariable final Long justificationId
+            @PathVariable final Long conceptID,
+            @PathVariable final Long definitionID,
+            @PathVariable final Long justificationID
     ) {
-        Concept concept = conceptService.findOne(conceptId);
-        Answer answer = answersService.findOne(concept, answerId);
-        justificationService.removeOne(answer, justificationId);
+        Concept concept = conceptService.findOne(conceptID);
+        Definition definition = definitionService.findOne(concept, definitionID);
+        justificationService.removeOne(definition, justificationID);
     }
 }

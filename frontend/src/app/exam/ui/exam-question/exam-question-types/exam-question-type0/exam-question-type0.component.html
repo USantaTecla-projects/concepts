@@ -1,0 +1,22 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true" class="question-panel" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="question-title"> Question {{ questionNumber }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="question-content">
+      <p>¿Que es {{ question.conceptText }} ?</p>
+      <form class="form" [formGroup]="questionReplyForm">
+        <mat-form-field appearance="outline" class="question-reply">
+          <mat-label>Write your reply...</mat-label>
+          <textarea
+            rows="2"
+            matInput
+            formControlName="text"
+            cdkTextareaAutosize
+            placeholder="Reply"
+            (input)="onQuestionReplied()"></textarea>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

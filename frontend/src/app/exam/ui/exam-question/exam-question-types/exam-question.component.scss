@@ -1,0 +1,15 @@
+.question-panel {
+  background-color: #673ab7;
+
+  .question-title {
+    color: white;
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    background-color: white !important;
+  }
+
+  .question-content {
+    margin-top: 2rem;
+  }
+}

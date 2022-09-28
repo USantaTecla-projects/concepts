@@ -5,15 +5,15 @@ import com.example.backend.api.resources.auth.configuration.AuthConfiguration;
 import com.example.backend.api.resources.auth.jwt.components.JwtRequestFilter;
 import com.example.backend.api.resources.auth.jwt.components.JwtTokenProvider;
 import com.example.backend.api.resources.auth.util.UserDetailsFinder;
-import com.example.backend.api.resources.knowledge.answer.AnswerService;
-import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.example.backend.api.resources.knowledge.definition.DefinitionService;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptService;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import com.example.backend.api.resources.knowledge.justification.JustificationController;
 import com.example.backend.api.resources.knowledge.justification.JustificationService;
 import com.example.backend.api.resources.knowledge.justification.dto.JustificationDTO;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToAnswerException;
+import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToDefinitionException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotFoundException;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
 import com.example.backend.api.resources.user.UserRepository;
@@ -58,7 +58,7 @@ public class JustificationControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AnswerService answerService;
+    private DefinitionService definitionService;
 
     @MockBean
     private ConceptService conceptService;
@@ -84,21 +84,21 @@ public class JustificationControllerTest {
                     justificationDTO.getError(),
                     CONCEPT_ID,
                     ANSWER_ID);
-            final Answer answer = new Answer(
+            final Definition definition = new Definition(
                     ANSWER_ID,
                     "Software answer",
                     true,
                     CONCEPT_ID,
                     new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.create(concept.getId(), answer, justificationDTO))
+            when(justificationsService.create(concept.getId(), definition, justificationDTO))
                     .thenReturn(justification);
 
             final String justificationJsonDTO = mapObjectToJson(justificationDTO);
@@ -119,16 +119,16 @@ public class JustificationControllerTest {
         void createWithWrongDTO() {
             final JustificationDTO justificationDTO = new JustificationDTO();
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.create(concept.getId(), answer, justificationDTO))
+            when(justificationsService.create(concept.getId(), definition, justificationDTO))
                     .thenThrow(new JustificationDTOBadRequestException("Field text in Justification DTO is mandatory"));
 
         }
@@ -141,16 +141,16 @@ public class JustificationControllerTest {
         @DisplayName("(FindOne) Should get 200 if the justification exists on the answer justifications list")
         void findOneWhenExists() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.findOne(answer, justification.getId()))
+            when(justificationsService.findOne(definition, justification.getId()))
                     .thenReturn(justification);
 
             mockMvc.perform(get(BASE_URL + justification.getId()))
@@ -164,17 +164,17 @@ public class JustificationControllerTest {
         @DisplayName("(FindOne) Should get 404 if the given id does not match in the database")
         void findOneWhenNotExists() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
             final long wrongJustificationId = 99L;
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.findOne(answer, wrongJustificationId))
+            when(justificationsService.findOne(definition, wrongJustificationId))
                     .thenThrow(new JustificationNotFoundException("The justification with id = " + justification.getId() + " has not been found"));
 
             mockMvc.perform(get(BASE_URL + wrongJustificationId))
@@ -185,18 +185,18 @@ public class JustificationControllerTest {
         @DisplayName("(FindOne) Should get 404 if the given id does not exists on the answer justifications list")
         void findOneWhenNotBelongsToConcept() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.findOne(answer, justification.getId()))
-                    .thenThrow(new JustificationNotBelongToAnswerException(
-                            "The justification with id = " + justification.getId() + " doesn't belong to the answer with id = " + answer.getId()
+            when(justificationsService.findOne(definition, justification.getId()))
+                    .thenThrow(new JustificationNotBelongToDefinitionException(
+                            "The justification with id = " + justification.getId() + " doesn't belong to the answer with id = " + definition.getId()
                     ));
 
             mockMvc.perform(get(BASE_URL + justification.getId()))
@@ -208,18 +208,18 @@ public class JustificationControllerTest {
         void findAllWhenDataExists() throws Exception {
             final Justification justification1 = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
             final Justification justification2 = new Justification(4L, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification1, justification2)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification1, justification2)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.findAll(answer))
-                    .thenReturn(answer.getJustificationList());
+            when(justificationsService.findAll(definition))
+                    .thenReturn(definition.getJustificationList());
 
 
             mockMvc.perform(get(BASE_URL))
@@ -231,17 +231,17 @@ public class JustificationControllerTest {
         @Test
         @DisplayName("(FindAll) Should get 404 if the answers justifications list is empty")
         void findAllWhenDataNotExists() {
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            when(justificationsService.findAll(answer))
-                    .thenThrow(new JustificationNotFoundException("The answer with id = " + answer.getId() + " has no justifications"));
+            when(justificationsService.findAll(definition))
+                    .thenThrow(new JustificationNotFoundException("The answer with id = " + definition.getId() + " has no justifications"));
         }
     }
 
@@ -253,18 +253,18 @@ public class JustificationControllerTest {
         void updateWhenExists() throws Exception {
             final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
             String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
-            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + justification.getId())
+            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + definition.getId() + "/justifications/" + justification.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(justificationJsonDTO))
                     .andExpect(status().isNoContent());
@@ -274,22 +274,22 @@ public class JustificationControllerTest {
         @DisplayName("(UpdateOne) Should get 404 if the Answer is not in the database")
         void updateWhenNotExists() throws Exception {
             final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
             final long wrongJustificationId = 99L;
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
             doThrow(new JustificationNotFoundException("The justification with id = " + wrongJustificationId + " has not been found"))
-                    .when(justificationsService).updateOne(answer, wrongJustificationId, justificationDTO);
+                    .when(justificationsService).updateOne(definition, wrongJustificationId, justificationDTO);
 
             String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
-            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + wrongJustificationId)
+            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + definition.getId() + "/justifications/" + wrongJustificationId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(justificationJsonDTO))
                     .andExpect(status().isNotFound());
@@ -300,21 +300,21 @@ public class JustificationControllerTest {
         void updateWhenNotBelongsToConcept() throws Exception {
             final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of()));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
-            doThrow(new JustificationNotBelongToAnswerException("The justification with id = " + justification.getId() + " doesn't belong to the answer with id = " + answer.getId()))
-                    .when(justificationsService).updateOne(answer, justification.getId(), justificationDTO);
+            doThrow(new JustificationNotBelongToDefinitionException("The justification with id = " + justification.getId() + " doesn't belong to the answer with id = " + definition.getId()))
+                    .when(justificationsService).updateOne(definition, justification.getId(), justificationDTO);
 
             String justificationJsonDTO = mapObjectToJson(justificationDTO);
 
-            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + answer.getId() + "/justifications/" + justification.getId())
+            mockMvc.perform(put("/concepts/" + concept.getId() + "/answers/" + definition.getId() + "/justifications/" + justification.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(justificationJsonDTO))
                     .andExpect(status().isNotFound());
@@ -329,14 +329,14 @@ public class JustificationControllerTest {
         @DisplayName("(RemoveOne) Should get 204 if the answer is in the concept answers list")
         void deleteWhenExists() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
 
             mockMvc.perform(delete(BASE_URL + justification.getId()))
@@ -347,19 +347,19 @@ public class JustificationControllerTest {
         @DisplayName("(RemoveOne) Should get 404 if the answer is not in the database")
         void deleteWhenNotExists() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>(List.of(justification)));
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
             final long wrongJustificationId = 99L;
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
 
             doThrow(new JustificationNotFoundException("The justification with id = " + wrongJustificationId + " has not been found"))
-                    .when(justificationsService).removeOne(answer, wrongJustificationId);
+                    .when(justificationsService).removeOne(definition, wrongJustificationId);
 
             mockMvc.perform(delete(BASE_URL + wrongJustificationId))
                     .andExpect(status().isNotFound());
@@ -369,21 +369,21 @@ public class JustificationControllerTest {
         @DisplayName("(RemoveOne) Should get 404 if the answer does not belong to the concept answers list")
         void deleteWhenNotBelongsToConcept() throws Exception {
             final Justification justification = new Justification(JUSTIFICATION_ID, "Software Justification", true, null, CONCEPT_ID, ANSWER_ID);
-            final Answer answer = new Answer(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
-            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(answer)));
+            final Definition definition = new Definition(ANSWER_ID, "Software answer", true, CONCEPT_ID, new LinkedList<>());
+            final Concept concept = new Concept(CONCEPT_ID, "Software", new LinkedList<>(List.of(definition)));
 
             when(conceptService.findOne(concept.getId()))
                     .thenReturn(concept);
 
-            when(answerService.findOne(concept, answer.getId()))
-                    .thenReturn(answer);
+            when(definitionService.findOne(concept, definition.getId()))
+                    .thenReturn(definition);
 
 
             doThrow(
-                    new JustificationNotBelongToAnswerException(
-                            "The justification with id = " + justification.getId() + " doesn't belong to the concept with id = " + answer.getId())
+                    new JustificationNotBelongToDefinitionException(
+                            "The justification with id = " + justification.getId() + " doesn't belong to the concept with id = " + definition.getId())
             )
-                    .when(justificationsService).removeOne(answer, justification.getId());
+                    .when(justificationsService).removeOne(definition, justification.getId());
 
             mockMvc.perform(delete(BASE_URL + justification.getId()))
                     .andExpect(status().isNotFound());

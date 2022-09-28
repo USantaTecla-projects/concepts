@@ -1,13 +1,12 @@
 package com.example.backend.api.resources.exam.model;
 
 
-import com.example.backend.api.resources.exam.question.model.Question;
+import com.example.backend.api.resources.exam.resources.question.model.Question;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class Exam {
-
     @JsonProperty("questionDataList")
     private List<Question> questionList;
 

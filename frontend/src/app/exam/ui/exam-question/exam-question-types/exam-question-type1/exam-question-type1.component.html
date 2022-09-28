@@ -1,0 +1,14 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true" class="question-panel" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="question-title"> Question {{ questionNumber }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="question-content">
+      <p>¿Por qué no es correcto afirmar que {{ question.conceptText }} es {{ question.incorrectDefinitionText }}?</p>
+      <mat-form-field appearance="outline" class="question-reply">
+        <mat-label>Write your reply...</mat-label>
+        <textarea rows="2" matInput formControlName="error" cdkTextareaAutosize placeholder="Reply"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

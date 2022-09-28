@@ -16,6 +16,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
 import { NavbarModule } from './components/navbar/navbar.module';
@@ -46,6 +47,7 @@ import { NavbarModule } from './components/navbar/navbar.module';
     MatCheckboxModule,
     MatDialogModule,
     MatPaginatorModule,
+    MatRadioModule,
     NavbarModule,
   ],
 })

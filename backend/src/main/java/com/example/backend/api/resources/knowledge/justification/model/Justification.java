@@ -20,26 +20,26 @@ public class Justification {
     private String error;
 
     @Column
-    private Long conceptId;
+    private Long conceptID;
 
     @Column
-    private Long answerId;
+    private Long definitionID;
 
-    public Justification(Long id, String text, Boolean isCorrect, String error, Long conceptId, Long answerId) {
+    public Justification(Long id, String text, Boolean isCorrect, String error, Long conceptID, Long definitionID) {
         this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
         this.error = error;
-        this.conceptId = conceptId;
-        this.answerId = answerId;
+        this.conceptID = conceptID;
+        this.definitionID = definitionID;
     }
 
-    public Justification(String text, Boolean isCorrect, String error, Long conceptId, Long answerId) {
+    public Justification(String text, Boolean isCorrect, String error, Long conceptID, Long definitionID) {
         this.text = text;
         this.isCorrect = isCorrect;
         this.error = error;
-        this.conceptId = conceptId;
-        this.answerId = answerId;
+        this.conceptID = conceptID;
+        this.definitionID = definitionID;
     }
 
     public Justification(String text, Boolean isCorrect, String error) {
@@ -53,11 +53,11 @@ public class Justification {
     public Justification() {
     }
 
-    public Justification(String text, Boolean isCorrect, Long conceptId, Long answerId) {
+    public Justification(String text, Boolean isCorrect, Long conceptID, Long definitionID) {
         this.text = text;
         this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
-        this.answerId = answerId;
+        this.conceptID = conceptID;
+        this.definitionID = definitionID;
     }
 
     public Long getId() {
@@ -92,20 +92,20 @@ public class Justification {
         this.error = error;
     }
 
-    public Long getConceptId() {
-        return conceptId;
+    public Long getConceptID() {
+        return conceptID;
     }
 
-    public void setConceptId(Long conceptId) {
-        this.conceptId = conceptId;
+    public void setConceptID(Long conceptID) {
+        this.conceptID = conceptID;
     }
 
-    public Long getAnswerId() {
-        return answerId;
+    public Long getDefinitionID() {
+        return definitionID;
     }
 
-    public void setAnswerId(Long answerId) {
-        this.answerId = answerId;
+    public void setDefinitionID(Long definitionID) {
+        this.definitionID = definitionID;
     }
 
     @Override
@@ -115,8 +115,8 @@ public class Justification {
                 ", text='" + text + '\'' +
                 ", isCorrect=" + isCorrect +
                 ", error='" + error + '\'' +
-                ", conceptId=" + conceptId +
-                ", answerId=" + answerId +
+                ", conceptID=" + conceptID +
+                ", definitionID=" + definitionID +
                 '}';
     }
 }

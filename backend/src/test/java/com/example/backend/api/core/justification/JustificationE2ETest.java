@@ -1,6 +1,6 @@
 package com.example.backend.api.core.justification;
 
-import com.example.backend.api.resources.knowledge.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.knowledge.definition.dto.DefinitionDTO;
 import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
 import com.example.backend.api.resources.knowledge.justification.dto.JustificationDTO;
 import io.restassured.RestAssured;
@@ -31,7 +31,7 @@ public class JustificationE2ETest {
 
         authCookie = getAuthCookie();
         CONCEPT_ID = createConcept(new ConceptDTO("Software")).extract().path("id");
-        ANSWER_ID = createAnswer(new AnswerDTO("Software answer", true), CONCEPT_ID).extract().path("id");
+        ANSWER_ID = createAnswer(new DefinitionDTO("Software answer", true), CONCEPT_ID).extract().path("id");
     }
 
 
@@ -79,12 +79,12 @@ public class JustificationE2ETest {
         @DisplayName("(Create) Should create the justification in the specified answer")
         void createAnswerInTheCorrectConcept() {
             final ConceptDTO conceptDTO = new ConceptDTO("Software");
-            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+            final DefinitionDTO definitionDTO = new DefinitionDTO("Software answer", true);
             final JustificationDTO justificationDTO = new JustificationDTO("Software justification", true, null);
 
 
             final int conceptId = createConcept(conceptDTO).extract().path("id");
-            final int answerId = createAnswer(answerDTO, conceptId).extract().path("id");
+            final int answerId = createAnswer(definitionDTO, conceptId).extract().path("id");
             final int justificationId = createJustification(justificationDTO, conceptId, answerId).extract().path("id");
 
             // Check that the justification is in the first answer
@@ -166,11 +166,11 @@ public class JustificationE2ETest {
         @DisplayName("(FindAll) Should find an empty list of justifications")
         void findAllWhenNotExists() {
             final ConceptDTO conceptDTO = new ConceptDTO("Software Concept");
-            final AnswerDTO answerDTO = new AnswerDTO("Software answer", true);
+            final DefinitionDTO definitionDTO = new DefinitionDTO("Software answer", true);
 
 
             final int conceptId = createConcept(conceptDTO).extract().path("id");
-            final int answerId = createAnswer(answerDTO, conceptId).extract().path("id");
+            final int answerId = createAnswer(definitionDTO, conceptId).extract().path("id");
 
             given()
                     .accept(ContentType.JSON)
@@ -301,12 +301,12 @@ public class JustificationE2ETest {
                 .then();
     }
 
-    private static ValidatableResponse createAnswer(AnswerDTO answerDTO, long conceptId) {
+    private static ValidatableResponse createAnswer(DefinitionDTO definitionDTO, long conceptId) {
         return
                 given()
                         .cookie("AuthToken",authCookie)
                         .contentType("application/json")
-                        .body(answerDTO)
+                        .body(definitionDTO)
                 .when()
                         .post("/concepts/" + conceptId + "/answers/")
                 .then();

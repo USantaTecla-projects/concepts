@@ -1,3 +1,16 @@
-<ng-container *ngFor="let question of (examStore.exam$ | async)!.questionList">
-  <app-exam-question-renderer [componentType]="question.type" [question]="question"></app-exam-question-renderer>
-</ng-container>
+<mat-toolbar class="tool-bar" color="primary">
+  <div mat-button disabled><mat-icon class="icon">square_foot</mat-icon> <span>Exam</span></div>
+</mat-toolbar>
+
+<div class="grid">
+  <ng-container *ngFor="let question of (emptyExam$ | async)!.questionList; let i = index">
+    <app-exam-question-renderer
+      class="question"
+      [componentType]="question.type"
+      [question]="question"
+      [questionNumber]="i+1">
+    </app-exam-question-renderer>
+  </ng-container>
+
+  <button class="submit-button" mat-raised-button color="primary">Deliver Exam</button>
+</div>

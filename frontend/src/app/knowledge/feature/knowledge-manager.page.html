@@ -12,15 +12,15 @@
     (getPage)="onConceptPageGet($event)">
   </app-knowledge-concept-list>
 
-  <app-knowledge-answer-list
+  <app-knowledge-definition-list
     class="card"
-    [answersList]="answerStore.answersList$ | async"
-    [resetList]="resetAnswerList"
-    (selectAnswer)="onAnswerSelect($event)"
-    (createAnswer)="onAnswerCreate($event)"
-    (updateAnswer)="onAnswerUpdate($event)"
-    (deleteAnswer)="onAnswerDelete($event)">
-  </app-knowledge-answer-list>
+    [definitionsList]="definitionStore.definitionsList$ | async"
+    [resetList]="resetDefinitionList"
+    (selectDefinition)="onDefinitionSelect($event)"
+    (createDefinition)="onDefinitionCreate($event)"
+    (updateDefinition)="onDefinitionUpdate($event)"
+    (deleteDefinition)="onDefinitionDelete($event)">
+  </app-knowledge-definition-list>
 
   <app-knowledge-justification-list
     class="card"

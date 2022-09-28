@@ -4,7 +4,7 @@ package com.example.backend.api.resources.knowledge.justification.exception;
 import com.example.backend.api.exception.dto.ExceptionDTO;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationDTOBadRequestException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationErrorNotProvidedException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToAnswerException;
+import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToDefinitionException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +48,8 @@ public class JustificationExceptionHandler {
         return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {JustificationNotBelongToAnswerException.class})
-    public ResponseEntity<Object> handleJustificationNotBelongToAnswerException(JustificationNotBelongToAnswerException exception) {
+    @ExceptionHandler(value = {JustificationNotBelongToDefinitionException.class})
+    public ResponseEntity<Object> handleJustificationNotBelongToDefinitionsException(JustificationNotBelongToDefinitionException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.NOT_FOUND,

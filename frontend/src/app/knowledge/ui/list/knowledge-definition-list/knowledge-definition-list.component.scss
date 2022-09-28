@@ -1,0 +1,56 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .card-title {
+    margin-bottom: 1rem;
+  }
+
+  .definitions {
+    width: 100%;
+
+    .actions {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+
+      .add-definition,
+      .delete-definition {
+        display: flex;
+        align-items: center;
+        color: white;
+        width: 43%;
+
+        .add-button,
+        .delete-button {
+          margin-right: 1rem;
+        }
+
+        p {
+          font-weight: 500;
+        }
+      }
+
+      .add-definition {
+        background-color: #c62828;
+      }
+
+      .delete-definition {
+        background-color: #673ab7;
+      }
+    }
+
+    .definition-panel {
+      background-color: #673ab7;
+
+      .definition-title {
+        color: #fff;
+      }
+
+      ::ng-deep .mat-expansion-panel-body {
+        background-color: white !important;
+      }
+    }
+  }
+}

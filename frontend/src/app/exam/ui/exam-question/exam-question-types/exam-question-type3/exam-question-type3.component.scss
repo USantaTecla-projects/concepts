@@ -1,0 +1,9 @@
+.question-reply {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+
+  .radio-button {
+    margin-bottom: 1rem;
+  }
+}

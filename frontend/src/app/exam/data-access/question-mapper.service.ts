@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ExamData } from '../types/dto/exam.dto';
 import { Exam } from '../types/model/exam.model';
 import { QuestionTypeX } from '../types/question-typeX.type';
-import { questionTypeMappers } from '../utils/mappers.map';
+import { questionTypeMappers } from '../utils/mappers.util';
 
 @Injectable({
   providedIn: 'root',

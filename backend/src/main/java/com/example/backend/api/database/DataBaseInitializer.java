@@ -1,8 +1,8 @@
 package com.example.backend.api.database;
 
 
-import com.example.backend.api.resources.knowledge.answer.AnswerRepository;
-import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
@@ -19,14 +19,14 @@ import java.util.List;
 public class DataBaseInitializer implements CommandLineRunner {
 
     private final ConceptRepository conceptRepository;
-    private final AnswerRepository answerRepository;
+    private final DefinitionRepository definitionRepository;
     private final JustificationRepository justificationRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataBaseInitializer(ConceptRepository conceptRepository, AnswerRepository answerRepository, JustificationRepository justificationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataBaseInitializer(ConceptRepository conceptRepository, DefinitionRepository definitionRepository, JustificationRepository justificationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.conceptRepository = conceptRepository;
-        this.answerRepository = answerRepository;
+        this.definitionRepository = definitionRepository;
         this.justificationRepository = justificationRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -43,24 +43,24 @@ public class DataBaseInitializer implements CommandLineRunner {
         Concept softwareConcept = conceptRepository.save(new Concept("el software."));
         Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad."));
 
-        Answer softwareIncorrectAnswer1 = answerRepository.save(new Answer(
+        Definition softwareIncorrectDefinition1 = definitionRepository.save(new Definition(
                 "el conjunto de los programas.",
                 false,
                 softwareConcept.getId()));
-        Answer softwareIncorrectAnswer2 = answerRepository.save(new Answer(
+        Definition softwareIncorrectDefinition2 = definitionRepository.save(new Definition(
                 "la parte lógica de un sistema informático, o sea sin contemplar el hardware.",
                 false,
                 softwareConcept.getId()));
-        Answer softwareIncorrectAnswer3 = answerRepository.save(new Answer(
+        Definition softwareIncorrectDefinition3 = definitionRepository.save(new Definition(
                 "la información que suministra el desarrollador para manipular la información del usuario.",
                 false,
                 softwareConcept.getId()));
 
-        Answer recursividadIncorrectAnswer = answerRepository.save(new Answer(
+        Definition recursividadIncorrectDefinition = definitionRepository.save(new Definition(
                 "la característica de las funciones que se llaman a sí mismas.",
                 false,
                 recursividadConcept.getId()));
-        Answer recursividadCorrectAnswer = answerRepository.save(new Answer(
+        Definition recursividadCorrectDefinition = definitionRepository.save(new Definition(
                 "la característica de definiciones que se autorreferencian, directa o indirectamente.",
                 true,
                 recursividadConcept.getId()));
@@ -69,49 +69,49 @@ public class DataBaseInitializer implements CommandLineRunner {
                 "no contempla los scripts de bases de datos (DDL, SQL), ficheros de configuración, imágenes (*.bmp, *.jpg, …) del interfaz gráfico de usuario, ficheros de datos (JSON, XML,DTD, XML Schema, …), de publicación (HTML, CSS, …), … y otros artefactos necesarios en el software que no son para programar, son configurar, publicar, …",
                 false,
                 softwareConcept.getId(),
-                softwareIncorrectAnswer1.getId()
+                softwareIncorrectDefinition1.getId()
         ));
 
         Justification softwareJustification2 = justificationRepository.save(new Justification(
                 "la definición es demasiado permisiva porque incluye firmware que no es software.",
                 true,
                 softwareConcept.getId(),
-                softwareIncorrectAnswer2.getId()
+                softwareIncorrectDefinition2.getId()
         ));
 
         Justification softwareJustification3 = justificationRepository.save(new Justification(
                 "la definición es demasiado permisiva porque los datos de usuario (todos los ficheros generados por el software), no son hardware ni son software y están siendo incluidos en el software.",
                 true,
                 softwareConcept.getId(),
-                softwareIncorrectAnswer2.getId()
+                softwareIncorrectDefinition2.getId()
         ));
 
         Justification recursividadJustification1 = justificationRepository.save(new Justification(
                 " no contempla la recursividad mutua.",
                 false,
                 recursividadConcept.getId(),
-                recursividadIncorrectAnswer.getId()
+                recursividadIncorrectDefinition.getId()
         ));
 
         Justification recursividadJustification2 = justificationRepository.save(new Justification(
                 "no contempla la recursividad de datos (listas, árboles, …), de imágenes (fractales), las fugas de Bach, las imágenes de Escher, los mantras budistas,...",
                 false,
                 recursividadConcept.getId(),
-                recursividadIncorrectAnswer.getId()
+                recursividadIncorrectDefinition.getId()
         ));
 
 
-        softwareIncorrectAnswer1.addJustification(softwareJustification1);
-        softwareIncorrectAnswer2.addJustification(softwareJustification2);
-        softwareIncorrectAnswer2.addJustification(softwareJustification3);
-        recursividadIncorrectAnswer.addJustification(recursividadJustification1);
-        recursividadIncorrectAnswer.addJustification(recursividadJustification2);
+        softwareIncorrectDefinition1.addJustification(softwareJustification1);
+        softwareIncorrectDefinition2.addJustification(softwareJustification2);
+        softwareIncorrectDefinition2.addJustification(softwareJustification3);
+        recursividadIncorrectDefinition.addJustification(recursividadJustification1);
+        recursividadIncorrectDefinition.addJustification(recursividadJustification2);
 
-        softwareConcept.addAnswer(softwareIncorrectAnswer1);
-        softwareConcept.addAnswer(softwareIncorrectAnswer2);
-        softwareConcept.addAnswer(softwareIncorrectAnswer3);
-        recursividadConcept.addAnswer(recursividadIncorrectAnswer);
-        recursividadConcept.addAnswer(recursividadCorrectAnswer);
+        softwareConcept.addDefinition(softwareIncorrectDefinition1);
+        softwareConcept.addDefinition(softwareIncorrectDefinition2);
+        softwareConcept.addDefinition(softwareIncorrectDefinition3);
+        recursividadConcept.addDefinition(recursividadIncorrectDefinition);
+        recursividadConcept.addDefinition(recursividadCorrectDefinition);
 
         conceptRepository.save(softwareConcept);
         conceptRepository.save(recursividadConcept);
@@ -134,11 +134,11 @@ public class DataBaseInitializer implements CommandLineRunner {
 
         // Create answers
         long conceptId = concept.getId();
-        Answer correctAnswer = createAnswer(correctAnswerText, true, conceptId);
-        Answer incorrectAnswer = createAnswer(incorrectAnswerText, false, conceptId);
+        Definition correctDefinition = createAnswer(correctAnswerText, true, conceptId);
+        Definition incorrectDefinition = createAnswer(incorrectAnswerText, false, conceptId);
 
         // Create justifications for correct Answer
-        long correctAnswerId = correctAnswer.getId();
+        long correctAnswerId = correctDefinition.getId();
         Justification correctJustificationForCorrectAnswer = createJustification(
                 correctJustificationTextForCorrectAnswer,
                 true,
@@ -151,7 +151,7 @@ public class DataBaseInitializer implements CommandLineRunner {
                 correctAnswerId);
 
         // Create justifications for incorrect Answer
-        long incorrectAnswerId = incorrectAnswer.getId();
+        long incorrectAnswerId = incorrectDefinition.getId();
         Justification correctJustificationForIncorrectAnswer = createJustification(
                 correctJustificationTextForIncorrectAnswer,
                 true,
@@ -164,32 +164,32 @@ public class DataBaseInitializer implements CommandLineRunner {
                 incorrectAnswerId);
 
         // Add justification to answers
-        correctAnswer.addJustification(correctJustificationForCorrectAnswer);
-        correctAnswer.addJustification(incorrectJustificationForCorrectAnswer);
+        correctDefinition.addJustification(correctJustificationForCorrectAnswer);
+        correctDefinition.addJustification(incorrectJustificationForCorrectAnswer);
 
-        incorrectAnswer.addJustification(correctJustificationForIncorrectAnswer);
-        incorrectAnswer.addJustification(incorrectJustificationForIncorrectAnswer);
+        incorrectDefinition.addJustification(correctJustificationForIncorrectAnswer);
+        incorrectDefinition.addJustification(incorrectJustificationForIncorrectAnswer);
 
-        answerRepository.save(correctAnswer);
-        answerRepository.save(incorrectAnswer);
+        definitionRepository.save(correctDefinition);
+        definitionRepository.save(incorrectDefinition);
 
         // Add answers to concept
-        concept.addAnswer(correctAnswer);
-        concept.addAnswer(incorrectAnswer);
+        concept.addDefinition(correctDefinition);
+        concept.addDefinition(incorrectDefinition);
 
         conceptRepository.save(concept);
     }
 
-    private Answer createAnswer(String answerText, boolean isCorrect, long conceptId) {
-        Answer answer = new Answer(answerText, isCorrect);
-        answer.setConceptId(conceptId);
-        return answerRepository.save(answer);
+    private Definition createAnswer(String answerText, boolean isCorrect, long conceptId) {
+        Definition definition = new Definition(answerText, isCorrect);
+        definition.setConceptId(conceptId);
+        return definitionRepository.save(definition);
     }
 
     private Justification createJustification(String justificationText, boolean isCorrect, long conceptId, long answerId) {
         Justification justification = new Justification(justificationText, isCorrect, "explanation");
-        justification.setConceptId(conceptId);
-        justification.setAnswerId(answerId);
+        justification.setConceptID(conceptId);
+        justification.setDefinitionID(answerId);
         return justificationRepository.save(justification);
     }
 

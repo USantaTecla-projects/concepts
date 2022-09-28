@@ -1,0 +1,17 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true" class="question-panel" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="question-title"> Question {{ questionNumber }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="question-content">
+      <p>
+        ¿Es cierto que {{ question.conceptText }} no es {{ question.incorrectDefinitionText }} porque
+        {{ question.justificationText }}?
+      </p>
+      <mat-radio-group class="question-reply" aria-label="Select an option">
+        <mat-radio-button class="radio-button" value="1">Yes</mat-radio-button>
+        <mat-radio-button class="radio-button" value="2">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

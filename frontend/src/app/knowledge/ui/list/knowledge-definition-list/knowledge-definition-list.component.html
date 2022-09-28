@@ -1,0 +1,46 @@
+<mat-card class="card">
+  <mat-card-title-group class="card-title">
+    <mat-card-title>Definitions</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content class="definitions" *ngIf="state === 'normal'; else noDefinitions">
+    <div class="actions">
+      <mat-card class="add-definition" [ngStyle]="{ width: !this.selectedDefinitionID ? '100%' : '43%' }">
+        <button mat-mini-fab class="add-button" color="warn" (click)="onDefinitionCreate()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add definition</p>
+      </mat-card>
+
+      <mat-card class="delete-definition" *ngIf="this.selectedDefinitionID">
+        <button mat-mini-fab class="delete-button" color="primary" (click)="onDefinitionDelete()">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete definition</p>
+      </mat-card>
+    </div>
+
+    <mat-accordion>
+      <mat-expansion-panel
+        class="definition-panel"
+        *ngFor="let definition of definitionsList"
+        (opened)="onDefinitionSelect(definition.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="definition-title">
+            {{ definition.text | titlecase | shortText: 100 }}</mat-panel-title
+          >
+        </mat-expansion-panel-header>
+
+        <app-knowledge-definition-update-form
+          [definition]="definition"
+          (updateDefinition)="onDefinitionUpdate($event)"></app-knowledge-definition-update-form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
+
+<!-- If the state is different that normal, display one of this-->
+<ng-template #noDefinitions>
+  <span *ngIf="state === 'init'">Select a concept to display its definitions</span>
+  <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
+  <span *ngIf="state === 'empty'">No definitions to display</span>
+</ng-template>

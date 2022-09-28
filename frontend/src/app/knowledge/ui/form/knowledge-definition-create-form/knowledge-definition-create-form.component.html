@@ -1,0 +1,15 @@
+<form class="form" [formGroup]="definitionForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Definition</mat-label>
+    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Definition text"></textarea>
+  </mat-form-field>
+
+  <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
+
+  <div mat-dialog-actions class="actions">
+    <button class="save-button" mat-raised-button type="submit" [disabled]="!definitionForm.valid">
+      Create Definition
+    </button>
+    <button class="close-button" mat-raised-button color="primary" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

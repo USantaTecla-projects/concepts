@@ -1,3 +1,3 @@
 export interface DialogData {
-  knowledgeItem: 'concept' | 'answer' | 'justification';
+  knowledgeItem: 'concept' | 'definition' | 'justification';
 }

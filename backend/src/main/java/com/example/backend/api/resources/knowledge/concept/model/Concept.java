@@ -1,6 +1,6 @@
 package com.example.backend.api.resources.knowledge.concept.model;
 
-import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -20,21 +20,21 @@ public class Concept {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Answer> answerList;
+    private List<Definition> definitionList;
 
 
     public Concept() {
     }
 
-    public Concept(Long id, String text, List<Answer> answerList) {
+    public Concept(Long id, String text, List<Definition> definitionList) {
         this.id = id;
         this.text = text;
-        this.answerList = answerList;
+        this.definitionList = definitionList;
     }
 
-    public Concept(String text, List<Answer> answerList) {
+    public Concept(String text, List<Definition> definitionList) {
         this.text = text;
-        this.answerList = answerList;
+        this.definitionList = definitionList;
     }
 
     public Concept(String text) {
@@ -42,32 +42,32 @@ public class Concept {
     }
 
     /**
-     * Add a new Answer to the list.
+     * Add a new definition to the list.
      *
-     * @param answer The Answer to add.
+     * @param definition The definition to add.
      */
-    public void addAnswer(Answer answer) {
-        if(this.answerList == null) this.answerList = new LinkedList<>();
-        answerList.add(answer);
+    public void addDefinition(Definition definition) {
+        if(this.definitionList == null) this.definitionList = new LinkedList<>();
+        definitionList.add(definition);
     }
 
     /**
-     * Remove an Answer from the list.
+     * Remove an definition from the list.
      *
-     * @param answer The Answer to remove.
+     * @param definition The definition to remove.
      */
-    public void removeAnswer(Answer answer) {
-        answerList.remove(answer);
+    public void removeDefinition(Definition definition) {
+        definitionList.remove(definition);
     }
 
     /**
-     * Check if an Answer is in the list.
+     * Check if an definition is in the list.
      *
-     * @param answer The Answer to look for.
+     * @param definition The definition to look for.
      * @return True if is in the list, else false.
      */
-    public boolean containsAnswer(Answer answer) {
-        return answerList.contains(answer);
+    public boolean containsDefinition(Definition definition) {
+        return definitionList.contains(definition);
     }
 
     public Long getId() {
@@ -86,12 +86,12 @@ public class Concept {
         this.text = text;
     }
 
-    public List<Answer> getAnswerList() {
-        return answerList;
+    public List<Definition> getDefinitionList() {
+        return definitionList;
     }
 
-    public void setAnswerList(List<Answer> answerList) {
-        this.answerList = answerList;
+    public void setDefinitionList(List<Definition> definitionList) {
+        this.definitionList = definitionList;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class Concept {
         return "Concept{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                ", answers=" + answerList +
+                ", definitions=" + definitionList +
                 '}';
     }
 }

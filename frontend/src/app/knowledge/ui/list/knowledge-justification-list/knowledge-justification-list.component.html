@@ -40,7 +40,7 @@
 
 <!-- If the state is different that normal, display one of this-->
 <ng-template #noJustifications>
-  <span *ngIf="state === 'init'">Select an answer to display its justifications</span>
+  <span *ngIf="state === 'init'">Select an definition to display its justifications</span>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
   <span *ngIf="state === 'empty'">No justifications to display</span>
 </ng-template>

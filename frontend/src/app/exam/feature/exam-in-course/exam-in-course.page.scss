@@ -1,1 +1,17 @@
+.grid {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 4rem;
 
+  .question {
+    margin: 1rem;
+  }
+
+  .submit-button {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    width: 50%;
+    height: 3rem;
+  }
+}

@@ -1,12 +1,12 @@
 package com.example.backend.api.core.justification;
 
-import com.example.backend.api.resources.knowledge.answer.AnswerRepository;
-import com.example.backend.api.resources.knowledge.answer.model.Answer;
+import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
 import com.example.backend.api.resources.knowledge.justification.JustificationService;
 import com.example.backend.api.resources.knowledge.justification.dto.JustificationDTO;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToAnswerException;
+import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToDefinitionException;
 import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotFoundException;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class JustificationServiceTest {
 
     @Mock
-    private AnswerRepository answerRepository;
+    private DefinitionRepository definitionRepository;
 
     @Mock
     private JustificationRepository justificationRepository;
@@ -47,28 +47,28 @@ public class JustificationServiceTest {
         void createWithCorrectDTO() {
             final long conceptId = 1L;
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
             final JustificationDTO justificationDTO = new JustificationDTO("Software Justification", true, null);
 
             when(justificationRepository.save(any(Justification.class)))
                     .thenReturn(justification);
 
-            when(answerRepository.save(any(Answer.class)))
-                    .thenReturn(answer);
+            when(definitionRepository.save(any(Definition.class)))
+                    .thenReturn(definition);
 
-            Justification createdJustification = justificationService.create(conceptId, answer, justificationDTO);
+            Justification createdJustification = justificationService.create(conceptId, definition, justificationDTO);
 
 
             // The justification is created correctly
             assertEquals(justification.getText(), createdJustification.getText());
-            assertEquals(justification.getConceptId(), createdJustification.getConceptId());
+            assertEquals(justification.getConceptID(), createdJustification.getConceptID());
 
             // The justification is added to the Concept
             assertEquals(
-                    answer.getJustificationList().get(0).getText(),
+                    definition.getJustificationList().get(0).getText(),
                     justification.getText()
             );
-            assertEquals(answer.getJustificationList().get(0).getAnswerId(), answer.getId());
+            assertEquals(definition.getJustificationList().get(0).getDefinitionID(), definition.getId());
         }
 
         @Test
@@ -76,9 +76,9 @@ public class JustificationServiceTest {
         void createWithWrongDTO() {
             final long conceptId = 1L;
             final JustificationDTO wrongJustificationDTO = new JustificationDTO();
-            final Answer answer = new Answer(2L, "Software answer", true, 1L);
+            final Definition definition = new Definition(2L, "Software answer", true, 1L);
 
-            assertThrows(JustificationDTOBadRequestException.class, () -> justificationService.create(conceptId, answer, wrongJustificationDTO));
+            assertThrows(JustificationDTOBadRequestException.class, () -> justificationService.create(conceptId, definition, wrongJustificationDTO));
         }
     }
 
@@ -90,12 +90,12 @@ public class JustificationServiceTest {
         @DisplayName("(FindOne) Should find an Answer with the given id")
         void findOneWhenExists() {
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
 
             when(justificationRepository.findById(justification.getId()))
                     .thenReturn(Optional.of(justification));
 
-            Justification foundJustification = justificationService.findOne(answer, justification.getId());
+            Justification foundJustification = justificationService.findOne(definition, justification.getId());
             assertEquals(justification, foundJustification);
         }
 
@@ -103,44 +103,44 @@ public class JustificationServiceTest {
         @DisplayName("(FindOne) Should not find a justification with the given id in the database")
         void findOneWhenNotExists() {
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
             final long wrongJustificationId = 99L;
 
             when(justificationRepository.findById(wrongJustificationId))
                     .thenReturn(Optional.empty());
 
-            assertThrows(JustificationNotFoundException.class, () -> justificationService.findOne(answer, wrongJustificationId));
+            assertThrows(JustificationNotFoundException.class, () -> justificationService.findOne(definition, wrongJustificationId));
         }
 
         @Test
         @DisplayName("(FindOne) Should not find a justification with the given id on the given answer")
         void findOneWhenNotBelongToConcept() {
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>());
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>());
 
 
             when(justificationRepository.findById(justification.getId()))
                     .thenReturn(Optional.of(justification));
 
-            assertThrows(JustificationNotBelongToAnswerException.class, () -> justificationService.findOne(answer, justification.getId()));
+            assertThrows(JustificationNotBelongToDefinitionException.class, () -> justificationService.findOne(definition, justification.getId()));
         }
 
         @Test
         @DisplayName("(FindAll) Should find the list of justifications in the given answer")
         void findAllWhenDataExists() {
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
 
-            List<Justification> justificationList = justificationService.findAll(answer);
-            assertEquals(justificationList.size(), answer.getJustificationList().size());
+            List<Justification> justificationList = justificationService.findAll(definition);
+            assertEquals(justificationList.size(), definition.getJustificationList().size());
         }
 
         @Test
         @DisplayName("(FindAll) Should find an empty list of justification in the given answer")
         void findAllWhenDataNotExists() {
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>());
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>());
 
-            List<Justification> justificationList = justificationService.findAll(answer);
+            List<Justification> justificationList = justificationService.findAll(definition);
             assertEquals(justificationList.size(), 0);
         }
 
@@ -155,22 +155,22 @@ public class JustificationServiceTest {
         void updateWhenExists() {
             final JustificationDTO justificationDTO = new JustificationDTO("Software justification", true, null);
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
 
             when(justificationRepository.findById(justification.getId()))
                     .thenReturn(Optional.of(justification));
 
-            justificationService.updateOne(answer, justification.getId(), justificationDTO);
+            justificationService.updateOne(definition, justification.getId(), justificationDTO);
         }
 
         @Test
         @DisplayName("(Update) Should throw an exception if the justification is not found")
         void updateWhenNotExists() {
             final JustificationDTO justificationDTO = new JustificationDTO("Software justification", true, null);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>());
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>());
             final long wrongJustificationId = 99L;
 
-            assertThrows(JustificationNotFoundException.class, () -> justificationService.updateOne(answer, wrongJustificationId, justificationDTO));
+            assertThrows(JustificationNotFoundException.class, () -> justificationService.updateOne(definition, wrongJustificationId, justificationDTO));
         }
     }
 
@@ -182,21 +182,21 @@ public class JustificationServiceTest {
         @DisplayName("(Delete) Should delete a justification if exists")
         void deleteWhenExists() {
             final Justification justification = new Justification(3L, "Software Justification", true, null, 1L, 2L);
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>(List.of(justification)));
 
             when(justificationRepository.findById(justification.getId()))
                     .thenReturn(Optional.of(justification));
 
-            justificationService.removeOne(answer, justification.getId());
+            justificationService.removeOne(definition, justification.getId());
         }
 
         @Test
         @DisplayName("(Delete) Should throw an exception if the justification is not found")
         void deleteWhenNotExists() {
-            final Answer answer = new Answer(2L, "Software answer", true, 1L, new LinkedList<>());
+            final Definition definition = new Definition(2L, "Software answer", true, 1L, new LinkedList<>());
             final long wrongJustificationId = 99L;
 
-            assertThrows(JustificationNotFoundException.class, () -> justificationService.removeOne(answer, wrongJustificationId));
+            assertThrows(JustificationNotFoundException.class, () -> justificationService.removeOne(definition, wrongJustificationId));
         }
     }
 }

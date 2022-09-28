@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JustificationRepository extends CrudRepository<Justification, Long>, PagingAndSortingRepository<Justification, Long> {
-    @Query(value = "SELECT * FROM justification j WHERE (j.id NOT IN ?1) AND (j.answer_id IN (SELECT id FROM answer a WHERE NOT a.is_correct)) LIMIT 1 OFFSET ?2", nativeQuery = true)
-    Optional<Justification> findOneJustificationLinkedToIncorrectAnswer(List<Long> justificationsId, int offset);
+    @Query(value = "SELECT * FROM justification j WHERE (j.id NOT IN ?1) AND (j.definition_id IN (SELECT id FROM definition d WHERE NOT d.is_correct)) LIMIT 1 OFFSET ?2", nativeQuery = true)
+    Optional<Justification> findOneJustificationLinkedToIncorrectDefinition(List<Long> justificationsID, int offset);
 
-    @Query(value = "SELECT COUNT(*) FROM answer_justifications j WHERE j.answer_id IN (SELECT a.id FROM answer a WHERE a.is_correct = false)", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM definition_justification_list j WHERE j.definition_id IN (SELECT d.id FROM definition d WHERE d.is_correct = false)", nativeQuery = true)
     long countAvailableType3Questions();
 
 }
