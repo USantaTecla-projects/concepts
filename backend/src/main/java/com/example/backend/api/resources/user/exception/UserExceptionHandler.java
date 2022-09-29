@@ -1,6 +1,6 @@
 package com.example.backend.api.resources.user.exception;
 
-import com.example.backend.api.exception.dto.ExceptionDTO;
+import com.example.backend.api.exception.specific.ExceptionDTO;
 import com.example.backend.api.resources.user.exception.model.UserAlreadyExistsException;
 import com.example.backend.api.resources.user.exception.model.UserDTOBadRequestException;
 import com.example.backend.api.resources.user.exception.model.UserNotFoundException;

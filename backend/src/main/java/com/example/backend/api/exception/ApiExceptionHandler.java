@@ -1,6 +1,6 @@
 package com.example.backend.api.exception;
 
-import com.example.backend.api.exception.dto.ExceptionDTO;
+import com.example.backend.api.exception.specific.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

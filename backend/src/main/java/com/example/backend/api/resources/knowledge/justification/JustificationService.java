@@ -1,13 +1,13 @@
 package com.example.backend.api.resources.knowledge.justification;
 
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionNotFoundException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
 import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.justification.dto.JustificationDTO;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationErrorNotProvidedException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotBelongToDefinitionException;
-import com.example.backend.api.resources.knowledge.justification.exception.model.JustificationNotFoundException;
+import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationErrorNotProvidedException;
+import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationNotBelongToDefinitionException;
+import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationNotFoundException;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
 import org.springframework.stereotype.Service;
 

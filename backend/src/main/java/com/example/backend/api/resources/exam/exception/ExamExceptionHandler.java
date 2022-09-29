@@ -1,10 +1,9 @@
 package com.example.backend.api.resources.exam.exception;
 
 
-import com.example.backend.api.exception.dto.ExceptionDTO;
-import com.example.backend.api.resources.exam.exception.model.CreateExamDTOBadRequestException;
-import com.example.backend.api.resources.exam.exception.model.ReplyExamDTOBadRequestException;
-import com.example.backend.api.resources.exam.resources.question.exception.model.QuestionDTOBadRequestException;
+import com.example.backend.api.exception.specific.ExceptionDTO;
+import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

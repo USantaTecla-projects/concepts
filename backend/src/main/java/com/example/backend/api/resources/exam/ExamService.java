@@ -1,16 +1,17 @@
 package com.example.backend.api.resources.exam;
 
 import com.example.backend.api.resources.exam.dto.CreateExamDTO;
-import com.example.backend.api.resources.exam.dto.QuestionDTO;
+import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
+import com.example.backend.api.resources.exam.module.answer.AnswerService;
+import com.example.backend.api.resources.exam.module.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.exam.module.answer.model.Answer;
+import com.example.backend.api.resources.exam.module.question.dto.QuestionDTO;
 import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
-import com.example.backend.api.resources.exam.exception.model.CreateExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
-import com.example.backend.api.resources.exam.resources.question.QuestionService;
-import com.example.backend.api.resources.exam.resources.question.exception.model.QuestionDTOBadRequestException;
-import com.example.backend.api.resources.exam.resources.question.mapper.QuestionMapper;
-import com.example.backend.api.resources.exam.resources.question.mapper.QuestionMapperProvider;
-import com.example.backend.api.resources.exam.resources.question.model.Question;
-import com.example.backend.api.resources.exam.resources.type.Type;
+import com.example.backend.api.resources.exam.module.question.QuestionService;
+import com.example.backend.api.resources.exam.module.question.exception.specific.QuestionDTOBadRequestException;
+import com.example.backend.api.resources.exam.module.question.model.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,14 @@ public class ExamService {
 
     private final QuestionService questionService;
 
-    public ExamService(QuestionService questionService) {
+    private final AnswerService answerService;
+
+    public ExamService(
+            QuestionService questionService,
+            AnswerService answerService
+    ) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     public Exam create(CreateExamDTO createExamDTO) {
@@ -38,23 +45,25 @@ public class ExamService {
 
     public void reply(final ReplyExamDTO replyExamDTO){
 
-        List<QuestionDTO> questionDTOList = replyExamDTO
-                .getQuestionDTOListOptional(replyExamDTO.getQuestionDTOList())
+        List<QuestionAndAnswerDTO> questionAndAnswerDTOList = replyExamDTO
+                .getQuestionAndAnswerDTOListOptional(replyExamDTO.getQuestionDTOList())
                 .orElseThrow(() -> new QuestionDTOBadRequestException("Field questionDTOList in ReplyExam DTO is mandatory"));
 
+        List<QuestionDTO> questionDTOList = questionAndAnswerDTOList
+                .stream()
+                .map(QuestionAndAnswerDTO::getQuestionDTO)
+                .toList();
 
-        for (QuestionDTO questionDTO : questionDTOList){
-            Type questionType = questionDTO
-                    .getTypeOptional(questionDTO.getType())
-                    .orElseThrow(() -> new QuestionDTOBadRequestException("Field type in QuestionDTO is mandatory"));
+        List<AnswerDTO> answerDTOList = questionAndAnswerDTOList
+                .stream()
+                .map(QuestionAndAnswerDTO::getAnswerDTO)
+                .toList();
 
-            QuestionMapper questionMapper = QuestionMapperProvider.valueOf(questionType.name()).getQuestionMapper();
-            Question question = questionMapper.mapQuestion(questionDTO);
+        final List<Question> questions = questionService.mapQuestionDTOToQuestion(questionDTOList);
+        final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
 
-            // Save in DB?
-            System.out.println(question);
-        }
-
+        System.out.println(questions);
+        System.out.println(answers);
         // Map each answer to its corresponding type
 
         // Store the exam in the database

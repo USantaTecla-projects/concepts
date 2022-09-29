@@ -1,9 +1,9 @@
 package com.example.backend.api.resources.knowledge.definition;
 
 import com.example.backend.api.resources.knowledge.definition.dto.DefinitionDTO;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionNotBelongToConceptException;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionNotFoundException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotBelongToConceptException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
 import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;

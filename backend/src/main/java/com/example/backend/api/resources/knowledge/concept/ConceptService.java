@@ -1,8 +1,8 @@
 package com.example.backend.api.resources.knowledge.concept;
 
 import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
-import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.concept.exception.model.ConceptNotFoundException;
+import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

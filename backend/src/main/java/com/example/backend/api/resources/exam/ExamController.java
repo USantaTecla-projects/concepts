@@ -21,6 +21,7 @@ public class ExamController {
     public Exam create(@RequestBody final CreateExamDTO createExamDTO) {
         return examService.create(createExamDTO);
     }
+
     @PostMapping("/replies")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void reply(@RequestBody final ReplyExamDTO replyExamDTO){

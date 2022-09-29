@@ -1,9 +1,9 @@
 package com.example.backend.api.resources.knowledge.definition.exception;
 
-import com.example.backend.api.exception.dto.ExceptionDTO;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionDTOBadRequestException;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionNotBelongToConceptException;
-import com.example.backend.api.resources.knowledge.definition.exception.model.DefinitionNotFoundException;
+import com.example.backend.api.exception.specific.ExceptionDTO;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotBelongToConceptException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
