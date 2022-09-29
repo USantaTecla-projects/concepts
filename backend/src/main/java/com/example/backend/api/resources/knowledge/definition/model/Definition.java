@@ -21,8 +21,8 @@ public class Definition {
     @Column
     private Boolean isCorrect;
 
-    @Column
-    private Long conceptId;
+    @Column(name = "concept_id")
+    private Long conceptID;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -31,32 +31,32 @@ public class Definition {
     public Definition() {
     }
 
-    public Definition(Long id, String text, Boolean isCorrect, Long conceptId) {
+    public Definition(Long id, String text, Boolean isCorrect, Long conceptID) {
         this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
+        this.conceptID = conceptID;
     }
 
-    public Definition(String text, Boolean isCorrect, Long conceptId, List<Justification> justificationList) {
+    public Definition(String text, Boolean isCorrect, Long conceptID, List<Justification> justificationList) {
         this.text = text;
         this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
+        this.conceptID = conceptID;
         this.justificationList = justificationList;
     }
 
-    public Definition(Long id, String text, Boolean isCorrect, Long conceptId, List<Justification> justificationList) {
+    public Definition(Long id, String text, Boolean isCorrect, Long conceptID, List<Justification> justificationList) {
         this.id = id;
         this.text = text;
         this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
+        this.conceptID = conceptID;
         this.justificationList = justificationList;
     }
 
-    public Definition(String text, Boolean isCorrect, Long conceptId) {
+    public Definition(String text, Boolean isCorrect, Long conceptID) {
         this.text = text;
         this.isCorrect = isCorrect;
-        this.conceptId = conceptId;
+        this.conceptID = conceptID;
     }
 
     public Definition(String text, Boolean isCorrect) {
@@ -101,12 +101,12 @@ public class Definition {
         isCorrect = correct;
     }
 
-    public Long getConceptId() {
-        return conceptId;
+    public Long getConceptID() {
+        return conceptID;
     }
 
-    public void setConceptId(Long conceptId) {
-        this.conceptId = conceptId;
+    public void setConceptID(Long conceptID) {
+        this.conceptID = conceptID;
     }
 
     public List<Justification> getJustificationList() {

@@ -182,7 +182,7 @@ public class DataBaseInitializer implements CommandLineRunner {
 
     private Definition createAnswer(String answerText, boolean isCorrect, long conceptId) {
         Definition definition = new Definition(answerText, isCorrect);
-        definition.setConceptId(conceptId);
+        definition.setConceptID(conceptId);
         return definitionRepository.save(definition);
     }
 

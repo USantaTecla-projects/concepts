@@ -1,5 +1,6 @@
 package com.example.backend.api.resources.exam.resources.type.factory.concrete;
 
+import com.example.backend.api.resources.exam.resources.question.repository.QuestionT1Repository;
 import com.example.backend.api.resources.exam.resources.type.factory.TypeFactory;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
@@ -16,12 +17,16 @@ public class Type1Factory implements TypeFactory {
 
     private final DefinitionRepository definitionRepository;
 
+    private final QuestionT1Repository questionT1Repository;
+
+
     public Type1Factory(
             ConceptRepository conceptRepository,
-            DefinitionRepository definitionRepository
-    ) {
+            DefinitionRepository definitionRepository,
+            QuestionT1Repository questionT1Repository) {
         this.conceptRepository = conceptRepository;
         this.definitionRepository = definitionRepository;
+        this.questionT1Repository = questionT1Repository;
     }
 
     @Override
@@ -31,7 +36,7 @@ public class Type1Factory implements TypeFactory {
 
     @Override
     public QuestionFiller createFiller() {
-        return new QuestionT1QuestionFiller(conceptRepository, definitionRepository);
+        return new QuestionT1QuestionFiller(conceptRepository, definitionRepository,questionT1Repository);
     }
 
     @Override

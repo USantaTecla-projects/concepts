@@ -58,14 +58,14 @@ public class DefinitionServiceTest {
 
             // The Answer is created correctly
             assertEquals(definition.getText(), createdDefinition.getText());
-            assertEquals(definition.getConceptId(), createdDefinition.getConceptId());
+            assertEquals(definition.getConceptID(), createdDefinition.getConceptID());
 
             // The Answer is added to the Concept
             assertEquals(
                     concept.getDefinitionList().get(0).getText(),
                     definition.getText()
             );
-            assertEquals(concept.getDefinitionList().get(0).getConceptId(), concept.getId());
+            assertEquals(concept.getDefinitionList().get(0).getConceptID(), concept.getId());
         }
 
         @Test

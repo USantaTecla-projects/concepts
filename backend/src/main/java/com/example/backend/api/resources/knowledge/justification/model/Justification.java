@@ -19,10 +19,10 @@ public class Justification {
     @Column(columnDefinition = "TEXT")
     private String error;
 
-    @Column
+    @Column(name = "concept_id")
     private Long conceptID;
 
-    @Column
+    @Column(name = "definition_id")
     private Long definitionID;
 
     public Justification(Long id, String text, Boolean isCorrect, String error, Long conceptID, Long definitionID) {

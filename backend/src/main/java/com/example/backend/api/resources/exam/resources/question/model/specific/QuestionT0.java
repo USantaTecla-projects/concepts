@@ -3,12 +3,10 @@ package com.example.backend.api.resources.exam.resources.question.model.specific
 import com.example.backend.api.resources.exam.resources.question.model.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="questionT0")
 public class QuestionT0 extends Question {
 
     @Id
@@ -17,6 +15,8 @@ public class QuestionT0 extends Question {
 
     @JsonIgnore
     private Long conceptID;
+
+    @Transient
     private String conceptText;
 
 

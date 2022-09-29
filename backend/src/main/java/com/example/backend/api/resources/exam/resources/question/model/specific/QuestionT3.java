@@ -3,25 +3,32 @@ package com.example.backend.api.resources.exam.resources.question.model.specific
 import com.example.backend.api.resources.exam.resources.question.model.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="questionT3")
 public class QuestionT3 extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @JsonIgnore
     private Long conceptID;
+
+    @Transient
     private String conceptText;
+
     @JsonIgnore
     private Long definitionID;
+
+    @Transient
     private String incorrectDefinitionText;
+
     @JsonIgnore
     private Long justificationID;
+
+    @Transient
     private String justificationText;
 
     public QuestionT3() {
