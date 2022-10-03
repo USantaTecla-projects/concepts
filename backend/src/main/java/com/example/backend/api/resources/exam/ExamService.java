@@ -2,18 +2,19 @@ package com.example.backend.api.resources.exam;
 
 import com.example.backend.api.resources.exam.dto.CreateExamDTO;
 import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
-import com.example.backend.api.resources.exam.module.answer.AnswerService;
+import com.example.backend.api.resources.exam.module.answer.service.AnswerService;
 import com.example.backend.api.resources.exam.module.answer.dto.AnswerDTO;
 import com.example.backend.api.resources.exam.module.answer.model.Answer;
 import com.example.backend.api.resources.exam.module.question.dto.QuestionDTO;
 import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
-import com.example.backend.api.resources.exam.module.question.QuestionService;
+import com.example.backend.api.resources.exam.module.question.service.QuestionService;
 import com.example.backend.api.resources.exam.module.question.exception.specific.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -43,7 +44,7 @@ public class ExamService {
     }
 
 
-    public void reply(final ReplyExamDTO replyExamDTO){
+    public void reply(final ReplyExamDTO replyExamDTO) {
 
         List<QuestionAndAnswerDTO> questionAndAnswerDTOList = replyExamDTO
                 .getQuestionAndAnswerDTOListOptional(replyExamDTO.getQuestionDTOList())
@@ -63,9 +64,19 @@ public class ExamService {
         final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
 
         System.out.println(questions);
-        System.out.println(answers);
-        // Map each answer to its corresponding type
 
-        // Store the exam in the database
+        saveAnswersOnQuestions(questions, answers);
+    }
+
+    private void saveAnswersOnQuestions(List<Question> questions, List<Answer> answers) {
+        Iterator<Question> questionIterator = questions.iterator();
+        Iterator<Answer> answerIterator = answers.iterator();
+
+        while (questionIterator.hasNext() && answerIterator.hasNext()){
+            Question question = questionIterator.next();
+            Answer answer = answerIterator.next();
+            question.addAnswer(answer);
+            questionService.saveQuestion(question);
+        }
     }
 }

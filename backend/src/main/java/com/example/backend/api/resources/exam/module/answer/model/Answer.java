@@ -2,6 +2,9 @@ package com.example.backend.api.resources.exam.module.answer.model;
 
 import com.example.backend.api.resources.exam.module.type.Type;
 
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class Answer {
     protected Type type;
 

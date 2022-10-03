@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT0QuestionFiller implements QuestionFiller {
+public class QuestionT0Filler implements QuestionFiller {
 
     private final ConceptRepository conceptRepository;
 
     private final QuestionT0Repository questionT0Repository;
 
-    public QuestionT0QuestionFiller(ConceptRepository conceptRepository,QuestionT0Repository questionT0Repository) {
+    public QuestionT0Filler(ConceptRepository conceptRepository, QuestionT0Repository questionT0Repository) {
         this.conceptRepository = conceptRepository;
         this.questionT0Repository = questionT0Repository;
     }

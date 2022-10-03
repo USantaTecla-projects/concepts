@@ -1,5 +1,6 @@
 package com.example.backend.api.resources.exam.module.question.model.specific;
 
+import com.example.backend.api.resources.exam.module.answer.model.Answer;
 import com.example.backend.api.resources.exam.module.answer.model.specific.AnswerT3;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 
@@ -30,9 +31,14 @@ public class QuestionT3 extends Question {
     private String justificationText;
 
     @OneToMany
-    private List<AnswerT3> answerT3;
+    private List<AnswerT3> answerT3List;
 
     public QuestionT3() {
+    }
+
+    @Override
+    public void addAnswer(Answer answer) {
+        answerT3List.add((AnswerT3) answer);
     }
 
     public Long getId() {
@@ -101,9 +107,11 @@ public class QuestionT3 extends Question {
                 ", incorrectDefinitionText='" + incorrectDefinitionText + '\'' +
                 ", justificationID=" + justificationID +
                 ", justificationText='" + justificationText + '\'' +
-                ", answerT3=" + answerT3 +
+                ", answerT3=" + answerT3List +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';
     }
+
+
 }

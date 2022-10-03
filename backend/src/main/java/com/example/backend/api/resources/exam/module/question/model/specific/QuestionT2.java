@@ -1,5 +1,6 @@
 package com.example.backend.api.resources.exam.module.question.model.specific;
 
+import com.example.backend.api.resources.exam.module.answer.model.Answer;
 import com.example.backend.api.resources.exam.module.answer.model.specific.AnswerT2;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 
@@ -25,9 +26,14 @@ public class QuestionT2 extends Question {
     private String definitionText;
 
     @OneToMany
-    private List<AnswerT2> answerT2;
+    private List<AnswerT2> answerT2List;
 
     public QuestionT2() {
+    }
+
+    @Override
+    public void addAnswer(Answer answer) {
+        answerT2List.add((AnswerT2) answer);
     }
 
     public Long getId() {
@@ -78,9 +84,11 @@ public class QuestionT2 extends Question {
                 ", conceptText='" + conceptText + '\'' +
                 ", definitionID=" + definitionID +
                 ", definitionText='" + definitionText + '\'' +
-                ", answerT2=" + answerT2 +
+                ", answerT2=" + answerT2List +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';
     }
+
+
 }

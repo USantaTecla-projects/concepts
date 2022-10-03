@@ -1,4 +1,4 @@
-package com.example.backend.api.resources.exam.module.question;
+package com.example.backend.api.resources.exam.module.question.service;
 
 import com.example.backend.api.resources.exam.module.question.dto.QuestionDTO;
 import com.example.backend.api.resources.exam.module.question.exception.specific.NotEnoughDataException;
@@ -6,6 +6,7 @@ import com.example.backend.api.resources.exam.module.question.exception.specific
 import com.example.backend.api.resources.exam.module.question.mapper.QuestionMapper;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.service.type.QuestionTypeService;
 import com.example.backend.api.resources.exam.module.type.Type;
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactoryProvider;
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactory;
@@ -67,11 +68,19 @@ public class QuestionService {
                     Type questionType = questionDTO
                             .getTypeOptional(questionDTO.getType())
                             .orElseThrow(() -> new QuestionDTOBadRequestException("Field type in QuestionDTO is mandatory"));
+                    final int questionTypeOrdinal = questionType.ordinal();
 
-                    QuestionMapper questionMapper = typeAbstractFactories.get(questionType.ordinal()).createQuestionMapper();
+                    QuestionMapper questionMapper = typeAbstractFactories.get(questionTypeOrdinal).createQuestionMapper();
                     return questionMapper.mapQuestion(questionDTO);
                 })
                 .toList();
+    }
+
+    public void saveQuestion(Question question){
+        final Type questionType = question.getType();
+        final int questionTypeOrdinal = questionType.ordinal();
+        QuestionTypeService questionTypeService = typeAbstractFactories.get(questionTypeOrdinal).getQuestionTypeService();
+        questionTypeService.saveQuestion(question);
     }
 
     private int generateRandomNumber() {

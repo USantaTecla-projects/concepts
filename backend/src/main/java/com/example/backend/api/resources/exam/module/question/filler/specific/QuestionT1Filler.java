@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT1QuestionFiller implements QuestionFiller {
+public class QuestionT1Filler implements QuestionFiller {
 
     private final ConceptRepository conceptRepository;
     private final DefinitionRepository definitionRepository;
 
     private final QuestionT1Repository questionT1Repository;
 
-    public QuestionT1QuestionFiller(
+    public QuestionT1Filler(
             ConceptRepository conceptRepository,
             DefinitionRepository definitionRepository,
             QuestionT1Repository questionT1Repository
