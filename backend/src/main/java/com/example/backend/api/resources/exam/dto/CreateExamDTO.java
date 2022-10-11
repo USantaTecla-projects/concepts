@@ -13,9 +13,16 @@ public class CreateExamDTO {
 
     private Integer numberOfQuestions;
 
+    private Long userID;
+
     public Optional<Integer> getNumberOfQuestionsOptional(final Integer numberOfQuestions) {
         return Optional
                 .ofNullable(numberOfQuestions)
                 .map((n) -> n > 0 ? n : null);
+    }
+
+    public Optional<Long> getUserIDOptional(Long userID) {
+        return Optional
+                .ofNullable(userID);
     }
 }

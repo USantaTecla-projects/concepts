@@ -10,7 +10,7 @@ import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
 import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationNotFoundException;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT3;
 import com.example.backend.api.resources.exam.module.type.Type;
@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT3Filler implements QuestionFiller {
+public class QuestionT3Generator implements QuestionGenerator {
 
     private final ConceptRepository conceptRepository;
     private final DefinitionRepository definitionRepository;
     private final JustificationRepository justificationRepository;
     private final QuestionT3Repository questionT3Repository;
 
-    public QuestionT3Filler(
+    public QuestionT3Generator(
             ConceptRepository conceptRepository,
             DefinitionRepository definitionRepository,
             JustificationRepository justificationRepository,
@@ -41,31 +41,33 @@ public class QuestionT3Filler implements QuestionFiller {
     }
 
     @Override
-    public void fillQuestion(final Question question, List<Question> questions) {
+    public Question generateQuestion(List<Question> alreadyGeneratedQuestions) {
         final int randomNum = generateRandomNumber();
 
-        QuestionT3 questionT3 = (QuestionT3) question;
-
-        List<QuestionT3> questionT3List = findQuestionsT3(questions);
+        List<QuestionT3> questionT3List = findQuestionsT3(alreadyGeneratedQuestions);
         List<Long> usedJustificationRelatedWithIncorrectDefinitionIDs = getUsedJustificationRelatedWithIncorrectDefinitionIDs(questionT3List);
 
-        final Justification justification = getJustification(randomNum, questionT3, usedJustificationRelatedWithIncorrectDefinitionIDs);
-
+        final Justification justification = getJustification(randomNum, usedJustificationRelatedWithIncorrectDefinitionIDs);
         final long definitionID = justification.getDefinitionID();
+
+
+        final Definition incorrectDefinition = getDefinition(definitionID);
         final long conceptID = justification.getConceptID();
+
+        final Concept concept = getConcept(conceptID);
         final long justificationID = justification.getId();
 
-        final Definition incorrectDefinition = getDefinition(questionT3, definitionID);
-        final Concept concept = getConcept(questionT3, conceptID);
-
-        extractAndSetQuestionT3Data(question, questionT3, justification, definitionID, conceptID, justificationID, incorrectDefinition, concept);
-
-        if(questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID,definitionID,justificationID).isEmpty()){
-            questionT3Repository.save(questionT3);
+        if (questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID)) {
+            System.out.println("Exists T3");
+            return questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();
         }
+
+        QuestionT3 questionT3 = new QuestionT3();
+        extractAndSetQuestionT3Data(questionT3, justification, definitionID, conceptID, justificationID, incorrectDefinition, concept);
+        return questionT3Repository.save(questionT3);
     }
 
-    private void extractAndSetQuestionT3Data(Question question, QuestionT3 questionT3, Justification justification, long definitionID, long conceptID, long justificationID, Definition incorrectDefinition, Concept concept) {
+    private void extractAndSetQuestionT3Data(QuestionT3 questionT3, Justification justification, long definitionID, long conceptID, long justificationID, Definition incorrectDefinition, Concept concept) {
         final String justificationText = justification.getText();
         final String incorrectDefinitionText = incorrectDefinition.getText();
         final String conceptText = concept.getText();
@@ -77,32 +79,28 @@ public class QuestionT3Filler implements QuestionFiller {
         questionT3.setDefinitionID(definitionID);
         questionT3.setConceptText(conceptText);
         questionT3.setConceptID(conceptID);
-        question.setFilled(true);
     }
 
-    private Concept getConcept(QuestionT3 questionT3, long conceptID) {
+    private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
                 .orElseThrow(() -> {
-                    questionT3.setFilled(false);
                     throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
                 });
     }
 
-    private Definition getDefinition(QuestionT3 questionT3, long definitionID) {
+    private Definition getDefinition(long definitionID) {
         return definitionRepository
                 .findById(definitionID)
                 .orElseThrow(() -> {
-                    questionT3.setFilled(false);
                     throw new DefinitionNotFoundException("The definition with id = " + definitionID + " has not been found");
                 });
     }
 
-    private Justification getJustification(int randomNum, QuestionT3 questionT3, List<Long> usedJustificationRelatedWithIncorrectDefinitionIDs) {
+    private Justification getJustification(int randomNum, List<Long> usedJustificationRelatedWithIncorrectDefinitionIDs) {
         return justificationRepository
                 .findOneJustificationLinkedToIncorrectDefinition(usedJustificationRelatedWithIncorrectDefinitionIDs, randomNum)
                 .orElseThrow(() -> {
-                    questionT3.setFilled(false);
                     throw new JustificationNotFoundException("No justification was found, probably all justifications have been used in this type of question");
                 });
     }

@@ -10,9 +10,13 @@ import { QuestionMapperService } from './question-mapper.service';
   providedIn: 'root',
 })
 export class ExamStore {
-  private emptyExamSubject = new BehaviorSubject<Exam>({ questionList: [] });
+  private examSubject = new BehaviorSubject<Exam>({ questionList: [] });
 
-  emptyExam$: Observable<Exam> = this.emptyExamSubject.asObservable();
+  private replyExamSubject = new BehaviorSubject<boolean>(false);
+
+  exam$: Observable<Exam> = this.examSubject.asObservable();
+
+  replyExam$: Observable<boolean> = this.replyExamSubject.asObservable();
 
   repliedQuestions: any[] = [];
 
@@ -23,16 +27,20 @@ export class ExamStore {
       catchError(error => {
         const message = 'Could not generate the exam';
         console.log(message, error);
-        return throwError(() => error);
+        return throwError(() => new Error(message));
       }),
       map(examData => this.questionMapperService.mapQuestions(examData)),
-      tap(exam => this.emptyExamSubject.next(exam)),
+      tap(exam => this.examSubject.next(exam)),
       shareReplay()
     );
   }
 
-  replyQuestion(question: any) {
-    this.repliedQuestions.push(question);
-    console.log(this.repliedQuestions);
+  replyExam() {
+    this.replyExamSubject.next(true);
+  }
+
+  replyQuestion(question: any, reply: any) {
+    console.log(question);
+    console.log(reply);
   }
 }

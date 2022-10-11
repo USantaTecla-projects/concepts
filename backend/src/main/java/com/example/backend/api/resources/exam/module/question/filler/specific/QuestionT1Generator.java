@@ -7,7 +7,7 @@ import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
 import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT1;
 import com.example.backend.api.resources.exam.module.type.Type;
@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT1Filler implements QuestionFiller {
+public class QuestionT1Generator implements QuestionGenerator {
 
     private final ConceptRepository conceptRepository;
     private final DefinitionRepository definitionRepository;
 
     private final QuestionT1Repository questionT1Repository;
 
-    public QuestionT1Filler(
+    public QuestionT1Generator(
             ConceptRepository conceptRepository,
             DefinitionRepository definitionRepository,
             QuestionT1Repository questionT1Repository
@@ -36,25 +36,27 @@ public class QuestionT1Filler implements QuestionFiller {
     }
 
     @Override
-    public void fillQuestion(final Question question, List<Question> questions) {
+    public Question generateQuestion(List<Question> alreadyGeneratedQuestions) {
         final int randomNum = generateRandomNumber();
 
-        QuestionT1 questionT1 = (QuestionT1) question;
-        List<QuestionT1> questionT1List = findQuestionsT1(questions);
+        List<QuestionT1> questionT1List = findQuestionsT1(alreadyGeneratedQuestions);
         List<Long> usedIncorrectDefinitionIDs = getUsedIncorrectDefinitionIDs(questionT1List);
 
-        final Definition definition = getDefinition(randomNum, questionT1, usedIncorrectDefinitionIDs);
+        final Definition definition = getDefinition(randomNum, usedIncorrectDefinitionIDs);
         final long conceptID = definition.getConceptID();
 
-        final Concept concept = getConcept(questionT1, conceptID);
-
-        extractAndSetQuestionT1Data(questionT1, definition, concept, conceptID);
-
+        final Concept concept = getConcept(conceptID);
         final long definitionID = definition.getId();
 
-        if (questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).isEmpty()) {
-            questionT1Repository.save(questionT1);
+
+        if (questionT1Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
+            System.out.println("Exists T1");
+            return questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
         }
+
+        QuestionT1 questionT1 = new QuestionT1();
+        extractAndSetQuestionT1Data(questionT1, definition, concept, conceptID);
+        return questionT1Repository.save(questionT1);
     }
 
     private void extractAndSetQuestionT1Data(QuestionT1 questionT1, Definition definition, Concept concept, long conceptID) {
@@ -70,20 +72,18 @@ public class QuestionT1Filler implements QuestionFiller {
         questionT1.setFilled(true);
     }
 
-    private Concept getConcept(QuestionT1 questionT1, long conceptID) {
+    private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
                 .orElseThrow(() -> {
-                    questionT1.setFilled(false);
                     throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
                 });
     }
 
-    private Definition getDefinition(int randomNum, QuestionT1 questionT1, List<Long> usedIncorrectDefinitionIDs) {
+    private Definition getDefinition(int randomNum, List<Long> usedIncorrectDefinitionIDs) {
         return definitionRepository
                 .findRandomDefinitionBasedOnCorrect(usedIncorrectDefinitionIDs, false, randomNum)
                 .orElseThrow(() -> {
-                    questionT1.setFilled(false);
                     throw new DefinitionNotFoundException("No definition was found, probably all definitions have been used in this type of question");
                 });
     }

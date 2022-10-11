@@ -3,6 +3,7 @@ package com.example.backend.api.resources.exam.exception;
 
 import com.example.backend.api.exception.specific.ExceptionDTO;
 import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
 import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,16 @@ public class ExamExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now());
+
+        return new ResponseEntity<>(exceptionDTO,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ExamNotFoundException.class})
+    public ResponseEntity<Object> handleExamNotFoundException(ExamNotFoundException exception){
+        ExceptionDTO exceptionDTO = new ExceptionDTO(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND,
                 ZonedDateTime.now());
 
         return new ResponseEntity<>(exceptionDTO,HttpStatus.BAD_REQUEST);

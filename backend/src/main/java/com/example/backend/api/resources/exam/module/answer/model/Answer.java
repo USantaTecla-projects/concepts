@@ -2,15 +2,29 @@ package com.example.backend.api.resources.exam.module.answer.model;
 
 import com.example.backend.api.resources.exam.module.type.Type;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Answer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     protected Type type;
 
     protected Long userID;
 
     public Answer() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Type getType() {

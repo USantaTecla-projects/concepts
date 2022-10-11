@@ -12,8 +12,8 @@ import com.example.backend.api.resources.exam.module.question.service.type.Quest
 import com.example.backend.api.resources.exam.module.question.service.type.specific.QuestionT0Service;
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactory;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
-import com.example.backend.api.resources.exam.module.question.filler.specific.QuestionT0Filler;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.filler.specific.QuestionT0Generator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT0;
 import com.example.backend.api.resources.exam.module.type.TypeData;
@@ -42,8 +42,8 @@ public class Type0Factory implements TypeFactory {
     }
 
     @Override
-    public QuestionFiller createFiller() {
-        return new QuestionT0Filler(conceptRepository, questionT0Repository);
+    public QuestionGenerator createFiller() {
+        return new QuestionT0Generator(conceptRepository, questionT0Repository);
     }
 
     @Override

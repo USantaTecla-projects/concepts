@@ -3,6 +3,6 @@ import { QuestionType2 } from '../../types/model/question/question-type/question
 import { ExamQuestionType2Component } from '../../ui/exam-question/exam-question-types/exam-question-type2/exam-question-type2.component';
 
 export function mapQuestionType2(questionData: QuestionData): QuestionType2 {
-  const { conceptText, definitionText } = questionData;
-  return { type: ExamQuestionType2Component, conceptText, definitionText };
+  const { id, conceptID, definitionID, conceptText, definitionText } = questionData;
+  return { id, conceptID, definitionID, type: ExamQuestionType2Component, conceptText, definitionText };
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, Type, ViewChild } from '@angular/core';
 import { QuestionHostDirective } from '../../../utils/question-host.directive';
 import { ExamQuestionComponent } from '../exam-question-types/exam-question.component';
 
@@ -14,7 +14,13 @@ export class ExamQuestionRendererComponent implements OnInit {
 
   @Input() questionNumber!: number;
 
+  @Input() set replyExam(val: boolean) {
+    if (val) this.replyQuestion();
+  }
+
   @ViewChild(QuestionHostDirective, { static: true }) questionHost!: QuestionHostDirective;
+
+  private componentRef!: any;
 
   constructor() {}
 
@@ -26,8 +32,12 @@ export class ExamQuestionRendererComponent implements OnInit {
     const viewContainerRef = this.questionHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<ExamQuestionComponent>(this.componentType);
-    componentRef.instance.question = this.question;
-    componentRef.instance.questionNumber = this.questionNumber;
-    componentRef.injector;
+    this.componentRef = componentRef;
+    this.componentRef.instance.question = this.question;
+    this.componentRef.instance.questionNumber = this.questionNumber;
+  }
+
+  replyQuestion() {
+    this.componentRef.instance.replyQuestion = true;
   }
 }

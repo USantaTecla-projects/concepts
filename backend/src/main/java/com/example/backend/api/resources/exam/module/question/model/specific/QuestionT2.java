@@ -8,12 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="questionT2")
 public class QuestionT2 extends Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     private Long conceptID;
 
@@ -26,6 +21,7 @@ public class QuestionT2 extends Question {
     private String definitionText;
 
     @OneToMany
+    @JoinTable(name = "questiont2_answerT2_list")
     private List<AnswerT2> answerT2List;
 
     public QuestionT2() {
@@ -34,14 +30,6 @@ public class QuestionT2 extends Question {
     @Override
     public void addAnswer(Answer answer) {
         answerT2List.add((AnswerT2) answer);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getConceptID() {
@@ -79,7 +67,6 @@ public class QuestionT2 extends Question {
     @Override
     public String toString() {
         return "QuestionT2{" +
-                "id=" + id +
                 ", conceptID=" + conceptID +
                 ", conceptText='" + conceptText + '\'' +
                 ", definitionID=" + definitionID +

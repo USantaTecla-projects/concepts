@@ -5,7 +5,7 @@ import com.example.backend.api.resources.exam.module.question.exception.specific
 import com.example.backend.api.resources.exam.module.question.exception.specific.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.exam.module.question.mapper.QuestionMapper;
 import com.example.backend.api.resources.exam.module.question.model.Question;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.service.type.QuestionTypeService;
 import com.example.backend.api.resources.exam.module.type.Type;
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactoryProvider;
@@ -42,23 +42,22 @@ public class QuestionService {
                             + " questions"
             );
 
-        final List<Question> questions = new LinkedList<>();
+        final List<Question> generatedQuestions = new LinkedList<>();
 
-        while (questions.size() < numberOfQuestions) {
+        while (generatedQuestions.size() < numberOfQuestions) {
             final int randomNum = generateRandomNumber();
-            Question question = typeAbstractFactories.get(randomNum).createQuestion();
-            QuestionFiller questionFiller = typeAbstractFactories.get(randomNum).createFiller();
+            QuestionGenerator questionGenerator = typeAbstractFactories.get(randomNum).createFiller();
 
             try {
-                questionFiller.fillQuestion(question, questions);
-                questions.add(question);
+                Question question = questionGenerator.generateQuestion(generatedQuestions);
+                generatedQuestions.add(question);
             } catch (Exception exception) {
                 LOG.error(exception.getMessage());
             }
 
         }
 
-        return questions;
+        return generatedQuestions;
     }
 
     public List<Question> mapQuestionDTOToQuestion(List<QuestionDTO> questionDTOList) {

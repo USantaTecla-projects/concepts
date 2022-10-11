@@ -9,4 +9,5 @@ public interface QuestionT3Repository extends CrudRepository<QuestionT3, Long> {
 
     Optional<QuestionT3> findByConceptIDAndDefinitionIDAndJustificationID(Long conceptID, Long definitionID, Long justificationID);
 
+    boolean existsByConceptIDAndDefinitionIDAndJustificationID(Long conceptID, Long definitionID, Long justificationID);
 }

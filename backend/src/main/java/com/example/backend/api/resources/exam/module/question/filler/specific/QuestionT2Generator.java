@@ -1,6 +1,6 @@
 package com.example.backend.api.resources.exam.module.question.filler.specific;
 
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT2;
 import com.example.backend.api.resources.exam.module.question.repository.QuestionT2Repository;
@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT2Filler implements QuestionFiller {
+public class QuestionT2Generator implements QuestionGenerator {
 
     private final ConceptRepository conceptRepository;
     private final DefinitionRepository definitionRepository;
 
     private final QuestionT2Repository questionT2Repository;
 
-    public QuestionT2Filler(
+    public QuestionT2Generator(
             ConceptRepository conceptRepository,
             DefinitionRepository definitionRepository,
             QuestionT2Repository questionT2Repository
@@ -37,27 +37,29 @@ public class QuestionT2Filler implements QuestionFiller {
 
 
     @Override
-    public void fillQuestion(final Question question, List<Question> questions) {
+    public Question generateQuestion(List<Question> alreadyGeneratedQuestions) {
         final int randomNum = generateRandomNumber();
 
-        QuestionT2 questionT2 = (QuestionT2) question;
-        List<QuestionT2> questionT2List = findQuestionsT2(questions);
+        List<QuestionT2> questionT2List = findQuestionsT2(alreadyGeneratedQuestions);
         List<Long> usedDefinitionIDs = getUsedDefinitionIDs(questionT2List);
 
-        final Definition definition = getDefinition(randomNum, questionT2, usedDefinitionIDs);
+        final Definition definition = getDefinition(randomNum, usedDefinitionIDs);
         final long conceptID = definition.getConceptID();
 
-        final Concept concept = getConcept(questionT2, conceptID);
+        final Concept concept = getConcept(conceptID);
         final long definitionID = definition.getId();
 
-        extractAndSetQuestionT2Data(question, questionT2, definition, conceptID, concept);
-
-        if (questionT2Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).isEmpty()) {
-            questionT2Repository.save(questionT2);
+        if (questionT2Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
+            System.out.println("Exists T2");
+            return questionT2Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
         }
+
+        QuestionT2 questionT2 = new QuestionT2();
+        extractAndSetQuestionT2Data(questionT2, definition, conceptID, concept);
+        return questionT2Repository.save(questionT2);
     }
 
-    private void extractAndSetQuestionT2Data(Question question, QuestionT2 questionT2, Definition definition, long conceptID, Concept concept) {
+    private void extractAndSetQuestionT2Data(QuestionT2 questionT2, Definition definition, long conceptID, Concept concept) {
         final String conceptText = concept.getText();
         final String definitionText = definition.getText();
         final long definitionID = definition.getId();
@@ -67,22 +69,19 @@ public class QuestionT2Filler implements QuestionFiller {
         questionT2.setConceptID(conceptID);
         questionT2.setDefinitionText(definitionText);
         questionT2.setDefinitionID(definitionID);
-        question.setFilled(true);
     }
 
-    private Concept getConcept(QuestionT2 questionT2, long conceptID) {
+    private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
                 .orElseThrow(() -> {
-                    questionT2.setFilled(false);
                     throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
                 });
     }
 
-    private Definition getDefinition(int randomNum, QuestionT2 questionT2, List<Long> usedDefinitionIDs) {
+    private Definition getDefinition(int randomNum, List<Long> usedDefinitionIDs) {
         return definitionRepository
                 .findRandomDefinition(usedDefinitionIDs, randomNum).orElseThrow(() -> {
-                    questionT2.setFilled(false);
                     throw new DefinitionNotFoundException("No definition was found, probably all definitions have been used in this type of question");
                 });
     }

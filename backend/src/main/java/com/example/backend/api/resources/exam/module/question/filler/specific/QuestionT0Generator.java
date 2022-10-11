@@ -1,6 +1,6 @@
 package com.example.backend.api.resources.exam.module.question.filler.specific;
 
-import com.example.backend.api.resources.exam.module.question.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT0;
 import com.example.backend.api.resources.exam.module.question.repository.QuestionT0Repository;
@@ -15,34 +15,35 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-public class QuestionT0Filler implements QuestionFiller {
+public class QuestionT0Generator implements QuestionGenerator {
 
     private final ConceptRepository conceptRepository;
 
     private final QuestionT0Repository questionT0Repository;
 
-    public QuestionT0Filler(ConceptRepository conceptRepository, QuestionT0Repository questionT0Repository) {
+    public QuestionT0Generator(ConceptRepository conceptRepository, QuestionT0Repository questionT0Repository) {
         this.conceptRepository = conceptRepository;
         this.questionT0Repository = questionT0Repository;
     }
 
     @Override
-    public void fillQuestion(final Question question, List<Question> questions) {
+    public Question generateQuestion(List<Question> alreadyGeneratedQuestions) {
         final int randomNum = generateRandomNumber();
 
-        QuestionT0 questionT0 = (QuestionT0) question;
-        List<QuestionT0> questionT0List = findQuestionsT0(questions);
+        List<QuestionT0> questionT0List = findQuestionsT0(alreadyGeneratedQuestions);
         List<Long> usedConceptIds = getUsedConceptIDs(questionT0List);
 
-        final Concept concept = getConcept(randomNum, questionT0, usedConceptIds);
-
-        extractAndSetQuestionT0Data(questionT0, concept);
-
+        final Concept concept = getConcept(randomNum, usedConceptIds);
         final Long conceptID = concept.getId();
 
-        if(questionT0Repository.findByConceptID(conceptID).isEmpty()){
-            questionT0Repository.save(questionT0);
+        if (questionT0Repository.existsByConceptID(conceptID)) {
+            System.out.println("Exists T0");
+            return questionT0Repository.findByConceptID(conceptID).orElseThrow();
         }
+
+        QuestionT0 questionT0 = new QuestionT0();
+        extractAndSetQuestionT0Data(questionT0, concept);
+        return questionT0Repository.save(questionT0);
     }
 
     private void extractAndSetQuestionT0Data(QuestionT0 questionT0, Concept concept) {
@@ -55,11 +56,10 @@ public class QuestionT0Filler implements QuestionFiller {
         questionT0.setFilled(true);
     }
 
-    private Concept getConcept(int randomNum, QuestionT0 questionT0, List<Long> usedConceptIds) {
+    private Concept getConcept(int randomNum, List<Long> usedConceptIds) {
         return conceptRepository
                 .findRandomConcept(usedConceptIds, randomNum)
                 .orElseThrow(() -> {
-                    questionT0.setFilled(false);
                     throw new ConceptNotFoundException("No concept was found, probably all concepts have been used in this type of question");
                 });
     }

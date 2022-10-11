@@ -8,9 +8,10 @@
       class="question"
       [componentType]="question.type"
       [question]="question"
-      [questionNumber]="i+1">
+      [questionNumber]="i+1"
+      [replyExam]="replyExam">
     </app-exam-question-renderer>
   </ng-container>
 
-  <button class="submit-button" mat-raised-button color="primary">Deliver Exam</button>
+  <button class="submit-button" mat-raised-button color="primary" (click)="onExamReply()">Deliver Exam</button>
 </div>

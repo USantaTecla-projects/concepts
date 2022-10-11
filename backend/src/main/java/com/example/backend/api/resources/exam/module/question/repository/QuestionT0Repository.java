@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface QuestionT0Repository extends CrudRepository<QuestionT0, Long> {
 
-
     Optional<QuestionT0> findByConceptID(Long conceptID);
+
+    boolean existsByConceptID(Long conceptID);
 }

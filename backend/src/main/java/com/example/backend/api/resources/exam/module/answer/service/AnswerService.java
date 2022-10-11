@@ -28,7 +28,7 @@ public class AnswerService {
                 .map(answerDTO -> {
                     Type answerType = getAnswerType(answerDTO);
                     Answer answer = mapAnswer(answerDTO, answerType);
-                    saveAnswer(answerType, answer);
+                    saveAnswerOnDatabase(answerType, answer);
                     return answer;
                 })
                 .toList();
@@ -41,7 +41,7 @@ public class AnswerService {
                 .orElseThrow(() -> new QuestionDTOBadRequestException("Field type in AnswerDTO is mandatory"));
     }
 
-    private void saveAnswer(Type answerType, Answer answer) {
+    private void saveAnswerOnDatabase(Type answerType, Answer answer) {
         AnswerTypeService answerTypeService = typeAbstractFactories.get(answerType.ordinal()).getAnswerTypeService();
         answerTypeService.saveAnswer(answer);
     }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,30 +18,28 @@ public class ReplyExamDTO {
 
     private Long userID;
 
-    public List<QuestionAndAnswerDTO> getQuestionDTOList() {
-        return questionAndAnswerDTOList;
-    }
+    private Long examID;
 
-    public void setQuestionDTOList(List<QuestionAndAnswerDTO> questionDTOList) {
-        this.questionAndAnswerDTOList = questionDTOList;
-    }
+    private Timestamp creationDate;
 
-    public Long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
-
-    public Optional <List<QuestionAndAnswerDTO>> getQuestionAndAnswerDTOListOptional(List<QuestionAndAnswerDTO> questionAndAnswerDTOList) {
+    public Optional<List<QuestionAndAnswerDTO>> getQuestionAndAnswerDTOListOptional(List<QuestionAndAnswerDTO> questionAndAnswerDTOList) {
         return Optional
                 .ofNullable(questionAndAnswerDTOList);
     }
 
-    public Optional <Long> getUserIDOptional(Long userID) {
+    public Optional<Long> getUserIDOptional(Long userID) {
         return Optional
                 .ofNullable(userID);
+    }
+
+    public Optional<Long> getExamIDOptional(Long examID) {
+        return Optional
+                .ofNullable(examID);
+    }
+
+    public Optional<Timestamp> getCreationDateOptional(Timestamp creationDate) {
+        return Optional
+                .ofNullable(creationDate);
     }
 
     @Override

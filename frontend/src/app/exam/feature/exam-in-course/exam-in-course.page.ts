@@ -11,9 +11,15 @@ import { Exam } from '../../types/model/exam.model';
 export class ExamInCoursePage implements OnInit {
   emptyExam$!: Observable<Exam>;
 
+  replyExam: boolean = false;
+
   constructor(public examStore: ExamStore) {}
 
   ngOnInit(): void {
-    this.emptyExam$ = this.examStore.emptyExam$;
+    this.emptyExam$ = this.examStore.exam$;
+  }
+
+  onExamReply() {
+    this.replyExam = true;
   }
 }

@@ -10,20 +10,8 @@ import javax.persistence.Id;
 @Entity
 public class AnswerT3 extends Answer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     private Boolean reply;
     public AnswerT3() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Boolean getReply() {
@@ -37,7 +25,6 @@ public class AnswerT3 extends Answer {
     @Override
     public String toString() {
         return "AnswerT3{" +
-                "id=" + id +
                 ", reply=" + reply +
                 ", type=" + type +
                 ", userID=" + userID +

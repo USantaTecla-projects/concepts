@@ -14,6 +14,10 @@ export class ExamQuestionType0Component implements OnInit, ExamQuestionComponent
 
   @Input() questionNumber!: number;
 
+  @Input() set replyQuestion(val: boolean) {
+    this.onQuestionReplied();
+  }
+
   questionReplyForm: FormGroup = new FormGroup({});
 
   constructor(public examStore: ExamStore, private formBuilder: FormBuilder) {}
@@ -26,8 +30,6 @@ export class ExamQuestionType0Component implements OnInit, ExamQuestionComponent
 
   onQuestionReplied() {
     const questionReplyFormValue = this.questionReplyForm.value;
-    if (questionReplyFormValue) {
-      this.examStore.replyQuestion(questionReplyFormValue);
-    }
+    this.examStore.replyQuestion(this.question, questionReplyFormValue);
   }
 }
