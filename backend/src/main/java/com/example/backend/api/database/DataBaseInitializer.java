@@ -43,18 +43,15 @@ public class DataBaseInitializer implements CommandLineRunner {
         Concept softwareConcept = conceptRepository.save(new Concept("el software."));
         Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad."));
 
-        Definition softwareIncorrectDefinition1 = definitionRepository.save(new Definition(
+        Definition softwareIncorrectDefinition = definitionRepository.save(new Definition(
                 "el conjunto de los programas.",
                 false,
                 softwareConcept.getId()));
-        Definition softwareIncorrectDefinition2 = definitionRepository.save(new Definition(
+        Definition softwareCorrectDefinition = definitionRepository.save(new Definition(
                 "la parte lógica de un sistema informático, o sea sin contemplar el hardware.",
-                false,
+                true,
                 softwareConcept.getId()));
-        Definition softwareIncorrectDefinition3 = definitionRepository.save(new Definition(
-                "la información que suministra el desarrollador para manipular la información del usuario.",
-                false,
-                softwareConcept.getId()));
+
 
         Definition recursividadIncorrectDefinition = definitionRepository.save(new Definition(
                 "la característica de las funciones que se llaman a sí mismas.",
@@ -66,25 +63,19 @@ public class DataBaseInitializer implements CommandLineRunner {
                 recursividadConcept.getId()));
 
         Justification softwareJustification1 = justificationRepository.save(new Justification(
-                "no contempla los scripts de bases de datos (DDL, SQL), ficheros de configuración, imágenes (*.bmp, *.jpg, …) del interfaz gráfico de usuario, ficheros de datos (JSON, XML,DTD, XML Schema, …), de publicación (HTML, CSS, …), … y otros artefactos necesarios en el software que no son para programar, son configurar, publicar, …",
+                "(HTML, CSS, …), … y otros artefactos necesarios en el software que no son para programar, son configurar, publicar, …",
                 false,
                 softwareConcept.getId(),
-                softwareIncorrectDefinition1.getId()
+                softwareIncorrectDefinition.getId()
         ));
 
         Justification softwareJustification2 = justificationRepository.save(new Justification(
                 "la definición es demasiado permisiva porque incluye firmware que no es software.",
                 true,
                 softwareConcept.getId(),
-                softwareIncorrectDefinition2.getId()
+                softwareCorrectDefinition.getId()
         ));
 
-        Justification softwareJustification3 = justificationRepository.save(new Justification(
-                "la definición es demasiado permisiva porque los datos de usuario (todos los ficheros generados por el software), no son hardware ni son software y están siendo incluidos en el software.",
-                true,
-                softwareConcept.getId(),
-                softwareIncorrectDefinition2.getId()
-        ));
 
         Justification recursividadJustification1 = justificationRepository.save(new Justification(
                 " no contempla la recursividad mutua.",
@@ -101,18 +92,18 @@ public class DataBaseInitializer implements CommandLineRunner {
         ));
 
 
-        softwareIncorrectDefinition1.addJustification(softwareJustification1);
-        softwareIncorrectDefinition2.addJustification(softwareJustification2);
-        softwareIncorrectDefinition2.addJustification(softwareJustification3);
+        softwareIncorrectDefinition.addJustification(softwareJustification1);
+        softwareCorrectDefinition.addJustification(softwareJustification2);
+
         recursividadIncorrectDefinition.addJustification(recursividadJustification1);
         recursividadIncorrectDefinition.addJustification(recursividadJustification2);
 
-        softwareConcept.addDefinition(softwareIncorrectDefinition1);
-        softwareConcept.addDefinition(softwareIncorrectDefinition2);
-        softwareConcept.addDefinition(softwareIncorrectDefinition3);
+        softwareConcept.addDefinition(softwareIncorrectDefinition);
+        softwareConcept.addDefinition(softwareCorrectDefinition);
+
         recursividadConcept.addDefinition(recursividadIncorrectDefinition);
         recursividadConcept.addDefinition(recursividadCorrectDefinition);
-
+//
         conceptRepository.save(softwareConcept);
         conceptRepository.save(recursividadConcept);
 

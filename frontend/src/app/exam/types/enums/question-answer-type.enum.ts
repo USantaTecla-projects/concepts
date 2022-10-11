@@ -1,4 +1,4 @@
-export enum QuestionType {
+export enum QuestionAnswerType {
   TYPE0,
   TYPE1,
   TYPE2,

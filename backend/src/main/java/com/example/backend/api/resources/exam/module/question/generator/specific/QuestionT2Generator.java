@@ -1,6 +1,6 @@
-package com.example.backend.api.resources.exam.module.question.filler.specific;
+package com.example.backend.api.resources.exam.module.question.generator.specific;
 
-import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.generator.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT2;
 import com.example.backend.api.resources.exam.module.question.repository.QuestionT2Repository;
@@ -50,7 +50,6 @@ public class QuestionT2Generator implements QuestionGenerator {
         final long definitionID = definition.getId();
 
         if (questionT2Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
-            System.out.println("Exists T2");
             return questionT2Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
         }
 

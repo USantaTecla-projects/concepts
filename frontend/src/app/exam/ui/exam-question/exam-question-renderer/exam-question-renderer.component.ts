@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Type, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, Type, ViewChild } from '@angular/core';
 import { QuestionHostDirective } from '../../../utils/question-host.directive';
 import { ExamQuestionComponent } from '../exam-question-types/exam-question.component';
 
@@ -32,9 +32,13 @@ export class ExamQuestionRendererComponent implements OnInit {
     const viewContainerRef = this.questionHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<ExamQuestionComponent>(this.componentType);
+
+    console.log(this.question);
+
     this.componentRef = componentRef;
     this.componentRef.instance.question = this.question;
     this.componentRef.instance.questionNumber = this.questionNumber;
+    componentRef.instance.sendRepliedQuestion.suscribe((val: any) => console.log(val));
   }
 
   replyQuestion() {

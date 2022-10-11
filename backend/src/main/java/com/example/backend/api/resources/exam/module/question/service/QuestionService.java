@@ -5,7 +5,7 @@ import com.example.backend.api.resources.exam.module.question.exception.specific
 import com.example.backend.api.resources.exam.module.question.exception.specific.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.exam.module.question.mapper.QuestionMapper;
 import com.example.backend.api.resources.exam.module.question.model.Question;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.generator.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.service.type.QuestionTypeService;
 import com.example.backend.api.resources.exam.module.type.Type;
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactoryProvider;

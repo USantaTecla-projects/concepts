@@ -1,10 +1,10 @@
+import { AnswerT1 } from '../../answer/answer-type/answer-type1.model';
 import { Question } from '../question.model';
 
-export interface QuestionType3 extends Question {
+export interface QuestionType1 extends Question {
   conceptID: number;
   definitionID: number;
-  justificationID: number;
   conceptText: string;
   incorrectDefinitionText: string;
-  justificationText: string;
+  answer?: AnswerT1;
 }

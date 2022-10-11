@@ -9,14 +9,14 @@ import { Exam } from '../../types/model/exam.model';
   styleUrls: ['./exam-in-course.page.scss'],
 })
 export class ExamInCoursePage implements OnInit {
-  emptyExam$!: Observable<Exam>;
+  exam$!: Observable<Exam>;
 
   replyExam: boolean = false;
 
   constructor(public examStore: ExamStore) {}
 
   ngOnInit(): void {
-    this.emptyExam$ = this.examStore.exam$;
+    this.exam$ = this.examStore.exam$;
   }
 
   onExamReply() {

@@ -13,7 +13,7 @@ public class QuestionT0 extends Question {
 
     private Long conceptID;
 
-    @Transient
+    @Column(columnDefinition = "TEXT")
     private String conceptText;
 
     @OneToMany

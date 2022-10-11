@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ExamStore } from 'src/app/exam/data-access/exam.store';
-import { QuestionType1 } from 'src/app/exam/types/model/question/question-type/question-type1.dto';
+import { QuestionType1 } from 'src/app/exam/types/model/question/question-type/question-type1.model';
 import { ExamQuestionComponent } from '../exam-question.component';
 
 @Component({
@@ -18,6 +18,8 @@ export class ExamQuestionType1Component implements OnInit, ExamQuestionComponent
     this.onQuestionReplied();
   }
 
+  @Output() sendRepliedQuestion: EventEmitter<string> = new EventEmitter();
+
   questionReplyForm: FormGroup = new FormGroup({});
 
   constructor(public examStore: ExamStore, private formBuilder: FormBuilder) {}
@@ -30,6 +32,6 @@ export class ExamQuestionType1Component implements OnInit, ExamQuestionComponent
 
   onQuestionReplied() {
     const questionReplyFormValue = this.questionReplyForm.value;
-    this.examStore.replyQuestion(this.question, questionReplyFormValue);
+    this.sendRepliedQuestion.emit(questionReplyFormValue);
   }
 }

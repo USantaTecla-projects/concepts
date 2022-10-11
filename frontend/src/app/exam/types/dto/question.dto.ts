@@ -1,6 +1,6 @@
-import { QuestionType } from '../enums/question-type.enum';
+import { QuestionAnswerType } from '../enums/question-answer-type.enum';
 
 export interface QuestionData {
-  type: QuestionType;
+  type: QuestionAnswerType;
   [key: string]: any;
 }

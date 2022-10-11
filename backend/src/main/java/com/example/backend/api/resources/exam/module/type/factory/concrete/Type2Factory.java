@@ -13,8 +13,8 @@ import com.example.backend.api.resources.exam.module.question.service.type.speci
 import com.example.backend.api.resources.exam.module.type.factory.TypeFactory;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
-import com.example.backend.api.resources.exam.module.question.filler.specific.QuestionT2Generator;
+import com.example.backend.api.resources.exam.module.question.generator.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.generator.specific.QuestionT2Generator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT2;
 import com.example.backend.api.resources.exam.module.type.TypeData;

@@ -1,4 +1,4 @@
-package com.example.backend.api.resources.exam.module.question.filler;
+package com.example.backend.api.resources.exam.module.question.generator;
 
 import com.example.backend.api.resources.exam.module.question.model.Question;
 

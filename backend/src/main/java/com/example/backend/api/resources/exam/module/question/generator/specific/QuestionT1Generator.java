@@ -1,4 +1,4 @@
-package com.example.backend.api.resources.exam.module.question.filler.specific;
+package com.example.backend.api.resources.exam.module.question.generator.specific;
 
 import com.example.backend.api.resources.exam.module.question.repository.QuestionT1Repository;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
@@ -7,7 +7,7 @@ import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
 import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
 import com.example.backend.api.resources.knowledge.concept.model.Concept;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.generator.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT1;
 import com.example.backend.api.resources.exam.module.type.Type;
@@ -50,7 +50,6 @@ public class QuestionT1Generator implements QuestionGenerator {
 
 
         if (questionT1Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
-            System.out.println("Exists T1");
             return questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
         }
 

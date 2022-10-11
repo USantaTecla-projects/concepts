@@ -3,10 +3,10 @@
 </mat-toolbar>
 
 <div class="grid">
-  <ng-container *ngFor="let question of (emptyExam$ | async)!.questionList; let i = index">
+  <ng-container *ngFor="let question of (exam$ | async)!.questionList; let i = index">
     <app-exam-question-renderer
       class="question"
-      [componentType]="question.type"
+      [componentType]="question.componentType"
       [question]="question"
       [questionNumber]="i+1"
       [replyExam]="replyExam">

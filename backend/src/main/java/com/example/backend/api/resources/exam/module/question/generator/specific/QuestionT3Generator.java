@@ -1,4 +1,4 @@
-package com.example.backend.api.resources.exam.module.question.filler.specific;
+package com.example.backend.api.resources.exam.module.question.generator.specific;
 
 import com.example.backend.api.resources.exam.module.question.repository.QuestionT3Repository;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
@@ -10,7 +10,7 @@ import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
 import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationNotFoundException;
 import com.example.backend.api.resources.knowledge.justification.model.Justification;
-import com.example.backend.api.resources.exam.module.question.filler.QuestionGenerator;
+import com.example.backend.api.resources.exam.module.question.generator.QuestionGenerator;
 import com.example.backend.api.resources.exam.module.question.model.Question;
 import com.example.backend.api.resources.exam.module.question.model.specific.QuestionT3;
 import com.example.backend.api.resources.exam.module.type.Type;
@@ -50,15 +50,14 @@ public class QuestionT3Generator implements QuestionGenerator {
         final Justification justification = getJustification(randomNum, usedJustificationRelatedWithIncorrectDefinitionIDs);
         final long definitionID = justification.getDefinitionID();
 
-
         final Definition incorrectDefinition = getDefinition(definitionID);
         final long conceptID = justification.getConceptID();
 
         final Concept concept = getConcept(conceptID);
         final long justificationID = justification.getId();
 
+
         if (questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID)) {
-            System.out.println("Exists T3");
             return questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();
         }
 
@@ -128,6 +127,5 @@ public class QuestionT3Generator implements QuestionGenerator {
         final int MAX = (int) numberOfIncorrectDefinitions;
         return ThreadLocalRandom.current().nextInt(MIN, MAX);
     }
-
 
 }
