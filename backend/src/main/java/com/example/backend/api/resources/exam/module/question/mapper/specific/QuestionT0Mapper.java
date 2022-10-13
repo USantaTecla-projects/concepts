@@ -16,7 +16,7 @@ public class QuestionT0Mapper extends QuestionMapper {
 
     @Override
     protected Question getQuestionFromDTO() {
-        Long conceptID = Long.valueOf((Integer) getTypeDetail("conceptId"));
+        Long conceptID = Long.valueOf((Integer) getTypeDetail("conceptID"));
 
         return questionT0Repository
                 .findByConceptID(conceptID)

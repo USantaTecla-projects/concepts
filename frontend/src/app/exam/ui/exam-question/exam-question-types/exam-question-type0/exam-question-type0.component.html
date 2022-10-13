@@ -8,13 +8,7 @@
       <form class="form" [formGroup]="questionReplyForm">
         <mat-form-field appearance="outline" class="question-reply">
           <mat-label>Write your reply...</mat-label>
-          <textarea
-            rows="2"
-            matInput
-            formControlName="text"
-            cdkTextareaAutosize
-            placeholder="Reply"
-            (input)="onQuestionReplied()"></textarea>
+          <textarea rows="2" matInput formControlName="text" cdkTextareaAutosize placeholder="Reply"></textarea>
         </mat-form-field>
       </form>
     </div>

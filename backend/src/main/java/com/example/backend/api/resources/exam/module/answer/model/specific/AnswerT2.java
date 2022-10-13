@@ -23,12 +23,11 @@ public class AnswerT2 extends Answer {
         this.reply = reply;
     }
 
+
     @Override
     public String toString() {
         return "AnswerT2{" +
-                ", reply=" + reply +
-                ", type=" + type +
-                ", userID=" + userID +
+                "reply=" + reply +
                 '}';
     }
 }

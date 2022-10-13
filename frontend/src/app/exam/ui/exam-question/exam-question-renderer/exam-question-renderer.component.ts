@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, Type, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
 import { QuestionHostDirective } from '../../../utils/question-host.directive';
 import { ExamQuestionComponent } from '../exam-question-types/exam-question.component';
 
@@ -14,13 +14,9 @@ export class ExamQuestionRendererComponent implements OnInit {
 
   @Input() questionNumber!: number;
 
-  @Input() set replyExam(val: boolean) {
-    if (val) this.replyQuestion();
-  }
+  @Input() userID!: number;
 
   @ViewChild(QuestionHostDirective, { static: true }) questionHost!: QuestionHostDirective;
-
-  private componentRef!: any;
 
   constructor() {}
 
@@ -32,16 +28,8 @@ export class ExamQuestionRendererComponent implements OnInit {
     const viewContainerRef = this.questionHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<ExamQuestionComponent>(this.componentType);
-
-    console.log(this.question);
-
-    this.componentRef = componentRef;
-    this.componentRef.instance.question = this.question;
-    this.componentRef.instance.questionNumber = this.questionNumber;
-    componentRef.instance.sendRepliedQuestion.suscribe((val: any) => console.log(val));
-  }
-
-  replyQuestion() {
-    this.componentRef.instance.replyQuestion = true;
+    componentRef.instance['question'] = this.question;
+    componentRef.instance['questionNumber'] = this.questionNumber;
+    componentRef.instance['userID'] = this.userID;
   }
 }

@@ -8,10 +8,12 @@
         ¿Es cierto que {{ question.conceptText }} no es {{ question.incorrectDefinitionText }} porque
         {{ question.justificationText }}?
       </p>
-      <mat-radio-group class="question-reply" aria-label="Select an option">
-        <mat-radio-button class="radio-button" value="1">Yes</mat-radio-button>
-        <mat-radio-button class="radio-button" value="2">No</mat-radio-button>
-      </mat-radio-group>
+      <form class="form" [formGroup]="questionReplyForm">
+        <mat-radio-group formControlName="bool" class="question-reply" aria-label="Select an option">
+          <mat-radio-button class="radio-button" value="1">Yes</mat-radio-button>
+          <mat-radio-button class="radio-button" value="0">No</mat-radio-button>
+        </mat-radio-group>
+      </form>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

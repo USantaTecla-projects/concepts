@@ -1,6 +1,7 @@
 import { QuestionAnswerType } from '../enum/question-answer-type.enum';
 
-export interface QuestionDTO {
+export interface AnswerDTO {
+  userID: number;
   type: QuestionAnswerType;
-  [key: string]: any;
+  reply: any;
 }

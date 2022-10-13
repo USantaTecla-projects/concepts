@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'in-course',
     loadChildren: () => import('../exam-in-course/exam-in-course.module').then(m => m.ExamInCourseModule),
   },
+  {
+    path: 'end',
+    loadChildren: () => import('../exam-end/exam-end.module').then(m => m.ExamEndModule),
+  },
 ];
 
 @NgModule({

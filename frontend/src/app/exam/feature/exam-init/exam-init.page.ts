@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
-import { GenerateExamData } from '../../types/dto/generate-exam.dto';
+import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
 import { ExamStore } from '../../data-access/exam.store';
 import { AuthStore } from '../../../auth/data-access/auth.store';
 import { mergeMap, switchMap, throwError } from 'rxjs';
@@ -26,7 +26,7 @@ export class ExamInitPage implements OnInit {
     this.authStore.user$
       .pipe(
         map(user => (!user ? -1 : user.id)),
-        mergeMap(userID => this.examStore.generateExam({ ...generateExamData, userID }))
+        mergeMap(userID => this.examStore.createExam({ ...generateExamData, userID }))
       )
       .subscribe({
         next: () => this.router.navigateByUrl('/exam/in-course'),

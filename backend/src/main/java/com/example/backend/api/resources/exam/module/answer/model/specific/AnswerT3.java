@@ -11,6 +11,7 @@ import javax.persistence.Id;
 public class AnswerT3 extends Answer {
 
     private Boolean reply;
+
     public AnswerT3() {
     }
 
@@ -25,9 +26,7 @@ public class AnswerT3 extends Answer {
     @Override
     public String toString() {
         return "AnswerT3{" +
-                ", reply=" + reply +
-                ", type=" + type +
-                ", userID=" + userID +
+                "reply=" + reply +
                 '}';
     }
 }

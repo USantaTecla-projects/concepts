@@ -1,17 +1,36 @@
-import { Injectable } from '@angular/core';
-import { QuestionAnswerType } from '../types/enums/question-answer-type.enum';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Question } from '../types/model/question/question.model';
-import { questionTypeRepliers } from '../utils/rreplier.util';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class QuestionReplierService {
+  private replyQuestionsSubject = new BehaviorSubject<boolean>(false);
+
+  replyQuestions$: Observable<boolean> = this.replyQuestionsSubject.asObservable();
+
+  private examFullyRepliedSubject = new BehaviorSubject<boolean>(false);
+
+  examFullyReplied$: Observable<boolean> = this.examFullyRepliedSubject.asObservable();
+
+  private numberOfQuestions: number = 0;
+
+  repliedQuestions: Question[] = [];
+
   constructor() {}
 
-  storeAnswerOnQuestion(userID: number, question: Question, reply: any): Question {
-    const { type } = question;
-    console.log(questionTypeRepliers[question.type]);
-    return questionTypeRepliers[type](userID, question, reply);
+  addRepliedQuestion(question: Question) {
+    this.repliedQuestions = [...this.repliedQuestions, question];
+
+    console.log(this.repliedQuestions);
+
+    if (this.repliedQuestions.length === this.numberOfQuestions) {
+      this.examFullyRepliedSubject.next(true);
+    }
+  }
+
+  notifyComponentsToSendReplies() {
+    this.replyQuestionsSubject.next(true);
+  }
+
+  setNumberOfQuestions(numberOfQuestions: number) {
+    this.numberOfQuestions = numberOfQuestions;
   }
 }

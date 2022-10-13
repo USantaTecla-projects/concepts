@@ -56,7 +56,7 @@ public class ExamService {
 
 
     public void reply(final ReplyExamDTO replyExamDTO) {
-
+        
         final Long userID = replyExamDTO
                 .getUserIDOptional(replyExamDTO.getUserID())
                 .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field userID in ReplyExam DTO is mandatory"));
@@ -66,6 +66,7 @@ public class ExamService {
         final List<QuestionAndAnswerDTO> questionAndAnswerDTOList = replyExamDTO
                 .getQuestionAndAnswerDTOListOptional(replyExamDTO.getQuestionAndAnswerDTOList())
                 .orElseThrow(() -> new QuestionDTOBadRequestException("Field questionDTOList in ReplyExam DTO is mandatory"));
+
 
         final List<QuestionDTO> questionDTOList = questionAndAnswerDTOList
                 .stream()
@@ -79,6 +80,9 @@ public class ExamService {
 
         final List<Question> questions = questionService.mapQuestionDTOToQuestion(questionDTOList);
         final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
+
+        System.out.println(answers);
+
         saveAnswersOnQuestions(questions, answers);
 
         replyExamOnDatabase(userID);

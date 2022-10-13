@@ -5,10 +5,12 @@
     </mat-expansion-panel-header>
     <div class="question-content">
       <p>¿Es correcto afirmar que {{ question.conceptText }} es {{ question.definitionText }}?</p>
-      <mat-radio-group class="question-reply" aria-label="Select an option">
-        <mat-radio-button class="radio-button" value="1">Yes</mat-radio-button>
-        <mat-radio-button class="radio-button" value="2">No</mat-radio-button>
-      </mat-radio-group>
+      <form class="form" [formGroup]="questionReplyForm">
+        <mat-radio-group formControlName="bool" class="question-reply" aria-label="Select an option">
+          <mat-radio-button class="radio-button" value="0">Yes</mat-radio-button>
+          <mat-radio-button class="radio-button" value="1">No</mat-radio-button>
+        </mat-radio-group>
+      </form>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

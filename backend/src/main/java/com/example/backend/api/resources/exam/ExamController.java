@@ -22,8 +22,8 @@ public class ExamController {
         return examService.create(createExamDTO);
     }
 
-    @PostMapping("/replies")
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @PatchMapping("/")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void reply(@RequestBody final ReplyExamDTO replyExamDTO){
         examService.reply(replyExamDTO);
     }

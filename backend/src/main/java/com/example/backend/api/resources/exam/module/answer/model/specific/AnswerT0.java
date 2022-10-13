@@ -26,9 +26,7 @@ public class AnswerT0 extends Answer {
     @Override
     public String toString() {
         return "AnswerT0{" +
-                ", reply='" + reply + '\'' +
-                ", type=" + type +
-                ", userID=" + userID +
+                "reply='" + reply + '\'' +
                 '}';
     }
 }

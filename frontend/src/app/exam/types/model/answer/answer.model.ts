@@ -1,4 +1,4 @@
-import { QuestionAnswerType } from '../../enums/question-answer-type.enum';
+import { QuestionAnswerType } from '../../enum/question-answer-type.enum';
 
 export interface Answer {
   type: QuestionAnswerType;

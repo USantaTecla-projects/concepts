@@ -17,8 +17,8 @@ public class QuestionT2Mapper extends QuestionMapper {
 
     @Override
     protected Question getQuestionFromDTO() {
-        Long conceptID = Long.valueOf((Integer) getTypeDetail("conceptId"));
-        Long definitionID = Long.valueOf((Integer) getTypeDetail("definitionId"));
+        Long conceptID = Long.valueOf((Integer) getTypeDetail("conceptID"));
+        Long definitionID = Long.valueOf((Integer) getTypeDetail("definitionID"));
 
         return questionT2Repository
                 .findByConceptIDAndDefinitionID(conceptID,definitionID)

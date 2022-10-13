@@ -1,8 +1,8 @@
-import { QuestionTypeX } from '../question-typeX.type';
+import { Question } from './question/question.model';
 
 export interface Exam {
-  id?: number;
-  userID?: number;
-  creationDate?: string;
-  questionList: QuestionTypeX[];
+  id: number;
+  userID: number;
+  creationDate: string;
+  questionList: Question[];
 }

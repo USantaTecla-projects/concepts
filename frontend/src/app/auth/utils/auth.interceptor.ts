@@ -33,6 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
       );
     }
 
-    return throwError(() => new Error('Session expired'));
+    return throwError(() => new Error(error.error.message));
   }
 }
