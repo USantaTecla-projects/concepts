@@ -93,8 +93,6 @@ public class AuthService {
                 "Auth successful. Tokens are created in cookie."
         );
 
-        System.out.println(responseHeaders);
-
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
 

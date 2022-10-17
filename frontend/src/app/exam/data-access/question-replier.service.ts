@@ -19,8 +19,6 @@ export class QuestionReplierService {
   addRepliedQuestion(question: Question) {
     this.repliedQuestions = [...this.repliedQuestions, question];
 
-    console.log(this.repliedQuestions);
-
     if (this.repliedQuestions.length === this.numberOfQuestions) {
       this.examFullyRepliedSubject.next(true);
     }

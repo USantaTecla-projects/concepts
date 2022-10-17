@@ -44,7 +44,7 @@ export class ExamQuestionType3Component implements OnInit, ExamQuestionComponent
       ...this.question,
       answer: {
         type: QuestionAnswerType.TYPE3,
-        reply: questionReplyFormValue.bool === '0',
+        reply: questionReplyFormValue.bool ? questionReplyFormValue.bool === '0' : null,
         userID: this.userID,
       },
     };

@@ -1,0 +1,36 @@
+.grid {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 4rem;
+
+  .card {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .card-title {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .done-icon {
+      width: 16rem;
+      height: 16rem;
+      font-size: 16rem;
+      color: #673ab7;
+      margin-bottom: 2rem;
+    }
+
+    .card-title,
+    p {
+      text-align: center;
+    }
+
+    .home-button {
+      margin-top: 1rem;
+    }
+  }
+}

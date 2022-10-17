@@ -42,7 +42,11 @@ export class ExamQuestionType0Component implements OnInit, ExamQuestionComponent
     const questionReplyFormValue: QuestionT0ReplyForm = this.questionReplyForm.getRawValue();
     this.question = {
       ...this.question,
-      answer: { type: QuestionAnswerType.TYPE0, reply: questionReplyFormValue.text, userID: this.userID },
+      answer: {
+        type: QuestionAnswerType.TYPE0,
+        reply: questionReplyFormValue.text ? questionReplyFormValue.text : null,
+        userID: this.userID,
+      },
     };
     this.questionReplierService.addRepliedQuestion(this.question);
   }

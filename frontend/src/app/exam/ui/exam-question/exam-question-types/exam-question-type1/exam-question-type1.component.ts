@@ -39,9 +39,14 @@ export class ExamQuestionType1Component implements OnInit, ExamQuestionComponent
 
   onQuestionReplied() {
     const questionReplyFormValue: QuestionT1ReplyForm = this.questionReplyForm.value;
+
     this.question = {
       ...this.question,
-      answer: { type: QuestionAnswerType.TYPE1, reply: questionReplyFormValue.text, userID: this.userID },
+      answer: {
+        type: QuestionAnswerType.TYPE1,
+        reply: questionReplyFormValue.text ? questionReplyFormValue.text : null,
+        userID: this.userID,
+      },
     };
 
     this.questionReplierService.addRepliedQuestion(this.question);

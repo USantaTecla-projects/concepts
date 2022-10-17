@@ -31,9 +31,6 @@ export class ExamMapperService {
       const questionDTO = fromQuestionTypeMappers[type](question);
       const answerDTO = <AnswerDTO>question['answer'];
 
-      if (answerDTO.reply === null) {
-        answerDTO.reply = '';
-      }
       return {
         questionDTO,
         answerDTO,

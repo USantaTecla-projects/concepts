@@ -81,8 +81,6 @@ public class ExamService {
         final List<Question> questions = questionService.mapQuestionDTOToQuestion(questionDTOList);
         final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
 
-        System.out.println(answers);
-
         saveAnswersOnQuestions(questions, answers);
 
         replyExamOnDatabase(userID);
@@ -108,9 +106,7 @@ public class ExamService {
 
     private Exam createExamOnDatabase(final Long userID,final List<Question> questionList) {
         final Exam exam = new Exam(questionList, userID, new Timestamp(System.currentTimeMillis()));
-        Exam savedExam = examRepository.save(exam);
-        System.out.println(savedExam);
-        return savedExam;
+        return examRepository.save(exam);
     }
 
     private void replyExamOnDatabase(final Long userID) {

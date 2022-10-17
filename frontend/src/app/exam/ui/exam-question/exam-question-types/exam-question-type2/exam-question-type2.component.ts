@@ -42,7 +42,11 @@ export class ExamQuestionType2Component implements OnInit, ExamQuestionComponent
     const questionReplyFormValue: QuestionT2ReplyForm = this.questionReplyForm.value;
     this.question = {
       ...this.question,
-      answer: { type: QuestionAnswerType.TYPE2, reply: questionReplyFormValue.bool === '0', userID: this.userID },
+      answer: {
+        type: QuestionAnswerType.TYPE2,
+        reply: questionReplyFormValue.bool ? questionReplyFormValue.bool === '0' : null,
+        userID: this.userID,
+      },
     };
     this.questionReplierService.addRepliedQuestion(this.question);
   }
