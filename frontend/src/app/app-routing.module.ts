@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'exam',
     loadChildren: () => import('./exam/feature/exam-shell/exam-shell.module').then(m => m.ExamShellModule),
   },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/feature/profile.module').then(m => m.ProfileModule),
+  },
 ];
 
 @NgModule({

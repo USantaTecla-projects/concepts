@@ -13,7 +13,7 @@
 
   <div class="profile">
     <button class="profile-button" mat-stroked-button mat-button color="basic">
-      <div class="button-content">
+      <div class="button-content" routerLink="/profile">
         <mat-icon class="icon">person</mat-icon>
         <span class="text">{{ (authStore.user$ | async)?.username | titlecase }}</span>
       </div>

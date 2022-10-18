@@ -1,0 +1,51 @@
+:host {
+  z-index: 99;
+}
+
+mat-card {
+  padding: 0;
+  height: 8rem;
+  margin-bottom: 1rem;
+  display: flex;
+
+  .exam-info {
+    width: 100%;
+    display: flex;
+    .mark {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #673ab7;
+      color: #fff;
+      width: 8rem;
+      height: 8rem;
+      border-top-left-radius: inherit;
+      border-bottom-left-radius: inherit;
+
+      span {
+        font-size: 2rem;
+        font-weight: 500;
+      }
+    }
+
+    .text-info {
+      margin: 1rem;
+
+      h4 {
+        font-weight: 500;
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .date-label,
+      .correct-answers-label,
+      .time-spent-label {
+        font-weight: 500;
+      }
+    }
+  }
+
+  button {
+    width: 9rem;
+  }
+}

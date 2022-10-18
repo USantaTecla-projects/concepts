@@ -10,10 +10,11 @@ import { NavbarModule } from './shared/components/navbar/navbar.module';
 import { ApiInterceptor } from './shared/utils/api.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { AuthInterceptor } from './auth/utils/auth.interceptor';
+import { ExamHistoryItemComponent } from './profile/ui/exam-history-item/exam-history-item.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, SharedModule, NavbarModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, SharedModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
