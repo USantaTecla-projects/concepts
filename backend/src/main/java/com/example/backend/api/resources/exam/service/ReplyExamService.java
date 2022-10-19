@@ -6,13 +6,14 @@ import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
 import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
-import com.example.backend.api.resources.exam.module.answer.dto.AnswerDTO;
-import com.example.backend.api.resources.exam.module.answer.model.Answer;
-import com.example.backend.api.resources.exam.module.answer.service.AnswerService;
-import com.example.backend.api.resources.exam.module.question.dto.QuestionDTO;
-import com.example.backend.api.resources.exam.module.question.exception.specific.QuestionDTOBadRequestException;
-import com.example.backend.api.resources.exam.module.question.model.Question;
-import com.example.backend.api.resources.exam.module.question.service.QuestionService;
+import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
+import com.example.backend.api.resources.exam.domain.family.answer.service.SaveAnswerService;
+import com.example.backend.api.resources.exam.domain.family.question.dto.QuestionDTO;
+import com.example.backend.api.resources.exam.domain.family.question.exception.specific.QuestionDTOBadRequestException;
+import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.example.backend.api.resources.exam.domain.family.question.service.MapQuestionService;
+import com.example.backend.api.resources.exam.domain.family.question.service.saver.SaveQuestionService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -23,24 +24,24 @@ import java.util.List;
 public class ReplyExamService {
 
     private final ExamRepository examRepository;
-
-    private final QuestionService questionService;
-
-    private final AnswerService answerService;
+    private final MapQuestionService mapQuestionService;
+    private final SaveQuestionService saveQuestionService;
+    private final SaveAnswerService answerService;
 
     public ReplyExamService(
             ExamRepository examRepository,
-            QuestionService questionService,
-            AnswerService answerService
+            MapQuestionService mapQuestionService,
+            SaveQuestionService saveQuestionService, SaveAnswerService answerService
     ) {
         this.examRepository = examRepository;
-        this.questionService = questionService;
+        this.mapQuestionService = mapQuestionService;
+        this.saveQuestionService = saveQuestionService;
         this.answerService = answerService;
     }
 
 
     public void reply(final ReplyExamDTO replyExamDTO) {
-        
+
         final Long userID = replyExamDTO
                 .getUserIDOptional(replyExamDTO.getUserID())
                 .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field userID in ReplyExam DTO is mandatory"));
@@ -62,12 +63,12 @@ public class ReplyExamService {
                 .map(QuestionAndAnswerDTO::getAnswerDTO)
                 .toList();
 
-        final List<Question> questions = questionService.mapQuestionDTOToQuestion(questionDTOList);
+        final List<Question> questions = mapQuestionService.mapQuestionDTOToQuestion(questionDTOList);
         final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
 
         saveAnswersOnQuestions(questions, answers);
 
-        replyExamOnDatabase(examID,userID);
+        replyExamOnDatabase(examID, userID);
     }
 
     private Long checkExamExistOnDatabase(final ReplyExamDTO replyExamDTO) {
@@ -90,17 +91,6 @@ public class ReplyExamService {
         return examID;
     }
 
-    private void replyExamOnDatabase(final Long examID, final Long userID) {
-        final Exam exam = examRepository
-                .findByIdAndUserID(examID,userID)
-                .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));
-
-
-        exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
-        exam.calculateTimeSpend();
-        examRepository.save(exam);
-    }
-
     private void saveAnswersOnQuestions(final List<Question> questions, final List<Answer> answers) {
         final Iterator<Question> questionIterator = questions.iterator();
         final Iterator<Answer> answerIterator = answers.iterator();
@@ -109,9 +99,17 @@ public class ReplyExamService {
             final Question question = questionIterator.next();
             final Answer answer = answerIterator.next();
             question.addAnswer(answer);
-            questionService.saveQuestion(question);
+            saveQuestionService.saveQuestion(question);
         }
+    }
 
+    private void replyExamOnDatabase(final Long examID, final Long userID) {
+        final Exam exam = examRepository
+                .findByIdAndUserID(examID, userID)
+                .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));
 
+        exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
+        exam.calculateTimeSpend();
+        examRepository.save(exam);
     }
 }

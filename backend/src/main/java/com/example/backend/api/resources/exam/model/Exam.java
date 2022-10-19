@@ -1,13 +1,12 @@
 package com.example.backend.api.resources.exam.model;
 
 
-import com.example.backend.api.resources.exam.module.question.model.Question;
+import com.example.backend.api.resources.exam.domain.family.question.model.Question;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Exam {

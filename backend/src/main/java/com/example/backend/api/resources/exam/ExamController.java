@@ -4,7 +4,7 @@ import com.example.backend.api.resources.exam.dto.CreateExamDTO;
 import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
 import com.example.backend.api.resources.exam.model.Exam;
 import com.example.backend.api.resources.exam.service.CreateExamService;
-import com.example.backend.api.resources.exam.service.GetUserExamService;
+import com.example.backend.api.resources.exam.service.FindExamsService;
 import com.example.backend.api.resources.exam.service.ReplyExamService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,22 +16,22 @@ public class ExamController {
 
     private final CreateExamService createExamService;
     private final ReplyExamService replyExamService;
-    private final GetUserExamService getUserExamService;
+    private final FindExamsService findExamsService;
 
     public ExamController(
             CreateExamService createExamService,
             ReplyExamService replyExamService,
-            GetUserExamService getUserExamService
+            FindExamsService findExamsService
     ) {
         this.createExamService = createExamService;
         this.replyExamService = replyExamService;
-        this.getUserExamService = getUserExamService;
+        this.findExamsService = findExamsService;
     }
 
     @GetMapping("/{userID}")
     @ResponseStatus(code = HttpStatus.OK)
     public Page<Exam> getUserExams(@PathVariable final Long userID, @RequestParam final Integer page) {
-        return getUserExamService.getUserExams(userID, page);
+        return findExamsService.findByUserID(userID, page);
     }
 
     @PostMapping("/")

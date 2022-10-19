@@ -1,7 +1,7 @@
 package com.example.backend.api.resources.exam.dto;
 
-import com.example.backend.api.resources.exam.module.answer.dto.AnswerDTO;
-import com.example.backend.api.resources.exam.module.question.dto.QuestionDTO;
+import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.exam.domain.family.question.dto.QuestionDTO;
 
 public class QuestionAndAnswerDTO {
 
