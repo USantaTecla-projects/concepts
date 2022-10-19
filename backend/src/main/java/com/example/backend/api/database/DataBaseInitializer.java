@@ -35,9 +35,16 @@ public class DataBaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         userRepository
-                .save(new User(1L, "teacher", passwordEncoder.encode("1234"), List.of("TEACHER", "STUDENT")));
+                .save(new User(
+                        1L,
+                        "Cristian de Gracia Nuero",
+                        "teacher",
+                        "teacher@gmail.com",
+                        passwordEncoder.encode("1234"),
+                        List.of("TEACHER", "STUDENT"))
+                );
         userRepository
-                .save(new User(2L, "student", passwordEncoder.encode("1234"), List.of("STUDENT")));
+                .save(new User(2L, "Cristian de Gracia Nuero", "student", "student@gmail.com", passwordEncoder.encode("1234"), List.of("STUDENT")));
 
 
         Concept softwareConcept = conceptRepository.save(new Concept("el software."));

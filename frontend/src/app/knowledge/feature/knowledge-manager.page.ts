@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
+import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { DefinitionStore } from '../data-access/definition.store';
 import { ConceptStore } from '../data-access/concept.store';
 import { JustificationStore } from '../data-access/justification.store';

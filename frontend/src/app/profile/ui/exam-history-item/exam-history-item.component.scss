@@ -8,6 +8,10 @@ mat-card {
   margin-bottom: 1rem;
   display: flex;
 
+  -webkit-box-shadow: 0px 0px 25px -14px rgba(0, 0, 0, 0.75) !important;
+  -moz-box-shadow: 0px 0px 25px -14px rgba(0, 0, 0, 0.75) !important;
+  box-shadow: 0px 0px 25px -14px rgba(0, 0, 0, 0.75) !important;
+
   .exam-info {
     width: 100%;
     display: flex;

@@ -20,10 +20,11 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
 import { NavbarModule } from './components/navbar/navbar.module';
+import { TimeSpentPipe } from './utils/time-spent.pipe';
 
 @NgModule({
   imports: [CommonModule, NavbarModule],
-  declarations: [ShortTextPipe],
+  declarations: [ShortTextPipe, TimeSpentPipe],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -32,6 +33,7 @@ import { NavbarModule } from './components/navbar/navbar.module';
   ],
   exports: [
     ShortTextPipe,
+    TimeSpentPipe,
     ReactiveFormsModule,
     MatExpansionModule,
     MatProgressSpinnerModule,

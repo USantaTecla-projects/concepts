@@ -1,9 +1,8 @@
-package com.example.backend.api.resources.exam;
+package com.example.backend.api.resources.exam.service;
 
-import com.example.backend.api.resources.exam.dto.CreateExamDTO;
+import com.example.backend.api.resources.exam.ExamRepository;
 import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
 import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
-import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
 import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
@@ -21,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class ExamService {
+public class ReplyExamService {
 
     private final ExamRepository examRepository;
 
@@ -29,7 +28,7 @@ public class ExamService {
 
     private final AnswerService answerService;
 
-    public ExamService(
+    public ReplyExamService(
             ExamRepository examRepository,
             QuestionService questionService,
             AnswerService answerService
@@ -39,21 +38,6 @@ public class ExamService {
         this.answerService = answerService;
     }
 
-    public Exam create(final CreateExamDTO createExamDTO) {
-
-        final Long userID = createExamDTO
-                .getUserIDOptional(createExamDTO.getUserID())
-                .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field userID in CreateExam DTO is mandatory"));
-
-        final int numberOfQuestions = createExamDTO
-                .getNumberOfQuestionsOptional(createExamDTO.getNumberOfQuestions())
-                .orElseThrow(() -> new CreateExamDTOBadRequestException("Field numberOfQuestions in CreateExam DTO is mandatory"));
-
-        final List<Question> questions = questionService.createQuestions(numberOfQuestions);
-
-        return createExamOnDatabase(userID, questions);
-    }
-
 
     public void reply(final ReplyExamDTO replyExamDTO) {
         
@@ -61,7 +45,7 @@ public class ExamService {
                 .getUserIDOptional(replyExamDTO.getUserID())
                 .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field userID in ReplyExam DTO is mandatory"));
 
-        checkExamExistOnDatabase(replyExamDTO);
+        Long examID = checkExamExistOnDatabase(replyExamDTO);
 
         final List<QuestionAndAnswerDTO> questionAndAnswerDTOList = replyExamDTO
                 .getQuestionAndAnswerDTOListOptional(replyExamDTO.getQuestionAndAnswerDTOList())
@@ -83,10 +67,10 @@ public class ExamService {
 
         saveAnswersOnQuestions(questions, answers);
 
-        replyExamOnDatabase(userID);
+        replyExamOnDatabase(examID,userID);
     }
 
-    private void checkExamExistOnDatabase(final ReplyExamDTO replyExamDTO) {
+    private Long checkExamExistOnDatabase(final ReplyExamDTO replyExamDTO) {
         final Long examID = replyExamDTO
                 .getExamIDOptional(replyExamDTO.getExamID())
                 .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field examID in ReplyExam DTO is mandatory"));
@@ -102,19 +86,18 @@ public class ExamService {
         if (!exam.getCreationDate().equals(creationDate)) {
             throw new ExamNotFoundException("Exam with this creation date wasn't found");
         }
+
+        return examID;
     }
 
-    private Exam createExamOnDatabase(final Long userID,final List<Question> questionList) {
-        final Exam exam = new Exam(questionList, userID, new Timestamp(System.currentTimeMillis()));
-        return examRepository.save(exam);
-    }
-
-    private void replyExamOnDatabase(final Long userID) {
+    private void replyExamOnDatabase(final Long examID, final Long userID) {
         final Exam exam = examRepository
-                .findTopByUserIDOrderByCreationDate(userID)
+                .findByIdAndUserID(examID,userID)
                 .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));
 
+
         exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
+        exam.calculateTimeSpend();
         examRepository.save(exam);
     }
 

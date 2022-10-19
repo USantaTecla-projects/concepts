@@ -2,16 +2,16 @@
   <div mat-button disabled><mat-icon class="icon">person</mat-icon> <span>Profile</span></div>
 </mat-toolbar>
 
-<div class="container">
+<div class="container" *ngIf="user$ | async as user">
   <mat-accordion>
     <mat-expansion-panel [disabled]="true" [expanded]="true" hideToggle>
       <mat-expansion-panel-header expandedHeight="16rem">
         <mat-panel-title>
           <mat-icon>account_circle</mat-icon>
           <div class="user-info">
-            <span class="name">Cristian de Gracia Nuero</span>
-            <span class="email">cris.dgrnu@gmail.com</span>
-            <span class="username">@Cfres_</span>
+            <span class="name">{{user.fullName}}</span>
+            <span class="email">{{user.email}}</span>
+            <span class="username">@{{user.username}}</span>
           </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -22,11 +22,12 @@
           <h3>Exam history</h3>
         </div>
         <div class="history-item-list">
-          <app-exam-history-item [mark]="8.9"></app-exam-history-item>
-          <app-exam-history-item [mark]="5.2"></app-exam-history-item>
-          <app-exam-history-item [mark]="7.6"></app-exam-history-item>
-          <app-exam-history-item [mark]="4.2"></app-exam-history-item>
-          <app-exam-history-item [mark]="9.4"></app-exam-history-item>
+          <app-exam-history-item
+            [title]="'Exam #' + i"
+            [date]="exam.creationDate"
+            [mark]="'TODO'"
+            [timeSpent]="exam.timeSpent"
+            *ngFor="let exam of (repliedExamsPage$ | async)!.content; let i = index"></app-exam-history-item>
         </div>
       </div>
     </mat-expansion-panel>

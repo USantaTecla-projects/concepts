@@ -5,4 +5,5 @@ export interface Exam {
   userID: number;
   creationDate: string;
   questionList: Question[];
+  timeSpent?: number;
 }

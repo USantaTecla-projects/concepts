@@ -5,18 +5,18 @@
     </div>
 
     <div class="text-info">
-      <h4>Exam title</h4>
+      <h4>{{ title }}</h4>
       <div>
         <span class="date-label">Date: </span>
-        <span>22/02/2022</span>
+        <span>{{ date | date }}</span>
       </div>
       <div>
         <span class="correct-answers-label">Correct answers: </span>
-        <span>8/10</span>
+        <span>TODO</span>
       </div>
       <div>
         <span class="time-spent-label">Time spent: </span>
-        <span>15 minutes and 16 seconds</span>
+        <span>{{ timeSpent | timeSpent }}</span>
       </div>
     </div>
   </div>

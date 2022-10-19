@@ -5,4 +5,5 @@ export interface ExamData {
   userID: number;
   creationDate: string;
   questionDataList: QuestionDTO[];
+  timeSpent?: number;
 }

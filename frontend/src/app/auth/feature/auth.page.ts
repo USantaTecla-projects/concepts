@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
+import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { AuthStore } from '../data-access/auth.store';
 import { Credentials } from '../types/dto/credentials.dto';
 import { RegisterUserData } from '../types/dto/register-user.dto';

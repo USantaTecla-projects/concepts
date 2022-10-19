@@ -7,5 +7,6 @@ import { ExamHistoryItemComponent } from './exam-history-item.component';
   imports: [CommonModule, SharedModule],
   declarations: [ExamHistoryItemComponent],
   exports: [ExamHistoryItemComponent],
+  providers: [],
 })
 export class ExamHistoryItemModule {}

@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { take, last, tap, Observable, share, switchMap, throwError, of, Subscription } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
+import { User } from 'src/app/auth/types/model/user.model';
+import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { ExamStore } from '../../data-access/exam.store';
 import { QuestionReplierService } from '../../data-access/question-replier.service';
 import { Exam } from '../../types/model/exam.model';
@@ -17,17 +18,22 @@ import { Question } from '../../types/model/question/question.model';
 export class ExamInCoursePage implements OnInit {
   exam$!: Observable<Exam>;
 
+  user$!: Observable<User | null>;
+
   repliedQuestions: Question[] = [];
 
   constructor(
     private router: Router,
-    public examStore: ExamStore,
-    public authStore: AuthStore,
+    private examStore: ExamStore,
+    private authStore: AuthStore,
     private questionReplierService: QuestionReplierService,
     private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
+    this.exam$ = this.examStore.examInCourse$;
+    this.user$ = this.authStore.user$;
+
     const numberOfQuestions = this.examStore.getNumberOfQuestions();
     if (!numberOfQuestions) this.router.navigateByUrl('/exam/init');
     this.questionReplierService.setNumberOfQuestions(numberOfQuestions);
@@ -48,7 +54,7 @@ export class ExamInCoursePage implements OnInit {
       )
       .subscribe({
         next: () => this.router.navigateByUrl('/exam/end'),
-        error: (err: Error) => this.snackbarService.openSnackBar(err.message),
+        error: (error: Error) => this.snackbarService.openSnackBar(error.message),
       });
   }
 }

@@ -15,14 +15,14 @@ export class ExamMapperService {
   constructor() {}
 
   mapDTOToExam(examData: ExamData): Exam {
-    const { id, userID, creationDate, questionDataList } = examData;
+    const { id, userID, creationDate, questionDataList, timeSpent } = examData;
 
     const mappedList: Question[] = questionDataList.map(questionData => {
       const { type } = questionData;
       return toQuestionTypeMappers[type](questionData);
     });
 
-    return { id, userID, creationDate, questionList: mappedList };
+    return { id, userID, creationDate, questionList: mappedList, timeSpent };
   }
 
   mapExamToDTO(metadata: ExamMetadata, questions: Question[]): ReplyExamDTO {

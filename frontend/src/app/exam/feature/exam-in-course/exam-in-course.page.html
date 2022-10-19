@@ -2,8 +2,8 @@
   <div mat-button disabled><mat-icon class="icon">square_foot</mat-icon> <span>Exam</span></div>
 </mat-toolbar>
 
-<div class="grid" *ngIf="(authStore.user$ | async) as user">
-  <ng-container *ngFor="let question of (examStore.exam$ | async)!.questionList; let i = index">
+<div class="grid" *ngIf="(user$ | async) as user">
+  <ng-container *ngFor="let question of (exam$ | async)!.questionList; let i = index">
     <app-exam-question-renderer
       class="question"
       [componentType]="question.componentType"

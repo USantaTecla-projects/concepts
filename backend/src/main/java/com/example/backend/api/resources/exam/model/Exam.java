@@ -22,6 +22,7 @@ public class Exam {
 
     private Timestamp replyDate;
 
+    private Long timeSpent;
 
     @JsonProperty("questionDataList")
     @ManyToMany
@@ -37,8 +38,12 @@ public class Exam {
         this.creationDate = creationDate;
     }
 
-    public Exam(List<Question> questionList) {
-        this.questionList = questionList;
+    public void calculateTimeSpend(){
+        if(replyDate == null){
+            throw new RuntimeException("Reply date is mandatory to calculate the time spent, the exam isn't replied");
+        }
+
+        timeSpent = replyDate.getTime() - creationDate.getTime();
     }
 
     public Long getId() {
@@ -73,6 +78,14 @@ public class Exam {
         this.replyDate = replyDate;
     }
 
+    public Long getTimeSpent() {
+        return timeSpent;
+    }
+
+    public void setTimeSpent(Long timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
     public List<Question> getQuestionList() {
         return questionList;
     }
@@ -80,6 +93,7 @@ public class Exam {
     public void setQuestionList(List<Question> questionList) {
         this.questionList = questionList;
     }
+
 
     @Override
     public String toString() {

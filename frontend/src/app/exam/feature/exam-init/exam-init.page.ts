@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SnackbarService } from 'src/app/shared/utils/snackbar.service';
+import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
 import { ExamStore } from '../../data-access/exam.store';
 import { AuthStore } from '../../../auth/data-access/auth.store';

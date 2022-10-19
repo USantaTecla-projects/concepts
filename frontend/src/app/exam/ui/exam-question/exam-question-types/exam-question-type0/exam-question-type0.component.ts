@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ExamStore } from 'src/app/exam/data-access/exam.store';
 import { QuestionReplierService } from 'src/app/exam/data-access/question-replier.service';
 import { QuestionAnswerType } from 'src/app/exam/types/enum/question-answer-type.enum';

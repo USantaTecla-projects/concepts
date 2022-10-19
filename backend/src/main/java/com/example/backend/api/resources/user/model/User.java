@@ -6,16 +6,18 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="user_account")
+@Table(name = "user_account")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique=true)
+    private String fullName;
+
+    @Column(unique = true)
     private String username;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -27,14 +29,16 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String password, List<String> roles) {
+    public User(Long id,String fullName, String username, String email, String password, List<String> roles) {
         this.id = id;
+        this.fullName = fullName;
+        this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
     }
 
-    public User(String username,String email, String password, List<String> roles) {
+    public User(String username, String email, String password, List<String> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -47,6 +51,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUsername() {

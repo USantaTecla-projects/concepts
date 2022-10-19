@@ -6,7 +6,13 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./exam-history-item.component.scss'],
 })
 export class ExamHistoryItemComponent implements OnInit {
-  @Input() mark!: number;
+  @Input() title!: string;
+
+  @Input() mark!: string;
+
+  @Input() date!: string;
+
+  @Input() timeSpent!: number | undefined;
 
   constructor() {}
 
