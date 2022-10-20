@@ -17,10 +17,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { TimeSpentPipe } from './utils/time-spent.pipe';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   imports: [CommonModule, NavbarModule],
@@ -50,6 +55,11 @@ import { TimeSpentPipe } from './utils/time-spent.pipe';
     MatDialogModule,
     MatPaginatorModule,
     MatRadioModule,
+    MatListModule,
+    MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSlideToggleModule,
     NavbarModule,
   ],
 })

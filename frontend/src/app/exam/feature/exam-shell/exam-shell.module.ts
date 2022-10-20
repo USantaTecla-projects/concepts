@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { ExamShellRoutingModule } from './exam-shell-routing.module';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, ExamShellRoutingModule],
+  imports: [CommonModule, ExamShellRoutingModule],
   declarations: [],
 })
 export class ExamShellModule {}

@@ -1,0 +1,70 @@
+<mat-toolbar class="tool-bar" color="primary">
+  <div mat-button disabled><mat-icon class="icon">draw</mat-icon> <span>Correction</span></div>
+</mat-toolbar>
+
+<div class="container">
+  <mat-accordion>
+    <mat-expansion-panel [disabled]="true" [expanded]="true" hideToggle>
+      <mat-expansion-panel-header expandedHeight="8rem">
+        <mat-panel-title>
+          <mat-icon class="icon">edit_note</mat-icon>
+          <h3>Pending exams</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-card class="filters">
+        <div class="filter-title">
+          <mat-icon>filter_alt</mat-icon>
+          <span>Filters</span>
+        </div>
+        <div class="filter-inputs-layout">
+          <div class="filter-inputs">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter by student</mat-label>
+              <input matInput type="text" />
+              <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Filter by date</mat-label>
+              <input matInput [matDatepicker]="picker" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <div class="slider">
+              <mat-slide-toggle></mat-slide-toggle>
+              <span>Name order</span>
+              <mat-icon>arrow_right</mat-icon>
+              <span class="order">ASC</span>
+            </div>
+
+            <div class="slider">
+              <mat-slide-toggle></mat-slide-toggle>
+              <span>Date order</span>
+              <mat-icon>arrow_right</mat-icon>
+              <span class="order">ASC</span>
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button mat-raised-button color="primary">
+              <span>Buscar</span>
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-selection-list #shoes [multiple]="false">
+        <div class="list-item" *ngFor="let item of list; let i = index">
+          <mat-list-option [value]="item">
+            <mat-icon mat-list-icon>description</mat-icon>
+            <div mat-line>Cristian de Gracia Nuero</div>
+            <div mat-line>22/02/2020</div>
+          </mat-list-option>
+          <mat-divider *ngIf="i + 1 !== list.length"></mat-divider>
+        </div>
+      </mat-selection-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

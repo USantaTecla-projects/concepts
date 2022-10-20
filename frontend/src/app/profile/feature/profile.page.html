@@ -21,13 +21,24 @@
           <mat-icon class="icon">history</mat-icon>
           <h3>Exam history</h3>
         </div>
-        <div class="history-item-list">
-          <app-exam-history-item
-            [title]="'Exam #' + i"
-            [date]="exam.creationDate"
-            [mark]="'TODO'"
-            [timeSpent]="exam.timeSpent"
-            *ngFor="let exam of (repliedExamsPage$ | async)!.content; let i = index"></app-exam-history-item>
+        <div class="history-item-list" *ngIf="(repliedExamsPage$ | async)!.content as repliedExamList">
+          <ng-container *ngIf="repliedExamList.length; else noExamsYet">
+            <app-exam-history-item
+              [title]="'Exam #' + i"
+              [date]="exam.creationDate"
+              [mark]="'TODO'"
+              [timeSpent]="exam.timeSpent"
+              *ngFor="let exam of repliedExamList; let i = index">
+            </app-exam-history-item>
+          </ng-container>
+          <ng-template #noExamsYet>
+            <div class="empty-history">
+              <mat-icon>rule</mat-icon>
+              <span class="first-empty-title">No exams done yet</span>
+              <br />
+              <span class="second-empty-title">Go to the exam section and complete your first!</span>
+            </div>
+          </ng-template>
         </div>
       </div>
     </mat-expansion-panel>

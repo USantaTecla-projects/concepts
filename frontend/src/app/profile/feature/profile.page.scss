@@ -1,67 +1,97 @@
 .container {
   margin: 3rem 18rem;
-}
 
-mat-expansion-panel {
-  background-color: #673ab7;
+  mat-expansion-panel {
+    background-color: #673ab7;
 
-  .mat-expansion-panel-header[aria-disabled='true'] {
-    color: #fff;
-  }
-
-  mat-panel-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    mat-icon {
-      width: 8rem;
-      height: 8rem;
-      font-size: 8rem;
+    .mat-expansion-panel-header[aria-disabled='true'] {
+      color: #fff;
     }
 
-    .user-info {
+    mat-panel-title {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
 
-      .name {
-        font-weight: 500;
-        font-size: 1.4rem;
-        margin-bottom: 0.75rem;
+      mat-icon {
+        width: 8rem;
+        height: 8rem;
+        font-size: 8rem;
+      }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .name {
+          font-weight: 500;
+          font-size: 1.4rem;
+          margin-bottom: 0.75rem;
+        }
       }
     }
   }
-}
 
-::ng-deep .mat-expansion-panel-body {
-  background-color: white !important;
-}
-
-.exam-history {
-  margin-top: 2rem;
-
-  .title {
-    display: flex;
-    align-items: center;
-
-    mat-icon {
-      width: 1.8rem;
-      height: 1.8rem;
-      font-size: 1.8rem;
-    }
-
-    h3 {
-      font-size: 1.5rem;
-      font-weight: 500;
-      margin-left: 0.3rem;
-      margin-bottom: 0;
-    }
+  ::ng-deep .mat-expansion-panel-body {
+    background-color: white !important;
   }
 
-  .history-item-list {
+  .exam-history {
     margin-top: 2rem;
-    margin-left: 0.4rem;
+
+    .title {
+      display: flex;
+      align-items: center;
+
+      mat-icon {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-left: 0.3rem;
+        margin-bottom: 0;
+      }
+    }
+
+    .history-item-list {
+      margin-top: 2rem;
+      margin-left: 0.4rem;
+    }
+
+    .empty-history {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 4rem;
+      margin-bottom: 6rem;
+
+      mat-icon {
+        width: 10rem;
+        height: 10rem;
+        font-size: 10rem;
+        color: #bfbfbf;
+        margin-bottom: 1rem;
+      }
+
+      .first-empty-title {
+        font-size: 1.75rem;
+        color: #bfbfbf;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .second-empty-title {
+        font-size: 1rem;
+        color: #bfbfbf;
+        font-weight: 500;
+        text-align: center;
+      }
+    }
   }
 }

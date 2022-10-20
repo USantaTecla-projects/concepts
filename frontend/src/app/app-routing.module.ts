@@ -11,12 +11,17 @@ const routes: Routes = [
     loadChildren: () => import('./auth/feature/auth.module').then(m => m.AuthPageModule),
   },
   {
+    path: 'exam',
+    loadChildren: () => import('./exam/feature/exam-shell/exam-shell.module').then(m => m.ExamShellModule),
+  },
+  {
     path: 'knowledge',
     loadChildren: () => import('./knowledge/feature/knowledge-manager.module').then(m => m.KnowledgeManagerPageModule),
   },
   {
-    path: 'exam',
-    loadChildren: () => import('./exam/feature/exam-shell/exam-shell.module').then(m => m.ExamShellModule),
+    path: 'correction',
+    loadChildren: () =>
+      import('./correction/feature/correction-shell/correction-shell.module').then(m => m.CorrectionShellModule),
   },
   {
     path: 'profile',
