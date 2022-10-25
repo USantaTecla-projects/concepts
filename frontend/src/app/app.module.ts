@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { AuthInterceptor } from './auth/utils/auth.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { ApiInterceptor } from './shared/utils/api.interceptor';
+
+export let AppInjector: Injector;
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,4 +30,8 @@ import { ApiInterceptor } from './shared/utils/api.interceptor';
 
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private injector: Injector) {
+    AppInjector = this.injector;
+  }
+}

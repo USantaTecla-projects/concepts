@@ -22,15 +22,24 @@
           <h3>Exam history</h3>
         </div>
         <div class="history-item-list" *ngIf="(repliedExamsPage$ | async)!.content as repliedExamList">
-          <ng-container *ngIf="repliedExamList.length; else noExamsYet">
-            <app-exam-history-item
-              [title]="'Exam #' + i"
-              [date]="exam.creationDate"
-              [mark]="'TODO'"
-              [timeSpent]="exam.timeSpent"
-              *ngFor="let exam of repliedExamList; let i = index">
-            </app-exam-history-item>
-          </ng-container>
+          <app-infinite-scroll-list
+            *ngIf="repliedExamList.length; else noExamsYet"
+            [elementSize]="128"
+            [datasource]="datasource">
+            <ng-template #elementTemplate let-exam="element">
+              <app-exam-history-item
+                *ngIf="exam; else noExam"
+                class="item-size"
+                [title]="'Exam #' + exam.id"
+                [date]="exam.creationDate"
+                [mark]="'TODO'"
+                [timeSpent]="exam.timeSpent">
+              </app-exam-history-item>
+
+              <ng-template #noExam>Loading...</ng-template>
+            </ng-template>
+          </app-infinite-scroll-list>
+
           <ng-template #noExamsYet>
             <div class="empty-history">
               <mat-icon>rule</mat-icon>

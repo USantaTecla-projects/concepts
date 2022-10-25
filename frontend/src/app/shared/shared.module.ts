@@ -21,11 +21,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { ShortTextPipe } from './utils/short-text.pipe';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { TimeSpentPipe } from './utils/time-spent.pipe';
 import { MatNativeDateModule } from '@angular/material/core';
+import { InfiniteScrollListModule } from './components/infinite-scroll-list/infinite-scroll-list.module';
 
 @NgModule({
   imports: [CommonModule, NavbarModule],
@@ -61,6 +63,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatNativeDateModule,
     MatSlideToggleModule,
     NavbarModule,
+    InfiniteScrollListModule,
   ],
 })
 export class SharedModule {}

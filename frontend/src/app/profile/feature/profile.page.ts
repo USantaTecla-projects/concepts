@@ -5,7 +5,7 @@ import { User } from 'src/app/auth/types/model/user.model';
 import { ExamStore } from 'src/app/exam/data-access/exam.store';
 import { Exam } from 'src/app/exam/types/model/exam.model';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
-import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { ExamItemDatasource } from '../data-access/exam-item.datasource';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +18,8 @@ export class ProfilePage implements OnInit {
   user$!: Observable<User | null>;
 
   page: number = 0;
+
+  datasource: ExamItemDatasource = new ExamItemDatasource();
 
   constructor(private examStore: ExamStore, private authStore: AuthStore) {}
 
