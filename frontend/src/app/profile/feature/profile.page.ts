@@ -19,9 +19,11 @@ export class ProfilePage implements OnInit {
 
   page: number = 0;
 
-  datasource: ExamItemDatasource = new ExamItemDatasource();
-
-  constructor(private examStore: ExamStore, private authStore: AuthStore) {}
+  constructor(
+    private examStore: ExamStore,
+    private authStore: AuthStore,
+    public examItemDatasource: ExamItemDatasource
+  ) {}
 
   ngOnInit(): void {
     this.user$ = this.authStore.user$;

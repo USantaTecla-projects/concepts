@@ -25,7 +25,7 @@
           <app-infinite-scroll-list
             *ngIf="repliedExamList.length; else noExamsYet"
             [elementSize]="128"
-            [datasource]="datasource">
+            [datasource]="examItemDatasource">
             <ng-template #elementTemplate let-exam="element">
               <app-exam-history-item
                 *ngIf="exam; else noExam"

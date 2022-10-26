@@ -79,7 +79,11 @@ export class ExamStore {
           const examList = content.map(examData => this.examMapperService.mapDTOToExam(examData));
           return { ...examDataPage, content: examList };
         }),
-        tap(examPage => this.repliedExamsPageSubject.next(examPage)),
+        tap(examPage => {
+          if (examPage.content.length) {
+            this.repliedExamsPageSubject.next(examPage);
+          }
+        }),
         shareReplay()
       );
   }

@@ -3,9 +3,9 @@ import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs'
 import { Page } from '../../interfaces/page-response.dto';
 
 export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefined> {
-  private length = 200;
   private pageSize = 10;
-  private cachedData = Array.from<T>({ length: this.length });
+  private length = 10000;
+  private cachedData = Array.from<T>({ length: this.pageSize });
   private lastPageFetched: number = 0;
 
   private readonly dataStream = new BehaviorSubject<T[]>(this.cachedData);
@@ -14,9 +14,10 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
   connect(collectionViewer: CollectionViewer): Observable<(T | undefined)[]> {
     this.subscription.add(
       collectionViewer.viewChange.subscribe(range => {
-        const pageToLoad = this.getPageForIndex(range.end - 1);
-
-        this.fetchPage(pageToLoad);
+        const pageToLoad = this.getPageForIndex(range.end);
+        if (pageToLoad !== this.lastPageFetched || this.lastPageFetched === 0) {
+          this.fetchPage(pageToLoad);
+        }
       })
     );
 
@@ -34,55 +35,72 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
   }
 
   private async fetchPage(page: number) {
-    console.log(this.cachedData);
-    console.log({ page });
+    if (page === 0) {
+      const elementsToRenderDown = await this.getElementsToRenderOnScrollDown(page);
+      this.cachedData.splice(page * this.pageSize, this.pageSize, ...elementsToRenderDown);
+    }
 
-    this.unloadStartHiddenElements();
-    this.unloadEndHiddenElements(page);
+    if (this.isScrollingDown(page)) {
+      this.unloadStartHiddenElements(page);
+      const elementsToRenderDown = await this.getElementsToRenderOnScrollDown(page);
+
+      this.hasElementBeenFetchedBefore(page)
+        ? this.cachedData.push(...elementsToRenderDown)
+        : this.cachedData.splice(page * this.pageSize, this.pageSize, ...elementsToRenderDown);
+    }
+
+    if (this.isScrollingUp(page)) {
+      this.unloadEndHiddenElements(page);
+
+      if (page > 1) {
+        const elementsToRenderOnScrollUp = await this.getElementsToRenderOnScrollUp(page);
+        this.cachedData.splice((page - 2) * this.pageSize, this.pageSize, ...elementsToRenderOnScrollUp);
+      }
+    }
 
     this.lastPageFetched = page;
-
-    const elementsToRenderDown = await this.getElementsToRender(page);
-
-    // this.cachedData.push(...elementsToRenderDown);
-    this.cachedData.splice(page * this.pageSize, this.pageSize, ...elementsToRenderDown);
+    console.log('Cached data');
+    console.log(this.cachedData);
     this.dataStream.next(this.cachedData);
   }
 
-  private unloadStartHiddenElements() {
-    const bottomEdgePage = this.lastPageFetched - 2;
-    if (bottomEdgePage > 0) {
-      const elementsToUnload = bottomEdgePage * this.pageSize;
+  private unloadStartHiddenElements(page: number) {
+    const pageToStartUnloading = page - 2;
+    if (pageToStartUnloading > 0) {
+      const elementsToUnload = pageToStartUnloading * this.pageSize;
       for (let i = 0; i < elementsToUnload; i++) {
-        this.cachedData[i] = undefined as unknown as T;
+        delete this.cachedData[i];
       }
     }
   }
 
   private async unloadEndHiddenElements(page: number) {
-    const topEdgePage = this.lastPageFetched + 2;
-    const lastPage = this.length / this.pageSize;
-    if (topEdgePage < lastPage) {
-      const indexToStartUnloading = topEdgePage * this.pageSize;
-
-      for (let i = indexToStartUnloading; i < this.length; i++) {
-        this.cachedData[i] = undefined as unknown as T;
-      }
-
-      if (page > 1) {
-        await this.getElementsToRenderOnScrollUp(page);
-      }
+    const pageToStartUnloading = page + 2;
+    const indexToStartUnloading = pageToStartUnloading * this.pageSize;
+    for (let i = indexToStartUnloading; i < this.length; i++) {
+      delete this.cachedData[i];
     }
   }
 
   private async getElementsToRenderOnScrollUp(page: number) {
-    const elementsToRenderOnScrollUp = await this.getElementsToRender(page - 2);
-    this.cachedData.splice((page - 2) * this.pageSize, this.pageSize, ...elementsToRenderOnScrollUp);
+    return await this.getElementsToRenderOnScrollDown(page - 2);
   }
 
-  private async getElementsToRender(page: number) {
+  private async getElementsToRenderOnScrollDown(page: number) {
     const fetchedData$ = this.fetchData(page);
     const pageElements = await firstValueFrom(fetchedData$);
     return pageElements.content;
+  }
+
+  private hasElementBeenFetchedBefore(page: number) {
+    return this.cachedData.length / this.pageSize === page;
+  }
+
+  private isScrollingDown(page: number) {
+    return page > this.lastPageFetched;
+  }
+
+  private isScrollingUp(page: number) {
+    return page < this.lastPageFetched;
   }
 }

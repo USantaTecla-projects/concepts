@@ -1,5 +1,4 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
-import { ExamItemDatasource } from 'src/app/profile/data-access/exam-item.datasource';
 import { InfiniteScrollListContex } from './infinite-scroll-list.context';
 
 @Component({
