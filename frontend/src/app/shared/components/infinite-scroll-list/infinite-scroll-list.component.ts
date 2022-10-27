@@ -7,7 +7,7 @@ import { InfiniteScrollListContex } from './infinite-scroll-list.context';
   styleUrls: ['./infinite-scroll-list.component.scss'],
 })
 export class InfiniteScrollListComponent<T> {
-  @Input() elementSize: number = 128;
+  @Input() elementSize = 128;
 
   @Input() datasource!: any;
 

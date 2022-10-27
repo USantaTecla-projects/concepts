@@ -1,26 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { mergeMap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
-import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
-import { ExamStore } from '../../data-access/exam.store';
 import { AuthStore } from '../../../auth/data-access/auth.store';
-import { mergeMap, switchMap, throwError } from 'rxjs';
-import { catchError, filter, flatMap, map, merge } from 'rxjs/operators';
+import { ExamStore } from '../../data-access/exam.store';
+import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
 
 @Component({
   selector: 'app-exam-init',
   templateUrl: './exam-init.page.html',
   styleUrls: ['./exam-init.page.scss'],
 })
-export class ExamInitPage implements OnInit {
+export class ExamInitPage {
   constructor(
     private router: Router,
     private examStore: ExamStore,
     private snackbarService: SnackbarService,
     private authStore: AuthStore
   ) {}
-
-  ngOnInit(): void {}
 
   onExamStart(generateExamData: GenerateExamData) {
     this.authStore.user$

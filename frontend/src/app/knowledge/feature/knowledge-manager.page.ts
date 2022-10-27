@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
-import { DefinitionStore } from '../data-access/definition.store';
 import { ConceptStore } from '../data-access/concept.store';
+import { DefinitionStore } from '../data-access/definition.store';
 import { JustificationStore } from '../data-access/justification.store';
-import { Definition } from '../types/definition.model';
 import { Concept } from '../types/concept.model';
+import { Definition } from '../types/definition.model';
 import { Justification } from '../types/justification.model';
 
 @Component({
@@ -12,16 +12,16 @@ import { Justification } from '../types/justification.model';
   templateUrl: './knowledge-manager.page.html',
   styleUrls: ['./knowledge-manager.page.scss'],
 })
-export class KnowledgeManagerPage implements OnInit {
+export class KnowledgeManagerPage {
   private selectedConceptID!: number;
 
   private selectedDefinitionID!: number;
 
   private selectedJustificationID!: number;
 
-  resetDefinitionList: boolean = false;
+  resetDefinitionList = false;
 
-  resetJustificationList: boolean = false;
+  resetJustificationList = false;
 
   constructor(
     public conceptStore: ConceptStore,
@@ -29,8 +29,6 @@ export class KnowledgeManagerPage implements OnInit {
     public justificationStore: JustificationStore,
     private snackbarService: SnackbarService
   ) {}
-
-  ngOnInit(): void {}
 
   onConceptSelect(conceptID: number) {
     this.selectedConceptID = conceptID;

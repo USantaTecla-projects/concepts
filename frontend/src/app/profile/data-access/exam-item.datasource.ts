@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppInjector } from 'src/app/app.module';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { ExamStore } from 'src/app/exam/data-access/exam.store';
 

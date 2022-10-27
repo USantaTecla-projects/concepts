@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExamInitPage } from './exam-init.page';
-import { ExamInitRoutingModule } from './exam-routing.module';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ExamInitFormModule } from '../../ui/exam-init-form/exam-init-form.module';
+import { ExamInitPage } from './exam-init.page';
+import { ExamInitRoutingModule } from './exam-routing.module';
 
 @NgModule({
   imports: [CommonModule, SharedModule, ExamInitRoutingModule, ExamInitFormModule],

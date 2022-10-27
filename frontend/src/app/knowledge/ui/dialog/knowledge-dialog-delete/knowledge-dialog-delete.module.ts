@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KnowledgeDialogDeleteComponent } from './knowledge-dialog-delete.component';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { KnowledgeDialogDeleteComponent } from './knowledge-dialog-delete.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule],

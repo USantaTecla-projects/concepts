@@ -17,7 +17,7 @@ export class ProfilePage implements OnInit {
 
   user$!: Observable<User | null>;
 
-  page: number = 0;
+  page = 0;
 
   constructor(
     private examStore: ExamStore,

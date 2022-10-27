@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthLoginFormComponent } from './auth-login-form.component';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AuthLoginFormComponent } from './auth-login-form.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule],

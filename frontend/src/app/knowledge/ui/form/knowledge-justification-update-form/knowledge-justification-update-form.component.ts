@@ -22,7 +22,10 @@ export class KnowledgeJustificationUpdateFormComponent implements OnInit {
       text: [this.justification.text, [Validators.required]],
       correct: [this.justification.correct],
       error: [
-        { value: !this.justification.correct ? this.justification.error : '', disabled: this.justification.correct },
+        {
+          value: !this.justification.correct ? this.justification.error : '',
+          disabled: this.justification.correct,
+        },
       ],
     });
   }

@@ -2,13 +2,13 @@
   <div mat-button disabled><mat-icon class="icon">description</mat-icon> <span>Exam</span></div>
 </mat-toolbar>
 
-<div class="grid" *ngIf="(user$ | async) as user">
+<div class="grid" *ngIf="user$ | async as user">
   <ng-container *ngFor="let question of (exam$ | async)!.questionList; let i = index">
     <app-exam-question-renderer
       class="question"
       [componentType]="question.componentType"
       [question]="question"
-      [questionNumber]="i+1"
+      [questionNumber]="i + 1"
       [userID]="user.id">
     </app-exam-question-renderer>
   </ng-container>

@@ -1,28 +1,33 @@
 <mat-card class="card">
+  <!-- Title -->
   <mat-card-title-group class="card-title">
     <mat-card-title>Concepts</mat-card-title>
   </mat-card-title-group>
 
+  <!-- Paginator -->
   <div class="paginator">
     <mat-paginator
       [showFirstLastButtons]="true"
       [length]="conceptsPage!.totalElements"
       [pageSize]="10"
-      (page)="onPageGet($event)">
-    </mat-paginator>
+      (page)="onPageGet($event)"></mat-paginator>
   </div>
 
+  <!-- List Body -->
   <mat-card-content class="concepts" *ngIf="state === 'init' || state === 'normal'; else noConcepts">
+    <!-- List actions-->
     <div class="actions">
+      <!-- Add Concept-->
       <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
-        <button mat-mini-fab class="add-button" color="warn" (click)="onConceptCreate()">
+        <button class="add-button" (click)="onConceptCreate()" mat-mini-fab color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add concept</p>
       </mat-card>
 
+      <!-- Delete Concept-->
       <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
-        <button mat-mini-fab class="delete-button" color="primary" (click)="onConceptDelete()">
+        <button class="delete-button" (click)="onConceptDelete()" mat-mini-fab color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete concept</p>
@@ -35,11 +40,10 @@
         *ngFor="let concept of conceptsPage!.content"
         (opened)="onConceptSelect(concept.id)">
         <mat-expansion-panel-header>
-          <mat-panel-title class="concept-title"> {{ concept.text | titlecase }}</mat-panel-title>
+          <mat-panel-title class="concept-title">{{ concept.text | titlecase }}</mat-panel-title>
         </mat-expansion-panel-header>
-        <app-knowledge-concept-update-form
-          [concept]="concept"
-          (updateConcept)="onConceptUpdate($event)"></app-knowledge-concept-update-form>
+        <app-knowledge-concept-update-form [concept]="concept" (updateConcept)="onConceptUpdate($event)">
+        </app-knowledge-concept-update-form>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>

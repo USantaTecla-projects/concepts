@@ -10,7 +10,7 @@ export class QuestionReplierService {
 
   examFullyReplied$: Observable<boolean> = this.examFullyRepliedSubject.asObservable();
 
-  private numberOfQuestions: number = 0;
+  private numberOfQuestions = 0;
 
   repliedQuestions: Question[] = [];
 

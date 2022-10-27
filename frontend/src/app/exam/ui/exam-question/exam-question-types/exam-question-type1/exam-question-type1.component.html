@@ -1,12 +1,12 @@
 <mat-accordion>
-  <mat-expansion-panel [expanded]="true" class="question-panel" hideToggle>
+  <mat-expansion-panel class="question-panel" [expanded]="true" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title class="question-title"> Question {{ questionNumber }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="question-content">
       <p>¿Por qué no es correcto afirmar que {{ question.conceptText }} es {{ question.incorrectDefinitionText }}?</p>
       <form class="form" [formGroup]="questionReplyForm">
-        <mat-form-field appearance="outline" class="question-reply">
+        <mat-form-field class="question-reply" appearance="outline">
           <mat-label>Write your reply...</mat-label>
           <textarea rows="2" matInput formControlName="text" cdkTextareaAutosize placeholder="Reply"></textarea>
         </mat-form-field>

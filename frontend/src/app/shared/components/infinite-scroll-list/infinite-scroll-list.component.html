@@ -1,10 +1,10 @@
-<cdk-virtual-scroll-viewport itemSize="{{ elementSize }}" class="example-viewport">
-  <div *cdkVirtualFor="let element of datasource" class="item" [ngStyle]="{ height: elementSize + 'px' }">
+<cdk-virtual-scroll-viewport class="example-viewport" itemSize="{{ elementSize }}">
+  <div class="item" *cdkVirtualFor="let element of datasource" [ngStyle]="{ height: elementSize + 'px' }">
     <ng-container *ngTemplateOutlet="elementTemplate || defaultItem; context: { element: element }"></ng-container>
   </div>
 </cdk-virtual-scroll-viewport>
 
 <!-- If no template is provided use keys as headers and display all values -->
 <ng-template #defaultItem>
-  <div *cdkVirtualFor="let element of datasource" class="item">'loading...'</div>
+  <div class="item" *cdkVirtualFor="let element of datasource">'loading...'</div>
 </ng-template>

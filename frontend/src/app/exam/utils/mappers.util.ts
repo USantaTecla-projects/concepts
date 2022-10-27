@@ -8,8 +8,6 @@ import { QuestionType1 } from '../types/model/question/question-type/question-ty
 import { QuestionType2 } from '../types/model/question/question-type/question-type2.model';
 import { QuestionType3 } from '../types/model/question/question-type/question-type3.model';
 import { Question } from '../types/model/question/question.model';
-import { Answer } from '../types/model/answer/answer.model';
-import { AnswerDTO } from '../types/dto/answer.dto';
 
 export const toQuestionTypeMappers: { [key: string]: Function } = {
   TYPE0: (questionData: QuestionDTO): QuestionType0 => mapToQuestionType0(questionData),

@@ -6,7 +6,13 @@ import { ExamQuestionType0Component } from '../../ui/exam-question/exam-question
 
 export const mapToQuestionType0 = (questionData: QuestionDTO): QuestionType0 => {
   const { id, conceptID, conceptText } = questionData;
-  return { id, type: QuestionAnswerType.TYPE0, conceptID, componentType: ExamQuestionType0Component, conceptText };
+  return {
+    id,
+    type: QuestionAnswerType.TYPE0,
+    conceptID,
+    componentType: ExamQuestionType0Component,
+    conceptText,
+  };
 };
 
 export const mapFromQuestionType0 = (question: Question): QuestionDTO => {

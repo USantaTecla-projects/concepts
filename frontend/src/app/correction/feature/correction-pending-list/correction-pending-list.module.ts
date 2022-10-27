@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CorrectionPendingListComponent } from './correction-pending-list.component';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CorrectionPendingListRoutingModule } from './correction-pending-list-routing.module';
+import { CorrectionPendingListComponent } from './correction-pending-list.component';
 
 @NgModule({
   imports: [CommonModule, CorrectionPendingListRoutingModule, SharedModule],

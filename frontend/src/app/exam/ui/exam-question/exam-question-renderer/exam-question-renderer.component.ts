@@ -16,7 +16,8 @@ export class ExamQuestionRendererComponent implements OnInit {
 
   @Input() userID!: number;
 
-  @ViewChild(QuestionHostDirective, { static: true }) questionHost!: QuestionHostDirective;
+  @ViewChild(QuestionHostDirective, { static: true })
+  questionHost!: QuestionHostDirective;
 
   constructor() {}
 

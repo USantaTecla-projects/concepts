@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concatMap, map, Observable, shareReplay, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { User } from 'src/app/auth/types/model/user.model';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
 import { GenerateExamData } from '../types/dto/exam/create-exam.dto';
@@ -20,7 +20,12 @@ export class ExamStore {
     numberOfElements: 0,
   });
 
-  private examInCourseSubject = new BehaviorSubject<Exam>({ id: 0, userID: 0, creationDate: '', questionList: [] });
+  private examInCourseSubject = new BehaviorSubject<Exam>({
+    id: 0,
+    userID: 0,
+    creationDate: '',
+    questionList: [],
+  });
 
   repliedExamsPage$: Observable<Page<Exam>> = this.repliedExamsPageSubject.asObservable();
 
@@ -58,7 +63,7 @@ export class ExamStore {
     );
   }
 
-  getUserExams(user$: Observable<User | null>, nextPage: number = 0): Observable<Page<Exam>> {
+  getUserExams(user$: Observable<User | null>, nextPage = 0): Observable<Page<Exam>> {
     return user$.pipe(
       map(user => (user ? user.id : 0)),
       switchMap(userID => this.getUsersExamsObservable(userID, nextPage))
@@ -67,7 +72,9 @@ export class ExamStore {
 
   private getUsersExamsObservable(userID: number, nextPage: number): Observable<Page<Exam>> {
     return this.httpClient
-      .get<Page<ExamData>>(`exams/${userID}`, { params: new HttpParams().set('page', nextPage) })
+      .get<Page<ExamData>>(`exams/${userID}`, {
+        params: new HttpParams().set('page', nextPage),
+      })
       .pipe(
         catchError(error => {
           const message = 'Could not get the user exams';

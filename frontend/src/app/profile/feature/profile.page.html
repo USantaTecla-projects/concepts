@@ -9,9 +9,9 @@
         <mat-panel-title>
           <mat-icon>account_circle</mat-icon>
           <div class="user-info">
-            <span class="name">{{user.fullName}}</span>
-            <span class="email">{{user.email}}</span>
-            <span class="username">@{{user.username}}</span>
+            <span class="name">{{ user.fullName }}</span>
+            <span class="email">{{ user.email }}</span>
+            <span class="username">@{{ user.username }}</span>
           </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -28,8 +28,8 @@
             [datasource]="examItemDatasource">
             <ng-template #elementTemplate let-exam="element">
               <app-exam-history-item
-                *ngIf="exam; else noExam"
                 class="item-size"
+                *ngIf="exam; else noExam"
                 [title]="'Exam #' + exam.id"
                 [date]="exam.creationDate"
                 [mark]="'TODO'"

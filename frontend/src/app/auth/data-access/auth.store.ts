@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, tap, Observable, shareReplay, BehaviorSubject, catchError, of, mergeMap } from 'rxjs';
+import { BehaviorSubject, catchError, map, mergeMap, Observable, tap } from 'rxjs';
 import { AuthResponse } from '../types/dto/auth-response.dto';
 import { Credentials } from '../types/dto/credentials.dto';
 import { RegisterUserData } from '../types/dto/register-user.dto';
@@ -17,7 +17,7 @@ export class AuthStore {
 
   isLoggedOut$!: Observable<boolean>;
 
-  AUTH_DATA: string = 'auth_data';
+  AUTH_DATA = 'auth_data';
 
   constructor(private httpClient: HttpClient) {
     this.isLoggedIn$ = this.user$.pipe(map(user => Boolean(user)));

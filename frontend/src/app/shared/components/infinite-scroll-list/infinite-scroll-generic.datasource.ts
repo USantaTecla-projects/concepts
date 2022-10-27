@@ -6,7 +6,7 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
   private pageSize = 10;
   private length = 10000;
   private cachedData = Array.from<T>({ length: this.pageSize });
-  private lastPageFetched: number = 0;
+  private lastPageFetched = 0;
 
   private readonly dataStream = new BehaviorSubject<T[]>(this.cachedData);
   private readonly subscription = new Subscription();

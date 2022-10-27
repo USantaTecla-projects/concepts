@@ -4,13 +4,22 @@
       <div class="button-content"><mat-icon class="icon">home</mat-icon> <span class="text">Home</span></div>
     </button>
     <button mat-button routerLink="/exam/init">
-      <div class="button-content"><mat-icon class="icon">description</mat-icon> <span class="text">Exams</span></div>
+      <div class="button-content">
+        <mat-icon class="icon">description</mat-icon>
+        <span class="text">Exams</span>
+      </div>
     </button>
-    <button mat-button routerLink="/knowledge" *ngIf="authStore.checkUserRoleAdmin() | async">
-      <div class="button-content"><mat-icon class="icon">book</mat-icon> <span class="text">Knowledge</span></div>
+    <button *ngIf="authStore.checkUserRoleAdmin() | async" mat-button routerLink="/knowledge">
+      <div class="button-content">
+        <mat-icon class="icon">book</mat-icon>
+        <span class="text">Knowledge</span>
+      </div>
     </button>
-    <button mat-button routerLink="/correction" *ngIf="authStore.checkUserRoleAdmin() | async">
-      <div class="button-content"><mat-icon class="icon">draw</mat-icon> <span class="text">Correction</span></div>
+    <button *ngIf="authStore.checkUserRoleAdmin() | async" mat-button routerLink="/correction">
+      <div class="button-content">
+        <mat-icon class="icon">draw</mat-icon>
+        <span class="text">Correction</span>
+      </div>
     </button>
   </div>
 

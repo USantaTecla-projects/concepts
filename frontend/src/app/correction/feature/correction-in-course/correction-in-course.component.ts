@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-correction-in-course',
   templateUrl: './correction-in-course.component.html',
-  styleUrls: ['./correction-in-course.component.scss']
+  styleUrls: ['./correction-in-course.component.scss'],
 })
-export class CorrectionInCourseComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class CorrectionInCourseComponent {
+  constructor() {}
 }

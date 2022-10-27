@@ -14,7 +14,7 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
 export class KnowledgeDefinitionListComponent implements OnInit, OnChanges {
   @Input() definitionsList!: Definition[] | null;
 
-  @Input() resetList: boolean = false;
+  @Input() resetList = false;
 
   @Output() selectDefinition: EventEmitter<number> = new EventEmitter();
 

@@ -1,11 +1,11 @@
 <form class="form" [formGroup]="conceptForm" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="outline" class="form-field">
+  <mat-form-field class="form-field" appearance="outline">
     <mat-label>Concept</mat-label>
     <input matInput type="text" formControlName="text" placeholder="Concept text" />
     <mat-icon matSuffix>book</mat-icon>
   </mat-form-field>
   <div class="actions">
-    <button class="save-button" mat-raised-button type="submit" [disabled]="!conceptForm.valid">Create Concept</button>
+    <button class="save-button" [disabled]="!conceptForm.valid" mat-raised-button type="submit">Create Concept</button>
     <button class="close-button" color="primary" mat-raised-button type="button">Cancel</button>
   </div>
 </form>

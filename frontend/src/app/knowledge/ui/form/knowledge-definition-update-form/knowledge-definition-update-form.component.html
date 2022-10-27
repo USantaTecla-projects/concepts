@@ -11,14 +11,14 @@
     {{ definition.correct ? 'Correct' : 'Incorrect' }}
   </p>
 
-  <mat-form-field appearance="outline" class="form-field">
+  <mat-form-field class="form-field" appearance="outline">
     <mat-label>Definition</mat-label>
     <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Definition text"></textarea>
   </mat-form-field>
 
   <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
 
-  <button class="save-button" mat-raised-button type="submit" color="primary" [disabled]="!definitionForm.valid">
+  <button class="save-button" [disabled]="!definitionForm.valid" mat-raised-button type="submit" color="primary">
     Update Definition
   </button>
 </form>

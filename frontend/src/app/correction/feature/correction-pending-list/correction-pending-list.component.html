@@ -27,8 +27,8 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Filter by date</mat-label>
-              <input matInput [matDatepicker]="picker" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <input [matDatepicker]="picker" matInput />
+              <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <div class="slider">

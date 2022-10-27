@@ -5,14 +5,14 @@
   <mat-card-content class="justifications" *ngIf="state === 'normal'; else noJustifications">
     <div class="actions">
       <mat-card class="add-justification" [ngStyle]="{ width: !this.selectedJustificationID ? '100%' : '43%' }">
-        <button mat-mini-fab class="add-button" color="warn" (click)="onJustificationCreate()">
+        <button class="add-button" (click)="onJustificationCreate()" mat-mini-fab color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add justification</p>
       </mat-card>
 
       <mat-card class="delete-justification" *ngIf="this.selectedJustificationID">
-        <button mat-mini-fab class="delete-button" color="primary" (click)="onJustificationDelete()">
+        <button class="delete-button" (click)="onJustificationDelete()" mat-mini-fab color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete justification</p>

@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KnowledgeJustificationUpdateFormComponent } from './knowledge-justification-update-form.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { NgModule } from '@angular/core';
 import { KnowledgeDialogDeleteModule } from 'src/app/knowledge/ui/dialog/knowledge-dialog-delete/knowledge-dialog-delete.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { KnowledgeJustificationUpdateFormComponent } from './knowledge-justification-update-form.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule, KnowledgeDialogDeleteModule],

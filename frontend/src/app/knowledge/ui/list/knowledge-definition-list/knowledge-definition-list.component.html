@@ -5,14 +5,14 @@
   <mat-card-content class="definitions" *ngIf="state === 'normal'; else noDefinitions">
     <div class="actions">
       <mat-card class="add-definition" [ngStyle]="{ width: !this.selectedDefinitionID ? '100%' : '43%' }">
-        <button mat-mini-fab class="add-button" color="warn" (click)="onDefinitionCreate()">
+        <button class="add-button" (click)="onDefinitionCreate()" mat-mini-fab color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add definition</p>
       </mat-card>
 
       <mat-card class="delete-definition" *ngIf="this.selectedDefinitionID">
-        <button mat-mini-fab class="delete-button" color="primary" (click)="onDefinitionDelete()">
+        <button class="delete-button" (click)="onDefinitionDelete()" mat-mini-fab color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete definition</p>

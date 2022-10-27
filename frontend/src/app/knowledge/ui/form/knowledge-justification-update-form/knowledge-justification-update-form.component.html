@@ -14,26 +14,28 @@
   <mat-chip-list>
     <mat-chip class="chip" color="warn" selected>Error</mat-chip>
   </mat-chip-list>
-  <p class="justification-text">{{ !justification.correct ? (justification.error | titlecase) : 'No error' }}</p>
+  <p class="justification-text">
+    {{ !justification.correct ? (justification.error | titlecase) : 'No error' }}
+  </p>
 
-  <mat-form-field appearance="outline" class="form-field">
+  <mat-form-field class="form-field" appearance="outline">
     <mat-label>Justification</mat-label>
     <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Justification text"></textarea>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="form-field">
+  <mat-form-field class="form-field" appearance="outline">
     <mat-label>Error</mat-label>
     <textarea matInput formControlName="error" cdkTextareaAutosize placeholder="Justification error"></textarea>
   </mat-form-field>
 
   <mat-checkbox
     class="form-checkbox"
-    formControlName="correct"
-    (change)="toggleErrorField(justificationForm.value.correct)">
+    (change)="toggleErrorField(justificationForm.value.correct)"
+    formControlName="correct">
     Is Correct
   </mat-checkbox>
 
-  <button class="save-button" mat-raised-button type="submit" color="primary" [disabled]="!justificationForm.valid">
+  <button class="save-button" [disabled]="!justificationForm.valid" mat-raised-button type="submit" color="primary">
     Update Justification
   </button>
 </form>

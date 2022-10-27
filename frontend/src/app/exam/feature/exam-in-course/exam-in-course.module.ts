@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExamInCoursePage } from './exam-in-course.page';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ExamInCourseRoutingModule } from './exam-in-course.routing.module';
 import { ExamQuestionRendererModule } from '../../ui/exam-question/exam-question-renderer/exam-question-renderer.module';
+import { ExamInCoursePage } from './exam-in-course.page';
+import { ExamInCourseRoutingModule } from './exam-in-course.routing.module';
 
 @NgModule({
   imports: [CommonModule, SharedModule, ExamInCourseRoutingModule, ExamQuestionRendererModule],

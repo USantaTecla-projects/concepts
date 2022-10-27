@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KnowledgeConceptCreateFormComponent } from './knowledge-concept-create-form.component';
+import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { KnowledgeConceptCreateFormComponent } from './knowledge-concept-create-form.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule],

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
 
@@ -7,13 +7,11 @@ import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
   templateUrl: './knowledge-dialog-delete.component.html',
   styleUrls: ['./knowledge-dialog-delete.component.scss'],
 })
-export class KnowledgeDialogDeleteComponent implements OnInit {
+export class KnowledgeDialogDeleteComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private dialogRef: MatDialogRef<KnowledgeDialogDeleteComponent>
   ) {}
-
-  ngOnInit(): void {}
 
   onClose(deleteItem: boolean) {
     this.dialogRef.close(deleteItem);

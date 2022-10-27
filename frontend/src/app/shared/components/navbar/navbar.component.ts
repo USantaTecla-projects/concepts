@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthStore } from '../../../auth/data-access/auth.store';
 
 @Component({
@@ -6,8 +6,6 @@ import { AuthStore } from '../../../auth/data-access/auth.store';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   constructor(public authStore: AuthStore) {}
-
-  ngOnInit(): void {}
 }

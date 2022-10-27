@@ -28,7 +28,7 @@ export class ConceptStore {
   }
 
   createConcept(concept: Concept): Observable<Concept> {
-    return this.httpClient.post<Concept>(`concepts/`, concept).pipe(
+    return this.httpClient.post<Concept>('concepts/', concept).pipe(
       catchError(error => {
         const message = 'Could not create the concept';
         console.log(message, error);
@@ -36,7 +36,9 @@ export class ConceptStore {
       }),
       tap(concept => {
         const conceptsPage = this.conceptsPageSubject.getValue();
-        const { content, totalPages, totalElements, numberOfElements } = { ...conceptsPage };
+        const { content, totalPages, totalElements, numberOfElements } = {
+          ...conceptsPage,
+        };
 
         let newPage = { ...conceptsPage };
 
@@ -108,20 +110,24 @@ export class ConceptStore {
     );
   }
 
-  getConcepts(nextPage: number = 0): Observable<Concept[]> {
+  getConcepts(nextPage = 0): Observable<Concept[]> {
     this.stateSubject.next(State.LOADING);
 
-    return this.httpClient.get<Page<Concept>>('concepts/', { params: new HttpParams().set('page', nextPage) }).pipe(
-      catchError(error => {
-        const message = 'Could not load concepts';
-        console.log(message, error);
-        return throwError(() => error);
-      }),
-      tap(page => this.conceptsPageSubject.next(page)),
-      map(page => page.content),
-      tap(concepts => {
-        concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+    return this.httpClient
+      .get<Page<Concept>>('concepts/', {
+        params: new HttpParams().set('page', nextPage),
       })
-    );
+      .pipe(
+        catchError(error => {
+          const message = 'Could not load concepts';
+          console.log(message, error);
+          return throwError(() => error);
+        }),
+        tap(page => this.conceptsPageSubject.next(page)),
+        map(page => page.content),
+        tap(concepts => {
+          concepts.length === 0 ? this.stateSubject.next(State.EMPTY) : this.stateSubject.next(State.NORMAL);
+        })
+      );
   }
 }

@@ -1,6 +1,8 @@
 package com.example.backend.api.database;
 
 
+import com.example.backend.api.resources.exam.ExamRepository;
+import com.example.backend.api.resources.exam.model.Exam;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
 import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
@@ -21,19 +23,26 @@ public class DataBaseInitializer implements CommandLineRunner {
     private final ConceptRepository conceptRepository;
     private final DefinitionRepository definitionRepository;
     private final JustificationRepository justificationRepository;
+
+    private final ExamRepository examRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataBaseInitializer(ConceptRepository conceptRepository, DefinitionRepository definitionRepository, JustificationRepository justificationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataBaseInitializer(ConceptRepository conceptRepository, DefinitionRepository definitionRepository, JustificationRepository justificationRepository, ExamRepository examRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.conceptRepository = conceptRepository;
         this.definitionRepository = definitionRepository;
         this.justificationRepository = justificationRepository;
+        this.examRepository = examRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
+
+
+
+
         userRepository
                 .save(new User(
                         1L,
@@ -43,6 +52,8 @@ public class DataBaseInitializer implements CommandLineRunner {
                         passwordEncoder.encode("1234"),
                         List.of("TEACHER", "STUDENT"))
                 );
+
+
         userRepository
                 .save(new User(2L, "Cristian de Gracia Nuero", "student", "student@gmail.com", passwordEncoder.encode("1234"), List.of("STUDENT")));
 
@@ -110,11 +121,16 @@ public class DataBaseInitializer implements CommandLineRunner {
 
         recursividadConcept.addDefinition(recursividadIncorrectDefinition);
         recursividadConcept.addDefinition(recursividadCorrectDefinition);
-//
+
         conceptRepository.save(softwareConcept);
         conceptRepository.save(recursividadConcept);
 
 
+        for (int i = 0; i <99 ; i++) {
+            Exam exam = new Exam();
+            exam.setUserID(1L);
+            examRepository.save(exam);
+        }
     }
 
     private void generateKnowledge(

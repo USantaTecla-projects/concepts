@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { ProfileRoutingModule } from './profile-routing.module';
-import { ProfilePage } from './profile.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ExamHistoryItemModule } from '../ui/exam-history-item/exam-history-item.module';
-import { TimeSpentPipe } from '../../shared/utils/time-spent.pipe';
+import { ProfileRoutingModule } from './profile-routing.module';
+import { ProfilePage } from './profile.page';
 
 @NgModule({
   imports: [CommonModule, ProfileRoutingModule, SharedModule, ExamHistoryItemModule],

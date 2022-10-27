@@ -14,7 +14,7 @@ import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowle
 export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   @Input() justificationsList!: Justification[] | null;
 
-  @Input() resetList: boolean = false;
+  @Input() resetList = false;
 
   @Output() selectJustification: EventEmitter<number> = new EventEmitter();
 

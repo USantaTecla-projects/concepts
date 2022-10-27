@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, throwError, tap, BehaviorSubject, switchMap } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthStore } from '../data-access/auth.store';
 import { AuthResponse } from '../types/dto/auth-response.dto';
 

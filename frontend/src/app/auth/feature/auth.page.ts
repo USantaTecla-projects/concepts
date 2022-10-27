@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
@@ -13,14 +12,12 @@ import { RegisterUserData } from '../types/dto/register-user.dto';
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
 })
-export class AuthPage implements OnInit {
+export class AuthPage {
   registerForm: FormGroup = new FormGroup({});
 
   isAuthenticated$: Observable<boolean> | undefined;
 
   constructor(private authStore: AuthStore, private snackbarService: SnackbarService, private router: Router) {}
-
-  ngOnInit(): void {}
 
   onLoginUser(credentials: Credentials): void {
     this.authStore.login(credentials).subscribe({
