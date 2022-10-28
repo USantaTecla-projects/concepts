@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { ConceptStore } from 'src/app/knowledge/data-access/concept.store';
 import { Concept } from 'src/app/knowledge/types/concept.model';
 import { State } from 'src/app/shared/interfaces/enums/state.enum';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
@@ -13,10 +12,12 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
   templateUrl: './knowledge-concept-list.component.html',
   styleUrls: ['./knowledge-concept-list.component.scss'],
 })
-export class KnowledgeConceptListComponent implements OnInit {
+export class KnowledgeConceptListComponent {
   @Input() conceptsPage!: Page<Concept> | null;
 
   @Input() totalElements: number | null = 0;
+
+  @Input() state: string | null = State.INIT;
 
   @Output() selectConcept: EventEmitter<number> = new EventEmitter();
 
@@ -28,18 +29,9 @@ export class KnowledgeConceptListComponent implements OnInit {
 
   @Output() getPage: EventEmitter<number> = new EventEmitter();
 
-  state: string = State.INIT;
-
   selectedConceptID!: number;
 
-  constructor(private conceptStore: ConceptStore, public dialog: MatDialog) {}
-
-  ngOnInit(): void {
-    this.conceptStore.state$.subscribe({
-      next: value => (this.state = value),
-      error: error => console.log(error),
-    });
-  }
+  constructor(public dialog: MatDialog) {}
 
   onConceptSelect(conceptID: number): void {
     this.selectedConceptID = conceptID;
@@ -75,7 +67,10 @@ export class KnowledgeConceptListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(deleteConcept => {
-      if (deleteConcept) this.deleteConcept.emit(this.selectedConceptID);
+      if (deleteConcept) {
+        this.deleteConcept.emit(this.selectedConceptID);
+        this.selectedConceptID = 0;
+      }
     });
   }
 

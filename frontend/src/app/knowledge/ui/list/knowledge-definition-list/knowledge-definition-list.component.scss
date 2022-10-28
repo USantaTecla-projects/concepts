@@ -9,8 +9,12 @@
 
   .definitions {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .actions {
+      width: 100%;
       margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
@@ -40,16 +44,19 @@
         background-color: #673ab7;
       }
     }
+    mat-accordion {
+      width: 100%;
 
-    .definition-panel {
-      background-color: #673ab7;
+      .definition-panel {
+        background-color: #673ab7;
 
-      .definition-title {
-        color: #fff;
-      }
+        .definition-title {
+          color: #fff;
+        }
 
-      ::ng-deep .mat-expansion-panel-body {
-        background-color: white !important;
+        ::ng-deep .mat-expansion-panel-body {
+          background-color: white !important;
+        }
       }
     }
   }

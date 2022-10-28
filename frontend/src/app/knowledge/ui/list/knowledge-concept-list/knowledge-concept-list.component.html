@@ -8,24 +8,20 @@
   <div class="paginator">
     <mat-paginator
       [showFirstLastButtons]="true"
-      [length]="conceptsPage!.totalElements"
+      [length]="conceptsPage!.content.length"
       [pageSize]="10"
       (page)="onPageGet($event)"></mat-paginator>
   </div>
 
   <!-- List Body -->
   <mat-card-content class="concepts" *ngIf="state === 'init' || state === 'normal'; else noConcepts">
-    <!-- List actions-->
     <div class="actions">
-      <!-- Add Concept-->
       <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
         <button class="add-button" (click)="onConceptCreate()" mat-mini-fab color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add concept</p>
       </mat-card>
-
-      <!-- Delete Concept-->
       <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
         <button class="delete-button" (click)="onConceptDelete()" mat-mini-fab color="primary">
           <mat-icon>remove</mat-icon>
@@ -34,7 +30,7 @@
       </mat-card>
     </div>
 
-    <mat-accordion class="accordion">
+    <mat-accordion>
       <mat-expansion-panel
         class="concept-panel"
         *ngFor="let concept of conceptsPage!.content"
@@ -52,5 +48,21 @@
 <!-- If the state is different that normal, display one of this-->
 <ng-template #noConcepts>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
-  <span *ngIf="state === 'empty'">No concepts to display</span>
+  <div class="concepts" *ngIf="state === 'empty'">
+    <div class="actions">
+      <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
+        <button class="add-button" (click)="onConceptCreate()" mat-mini-fab color="warn">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add concept</p>
+      </mat-card>
+      <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
+        <button class="delete-button" (click)="onConceptDelete()" mat-mini-fab color="primary">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete concept</p>
+      </mat-card>
+    </div>
+    <span> No concepts to display</span>
+  </div>
 </ng-template>

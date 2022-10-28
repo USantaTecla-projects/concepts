@@ -42,5 +42,22 @@
 <ng-template #noDefinitions>
   <span *ngIf="state === 'init'">Select a concept to display its definitions</span>
   <mat-spinner *ngIf="state === 'loading'"></mat-spinner>
-  <span *ngIf="state === 'empty'">No definitions to display</span>
+  <div class="definitions" *ngIf="state === 'empty'">
+    <div class="actions">
+      <mat-card class="add-definition" [ngStyle]="{ width: !this.selectedDefinitionID ? '100%' : '43%' }">
+        <button class="add-button" (click)="onDefinitionCreate()" mat-mini-fab color="warn">
+          <mat-icon>add</mat-icon>
+        </button>
+        <p>Add definition</p>
+      </mat-card>
+
+      <mat-card class="delete-definition" *ngIf="this.selectedDefinitionID">
+        <button class="delete-button" (click)="onDefinitionDelete()" mat-mini-fab color="primary">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <p>Delete definition</p>
+      </mat-card>
+    </div>
+    <span>No definitions to display</span>
+  </div>
 </ng-template>

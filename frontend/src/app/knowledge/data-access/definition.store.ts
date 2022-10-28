@@ -95,6 +95,6 @@ export class DefinitionStore {
 
   resetDefinitionList() {
     this.definitionsListSubject.next([]);
-    this.stateSubject.next(State.EMPTY);
+    this.stateSubject.next(State.INIT);
   }
 }

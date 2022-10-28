@@ -9,8 +9,12 @@
 
   .concepts {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .actions {
+      width: 100%;
       margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
@@ -45,16 +49,19 @@
       display: flex;
       justify-content: center;
     }
+    mat-accordion {
+      width: 100%;
 
-    .concept-panel {
-      background-color: #673ab7;
+      .concept-panel {
+        background-color: #673ab7;
 
-      .concept-title {
-        color: #fff;
-      }
+        .concept-title {
+          color: #fff;
+        }
 
-      ::ng-deep .mat-expansion-panel-body {
-        background-color: white !important;
+        ::ng-deep .mat-expansion-panel-body {
+          background-color: white !important;
+        }
       }
     }
   }

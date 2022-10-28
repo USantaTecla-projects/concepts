@@ -59,6 +59,15 @@ public class DataBaseInitializer implements CommandLineRunner {
 
 
         Concept softwareConcept = conceptRepository.save(new Concept("el software."));
+
+//        for (int i = 0; i <5 ; i++) {
+//            Definition definition = new Definition();
+//            softwareConcept.addDefinition(definition);
+//            definitionRepository.save(definition);
+//            conceptRepository.save(softwareConcept);
+//
+//        }
+
         Concept recursividadConcept = conceptRepository.save(new Concept("la recursividad."));
 
         Definition softwareIncorrectDefinition = definitionRepository.save(new Definition(

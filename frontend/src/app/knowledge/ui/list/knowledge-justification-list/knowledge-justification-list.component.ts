@@ -14,6 +14,8 @@ import { KnowledgeDialogJustificationCreateComponent } from '../../dialog/knowle
 export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   @Input() justificationsList!: Justification[] | null;
 
+  @Input() state: string | null = State.INIT;
+
   @Input() resetList = false;
 
   @Output() selectJustification: EventEmitter<number> = new EventEmitter();
@@ -23,8 +25,6 @@ export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   @Output() updateJustification: EventEmitter<Justification> = new EventEmitter();
 
   @Output() deleteJustification: EventEmitter<number> = new EventEmitter();
-
-  state: string = State.INIT;
 
   selectedJustificationID!: number;
 
@@ -79,7 +79,10 @@ export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe(deleteJustification => {
-      if (deleteJustification) this.deleteJustification.emit(this.selectedJustificationID);
+      if (deleteJustification) {
+        this.deleteJustification.emit(this.selectedJustificationID);
+        this.selectedJustificationID = 0;
+      }
     });
   }
 }

@@ -56,6 +56,9 @@ export class ConceptStore {
           totalPages: totalPages + 1,
         };
 
+        if (this.conceptsPageSubject.getValue().content.length === 0) {
+          this.stateSubject.next(State.NORMAL);
+        }
         this.conceptsPageSubject.next(newPage);
       }),
       shareReplay()

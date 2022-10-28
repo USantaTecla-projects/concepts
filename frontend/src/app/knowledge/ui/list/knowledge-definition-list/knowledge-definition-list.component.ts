@@ -14,6 +14,8 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
 export class KnowledgeDefinitionListComponent implements OnInit, OnChanges {
   @Input() definitionsList!: Definition[] | null;
 
+  @Input() state: string | null = State.INIT;
+
   @Input() resetList = false;
 
   @Output() selectDefinition: EventEmitter<number> = new EventEmitter();
@@ -23,8 +25,6 @@ export class KnowledgeDefinitionListComponent implements OnInit, OnChanges {
   @Output() updateDefinition: EventEmitter<Definition> = new EventEmitter();
 
   @Output() deleteDefinition: EventEmitter<number> = new EventEmitter();
-
-  state: string = State.INIT;
 
   selectedDefinitionID!: number;
 
@@ -78,7 +78,10 @@ export class KnowledgeDefinitionListComponent implements OnInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe(deleteDefinition => {
-      if (deleteDefinition) this.deleteDefinition.emit(this.selectedDefinitionID);
+      if (deleteDefinition) {
+        this.deleteDefinition.emit(this.selectedDefinitionID);
+        this.selectedDefinitionID = 0;
+      }
     });
   }
 }
