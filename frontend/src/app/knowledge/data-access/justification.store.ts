@@ -30,6 +30,9 @@ export class JustificationStore {
         tap(justification => {
           const justifications = this.justificationsListSubject.getValue();
           const newJustifications = [...justifications, justification];
+          if (this.justificationsListSubject.getValue().length === 0) {
+            this.stateSubject.next(State.NORMAL);
+          }
           this.justificationsListSubject.next(newJustifications);
         }),
         shareReplay()

@@ -28,6 +28,10 @@ export class DefinitionStore {
       tap(definition => {
         const definitions = this.definitionsListSubject.getValue();
         const newDefinitions = [...definitions, definition];
+
+        if (this.definitionsListSubject.getValue().length === 0) {
+          this.stateSubject.next(State.NORMAL);
+        }
         this.definitionsListSubject.next(newDefinitions);
       }),
       shareReplay()

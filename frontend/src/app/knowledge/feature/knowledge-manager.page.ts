@@ -41,10 +41,12 @@ export class KnowledgeManagerPage {
   }
 
   onConceptCreate(concept: Concept) {
-    this.conceptStore.createConcept(concept).subscribe({
-      next: () => this.snackbarService.openSnackBar('Concept created.'),
-      error: (err: Error) => this.snackbarService.openSnackBar(err.message),
-    });
+    if (concept.text) {
+      this.conceptStore.createConcept(concept).subscribe({
+        next: () => this.snackbarService.openSnackBar('Concept created.'),
+        error: (err: Error) => this.snackbarService.openSnackBar(err.message),
+      });
+    }
   }
 
   onConceptUpdate(updatedConcept: Concept) {
@@ -79,10 +81,12 @@ export class KnowledgeManagerPage {
   }
 
   onDefinitionCreate(definition: Definition) {
-    this.definitionStore.createDefinition(this.selectedConceptID, definition).subscribe({
-      next: () => this.snackbarService.openSnackBar('Definition created.'),
-      error: () => this.snackbarService.openSnackBar('Error creating definition.'),
-    });
+    if (definition.text) {
+      this.definitionStore.createDefinition(this.selectedConceptID, definition).subscribe({
+        next: () => this.snackbarService.openSnackBar('Definition created.'),
+        error: () => this.snackbarService.openSnackBar('Error creating definition.'),
+      });
+    }
   }
 
   onDefinitionUpdate(updatedDefinition: Definition) {
@@ -109,12 +113,14 @@ export class KnowledgeManagerPage {
   }
 
   onJustificationCreate(justification: Justification) {
-    this.justificationStore
-      .createJustification(this.selectedConceptID, this.selectedDefinitionID, justification)
-      .subscribe({
-        next: () => this.snackbarService.openSnackBar('Justification created.'),
-        error: () => this.snackbarService.openSnackBar('Error creating justification.'),
-      });
+    if (justification.text) {
+      this.justificationStore
+        .createJustification(this.selectedConceptID, this.selectedDefinitionID, justification)
+        .subscribe({
+          next: () => this.snackbarService.openSnackBar('Justification created.'),
+          error: () => this.snackbarService.openSnackBar('Error creating justification.'),
+        });
+    }
   }
 
   onJustificationUpdate(updatedJustification: Justification) {

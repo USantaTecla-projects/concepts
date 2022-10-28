@@ -20,6 +20,6 @@
     <button class="save-button" [disabled]="!justificationForm.valid" mat-raised-button type="submit">
       Create Justification
     </button>
-    <button class="close-button" mat-raised-button color="primary" type="button">Cancel</button>
+    <button class="close-button" (click)="onCancel()" mat-raised-button color="primary" type="button">Cancel</button>
   </div>
 </form>
