@@ -17,6 +17,7 @@ public abstract class Question {
     protected Type type;
 
     @JsonIgnore
+    @Transient
     protected boolean isFilled;
 
     public abstract void addAnswer(Answer answer);

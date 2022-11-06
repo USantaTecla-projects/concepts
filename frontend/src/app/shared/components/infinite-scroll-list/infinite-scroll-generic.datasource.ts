@@ -1,12 +1,15 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
 import { Page } from '../../interfaces/page-response.dto';
 
+@Injectable({ providedIn: 'root' })
 export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefined> {
   private pageSize = 10;
   private length = 10000;
   private cachedData = Array.from<T>({ length: this.pageSize });
   private lastPageFetched = 0;
+  private firstFetch = true;
 
   private readonly dataStream = new BehaviorSubject<T[]>(this.cachedData);
   private readonly subscription = new Subscription();
@@ -35,9 +38,17 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
   }
 
   private async fetchPage(page: number) {
-    if (page === 0) {
+    console.log({ page, cachedData: this.cachedData });
+
+    if (page === 0 || this.firstFetch) {
       const elementsToRenderDown = await this.getElementsToRenderOnScrollDown(page);
-      this.cachedData.splice(page * this.pageSize, this.pageSize, ...elementsToRenderDown);
+
+      if (this.firstFetch) {
+        this.cachedData.splice(0, this.pageSize, ...elementsToRenderDown);
+        this.firstFetch = false;
+      } else {
+        this.cachedData.splice(page * this.pageSize, this.pageSize, ...elementsToRenderDown);
+      }
     }
 
     if (this.isScrollingDown(page)) {

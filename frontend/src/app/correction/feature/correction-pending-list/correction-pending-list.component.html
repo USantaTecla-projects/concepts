@@ -55,16 +55,34 @@
         </div>
       </mat-card>
 
-      <mat-selection-list #shoes [multiple]="false">
-        <div class="list-item" *ngFor="let item of list; let i = index">
-          <mat-list-option [value]="item">
-            <mat-icon mat-list-icon>description</mat-icon>
-            <div mat-line>Cristian de Gracia Nuero</div>
-            <div mat-line>22/02/2020</div>
-          </mat-list-option>
-          <mat-divider *ngIf="i + 1 !== list.length"></mat-divider>
-        </div>
-      </mat-selection-list>
+      <app-infinite-scroll-list
+        class="pending-exam-list"
+        *ngIf="list.length; else noExamsYet"
+        [elementSize]="120"
+        [datasource]="examItemDatasource">
+        <ng-template #elementTemplate let-exam="element">
+          <div class="list-item" *ngIf="exam; else noExam">
+            <div class="item-decoration">
+              <mat-icon mat-list-icon>description</mat-icon>
+              <div class="info">
+                <div class="username">Cristian de Gracia Nuero {{ exam.userID }}</div>
+                <div class="exam-name">Exam #{{ exam.id }}</div>
+                <div class="date">22/02/2020</div>
+              </div>
+            </div>
+            <button class="submit-button" mat-raised-button color="primary" routerLink="/correction/in-course">
+              Correct <mat-icon>edit_note</mat-icon>
+            </button>
+          </div>
+          <ng-template #noExam>
+            <div class="list-item">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          </ng-template>
+        </ng-template>
+      </app-infinite-scroll-list>
+
+      <ng-template #noExamsYet></ng-template>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

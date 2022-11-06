@@ -37,7 +37,9 @@ public class QuestionT0Generator implements QuestionGenerator {
         final Long conceptID = concept.getId();
 
         if (questionT0Repository.existsByConceptID(conceptID)) {
-            return questionT0Repository.findByConceptID(conceptID).orElseThrow();
+            QuestionT0 questionT0 = questionT0Repository.findByConceptID(conceptID).orElseThrow();
+            questionT0.setConceptText(concept.getText());
+            return questionT0;
         }
 
         QuestionT0 questionT0 = new QuestionT0();

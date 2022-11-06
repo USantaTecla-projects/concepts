@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="!isOffline; else offline">
   <div class="exam-info">
     <div class="mark">
       <span>{{ mark }}</span>
@@ -22,3 +22,9 @@
   </div>
   <button mat-raised-button color="primary">Review Exam</button>
 </mat-card>
+
+<ng-template #offline>
+  <mat-card class="offline-card">
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </mat-card>
+</ng-template>

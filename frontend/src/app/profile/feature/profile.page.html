@@ -36,7 +36,9 @@
                 [timeSpent]="exam.timeSpent">
               </app-exam-history-item>
 
-              <ng-template #noExam>Loading...</ng-template>
+              <ng-template #noExam>
+                <app-exam-history-item class="item-size" [isOffline]="true"></app-exam-history-item>
+              </ng-template>
             </ng-template>
           </app-infinite-scroll-list>
 

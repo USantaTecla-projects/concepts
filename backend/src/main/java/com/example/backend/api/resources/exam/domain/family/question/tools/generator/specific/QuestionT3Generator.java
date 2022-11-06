@@ -58,7 +58,10 @@ public class QuestionT3Generator implements QuestionGenerator {
 
 
         if (questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID)) {
-            return questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();
+            QuestionT3 questionT3 = questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();
+            questionT3.setConceptText(concept.getText());
+            questionT3.setIncorrectDefinitionText(incorrectDefinition.getText());
+            questionT3.setJustificationText(justification.getText());
         }
 
         QuestionT3 questionT3 = new QuestionT3();

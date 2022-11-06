@@ -17,17 +17,16 @@ export class ProfilePage implements OnInit {
 
   user$!: Observable<User | null>;
 
+  examItemDatasource!: ExamItemDatasource;
+
   page = 0;
 
-  constructor(
-    private examStore: ExamStore,
-    private authStore: AuthStore,
-    public examItemDatasource: ExamItemDatasource
-  ) {}
+  constructor(private examStore: ExamStore, private authStore: AuthStore) {}
 
   ngOnInit(): void {
     this.user$ = this.authStore.user$;
     this.examStore.getUserExams(this.user$, this.page).subscribe();
     this.repliedExamsPage$ = this.examStore.repliedExamsPage$;
+    this.examItemDatasource = new ExamItemDatasource(this.examStore, this.authStore);
   }
 }

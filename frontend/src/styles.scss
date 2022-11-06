@@ -8,6 +8,19 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 1rem;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: #c2d2e4;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 30px;
+  background-color: #673ab7;
+  border-radius: 0.5rem;
+}
+
 .tool-bar {
   height: 10vh;
   box-shadow: -17px 77px 73px -92px rgba(0, 0, 0, 0.53) inset;

@@ -12,17 +12,17 @@ public class QuestionT3 extends Question {
 
     private Long conceptID;
 
-    @Column(columnDefinition = "TEXT")
+    @Transient
     private String conceptText;
 
     private Long definitionID;
 
-    @Column(columnDefinition = "TEXT")
+    @Transient
     private String incorrectDefinitionText;
 
     private Long justificationID;
 
-    @Column(columnDefinition = "TEXT")
+    @Transient
     private String justificationText;
 
     @OneToMany

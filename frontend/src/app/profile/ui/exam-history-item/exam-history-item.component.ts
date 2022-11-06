@@ -14,5 +14,7 @@ export class ExamHistoryItemComponent {
 
   @Input() timeSpent!: number | undefined;
 
+  @Input() isOffline: boolean = false;
+
   constructor() {}
 }

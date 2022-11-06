@@ -50,7 +50,10 @@ public class QuestionT1Generator implements QuestionGenerator {
 
 
         if (questionT1Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
-            return questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
+            QuestionT1 questionT1 = questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
+            questionT1.setConceptText(concept.getText());
+            questionT1.setIncorrectDefinitionText(definition.getText());
+            return questionT1;
         }
 
         QuestionT1 questionT1 = new QuestionT1();
