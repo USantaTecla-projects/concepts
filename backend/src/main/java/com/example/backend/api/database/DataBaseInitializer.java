@@ -135,11 +135,11 @@ public class DataBaseInitializer implements CommandLineRunner {
         conceptRepository.save(recursividadConcept);
 
 
-        for (int i = 0; i <99 ; i++) {
-            Exam exam = new Exam();
-            exam.setUserID(1L);
-            examRepository.save(exam);
-        }
+//        for (int i = 0; i <99 ; i++) {
+//            Exam exam = new Exam();
+//            exam.setUserID(1L);
+//            examRepository.save(exam);
+//        }
     }
 
     private void generateKnowledge(

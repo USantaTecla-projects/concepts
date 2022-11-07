@@ -21,7 +21,7 @@
           <mat-icon class="icon">history</mat-icon>
           <h3>Exam history</h3>
         </div>
-        <div class="history-item-list" *ngIf="(repliedExamsPage$ | async)!.content as repliedExamList">
+        <div class="history-item-list" *ngIf="(hasRepliedExams$ | async)!.content as repliedExamList">
           <app-infinite-scroll-list
             *ngIf="repliedExamList.length; else noExamsYet"
             [elementSize]="128"
@@ -32,7 +32,7 @@
                 *ngIf="exam; else noExam"
                 [title]="'Exam #' + exam.id"
                 [date]="exam.creationDate"
-                [mark]="'TODO'"
+                [mark]="'¿?'"
                 [timeSpent]="exam.timeSpent">
               </app-exam-history-item>
 

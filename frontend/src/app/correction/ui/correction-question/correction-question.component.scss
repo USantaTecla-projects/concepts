@@ -1,0 +1,29 @@
+.question {
+  border: 1px solid #dbdbdb;
+  border-radius: 0.25rem;
+  padding: 1rem 2rem;
+  padding-top: 2rem;
+  margin: 2rem 0;
+
+  .chip {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .question-text {
+    font-weight: 500;
+    margin-left: 0.25rem;
+  }
+
+  .answer-text {
+    margin-left: 0.25rem;
+  }
+
+  .actions {
+    margin-top: 2rem;
+    button {
+      margin-right: 1rem;
+    }
+  }
+}

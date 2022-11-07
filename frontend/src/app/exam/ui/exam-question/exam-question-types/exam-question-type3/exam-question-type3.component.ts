@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ExamStore } from 'src/app/exam/data-access/exam.store';
+import { ExamService } from 'src/app/exam/data-access/exam.service';
 import { QuestionReplierService } from 'src/app/exam/data-access/question-replier.service';
 import { QuestionAnswerType } from 'src/app/exam/types/enum/question-answer-type.enum';
 import { QuestionT3ReplyForm } from 'src/app/exam/types/model/form/questionT3ReplyForm.model';
@@ -22,7 +22,7 @@ export class ExamQuestionType3Component implements OnInit, ExamQuestionComponent
   questionReplyForm: FormGroup = new FormGroup({});
 
   constructor(
-    public examStore: ExamStore,
+    public examService: ExamService,
     private formBuilder: FormBuilder,
     private questionReplierService: QuestionReplierService
   ) {}

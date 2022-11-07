@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/exams")
+@RequestMapping("/{userID}")
 public class ExamController {
 
     private final CreateExamService createExamService;
@@ -28,19 +28,25 @@ public class ExamController {
         this.findExamsService = findExamsService;
     }
 
-    @GetMapping("/{userID}")
+    @GetMapping("/exams")
     @ResponseStatus(code = HttpStatus.OK)
     public Page<Exam> getUserExams(@PathVariable final Long userID, @RequestParam final Integer page) {
-        return findExamsService.findByUserID(userID, page);
+        return findExamsService.findAllByUserID(userID, page);
     }
 
-    @PostMapping("/")
+    @GetMapping("/exam/{examID}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Exam getUserExam(@PathVariable final Long userID, @PathVariable final Long examID) {
+        return findExamsService.findByExamID(userID,examID);
+    }
+
+    @PostMapping("/exam")
     @ResponseStatus(code = HttpStatus.CREATED)
     public Exam create(@RequestBody final CreateExamDTO createExamDTO) {
         return createExamService.create(createExamDTO);
     }
 
-    @PatchMapping("/")
+    @PatchMapping("/exam")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void reply(@RequestBody final ReplyExamDTO replyExamDTO) {
         replyExamService.reply(replyExamDTO);

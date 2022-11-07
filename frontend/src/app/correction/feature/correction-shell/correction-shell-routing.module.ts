@@ -8,7 +8,7 @@ const routes: Routes = [
       import('../correction-pending-list/correction-pending-list.module').then(m => m.CorrectionPendingListModule),
   },
   {
-    path: 'in-course',
+    path: 'in-course/:id',
     loadChildren: () =>
       import('../correction-in-course/correction-in-course.module').then(m => m.CorrectionInCourseModule),
   },

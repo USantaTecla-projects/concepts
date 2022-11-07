@@ -11,8 +11,7 @@
           <h3>Pending exams</h3>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <p>Exam List goes here</p>
+      <app-correction-question *ngFor="let question of (exam$ | async)!.questionList"></app-correction-question>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

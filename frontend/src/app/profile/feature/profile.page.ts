@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { User } from 'src/app/auth/types/model/user.model';
-import { ExamStore } from 'src/app/exam/data-access/exam.store';
+import { ExamService } from 'src/app/exam/data-access/exam.service';
 import { Exam } from 'src/app/exam/types/model/exam.model';
 import { Page } from 'src/app/shared/interfaces/page-response.dto';
 import { ExamItemDatasource } from '../data-access/exam-item.datasource';
@@ -13,7 +13,7 @@ import { ExamItemDatasource } from '../data-access/exam-item.datasource';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  repliedExamsPage$!: Observable<Page<Exam>>;
+  hasRepliedExams$!: Observable<Page<Exam>>;
 
   user$!: Observable<User | null>;
 
@@ -21,12 +21,12 @@ export class ProfilePage implements OnInit {
 
   page = 0;
 
-  constructor(private examStore: ExamStore, private authStore: AuthStore) {}
+  constructor(private examService: ExamService, private authStore: AuthStore) {}
 
   ngOnInit(): void {
     this.user$ = this.authStore.user$;
-    this.examStore.getUserExams(this.user$, this.page).subscribe();
-    this.repliedExamsPage$ = this.examStore.repliedExamsPage$;
-    this.examItemDatasource = new ExamItemDatasource(this.examStore, this.authStore);
+    this.examService.getUserExams(this.user$, this.page).subscribe();
+    this.hasRepliedExams$ = this.examService.getUserExams(this.user$, this.page);
+    this.examItemDatasource = new ExamItemDatasource(this.examService, this.authStore);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
-import { QuestionHostDirective } from '../../../utils/question-host.directive';
+import { QuestionHostDirective } from 'src/app/exam/utils/question-host.directive';
 import { ExamQuestionComponent } from '../exam-question-types/exam-question.component';
 
 @Component({

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { QuestionHostDirective } from 'src/app/exam/utils/question-host.directive';
 import { MaterialModule } from 'src/app/shared/material.module';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { QuestionHostDirective } from '../../../utils/question-host.directive';
 
 import { ExamQuestionType0Component } from '../exam-question-types/exam-question-type0/exam-question-type0.component';
 import { ExamQuestionType1Component } from '../exam-question-types/exam-question-type1/exam-question-type1.component';
@@ -11,7 +11,7 @@ import { ExamQuestionType3Component } from '../exam-question-types/exam-question
 import { ExamQuestionRendererComponent } from './exam-question-renderer.component';
 
 @NgModule({
-  imports: [CommonModule, MaterialModule, SharedModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
   declarations: [
     ExamQuestionRendererComponent,
     QuestionHostDirective,

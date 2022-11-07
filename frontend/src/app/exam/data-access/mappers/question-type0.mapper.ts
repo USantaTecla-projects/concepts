@@ -1,8 +1,8 @@
+import { ExamQuestionType0Component } from 'src/app/exam/ui/exam-question/exam-question-types/exam-question-type0/exam-question-type0.component';
 import { QuestionDTO } from '../../types/dto/question.dto';
 import { QuestionAnswerType } from '../../types/enum/question-answer-type.enum';
 import { QuestionType0 } from '../../types/model/question/question-type/question-type0.model';
 import { Question } from '../../types/model/question/question.model';
-import { ExamQuestionType0Component } from '../../ui/exam-question/exam-question-types/exam-question-type0/exam-question-type0.component';
 
 export const mapToQuestionType0 = (questionData: QuestionDTO): QuestionType0 => {
   const { id, conceptID, conceptText } = questionData;
