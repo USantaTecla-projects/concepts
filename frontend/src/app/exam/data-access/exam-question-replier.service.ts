@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Question } from '../types/model/question/question.model';
 
-export class QuestionReplierService {
+export class ExamQuestionReplierService {
   private replyQuestionsSubject = new BehaviorSubject<boolean>(false);
 
   replyQuestions$: Observable<boolean> = this.replyQuestionsSubject.asObservable();

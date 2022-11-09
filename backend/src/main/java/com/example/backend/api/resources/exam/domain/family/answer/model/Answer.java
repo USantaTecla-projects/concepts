@@ -16,6 +16,8 @@ public class Answer {
 
     protected Long userID;
 
+    protected CorrectionStatus correctionStatus = CorrectionStatus.PENDING;
+
     public Answer() {
     }
 
@@ -43,5 +45,11 @@ public class Answer {
         this.userID = userID;
     }
 
+    public CorrectionStatus getCorrectionStatus() {
+        return correctionStatus;
+    }
 
+    public void setCorrectionStatus(CorrectionStatus correctionStatus) {
+        this.correctionStatus = correctionStatus;
+    }
 }

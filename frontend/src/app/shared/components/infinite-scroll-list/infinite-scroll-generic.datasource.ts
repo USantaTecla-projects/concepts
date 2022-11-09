@@ -38,8 +38,6 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
   }
 
   private async fetchPage(page: number) {
-    console.log({ page, cachedData: this.cachedData });
-
     if (page === 0 || this.firstFetch) {
       const elementsToRenderDown = await this.getElementsToRenderOnScrollDown(page);
 
@@ -70,8 +68,6 @@ export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefin
     }
 
     this.lastPageFetched = page;
-    console.log('Cached data');
-    console.log(this.cachedData);
     this.dataStream.next(this.cachedData);
   }
 

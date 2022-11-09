@@ -27,7 +27,7 @@ export class ExamInCourseStore {
     return this.httpClient.post<ExamData>(`${userID}/exam`, generateExamData).pipe(
       catchError(error => {
         const message = 'Could not generate the exam';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => new Error(message));
       }),
       map(examData => this.examMapperService.mapDTOToExam(examData)),
@@ -38,15 +38,15 @@ export class ExamInCourseStore {
     );
   }
 
-  replyExam(repliedQuestions: Question[]) {
+  updateExam(repliedQuestions: Question[]) {
     const { id: examID, userID, creationDate } = this.examInCourseSubject.getValue();
 
-    const replyExamDTO = this.examMapperService.mapExamToDTO({ examID, userID, creationDate }, repliedQuestions);
+    const updatedExamDTO = this.examMapperService.mapExamToDTO({ examID, userID, creationDate }, repliedQuestions);
 
-    return this.httpClient.patch<Exam>(`${userID}/exam`, replyExamDTO).pipe(
+    return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => new Error(message));
       })
     );

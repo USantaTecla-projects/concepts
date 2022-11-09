@@ -1,0 +1,13 @@
+<div class="question">
+  <mat-chip-list class="info">
+    <mat-chip class="chip" color="primary" selected>Question #{{ questionNumber }}</mat-chip>
+  </mat-chip-list>
+
+  <p class="question-text">¿Es correcto afirmar que {{ question.conceptText }} es {{ question.definitionText }}?</p>
+  <p class="answer-text">{{ question.answer.reply ? 'Yes' : 'No' }}</p>
+
+  <div class="actions">
+    <button (click)="correctQuestion(true)" mat-raised-button>Correct</button>
+    <button (click)="correctQuestion(false)" mat-raised-button color="warn">Incorrect</button>
+  </div>
+</div>

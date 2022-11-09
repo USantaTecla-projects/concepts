@@ -5,7 +5,7 @@ import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { User } from 'src/app/auth/types/model/user.model';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { ExamInCourseStore } from '../../data-access/exam-in-course.store';
-import { QuestionReplierService } from '../../data-access/question-replier.service';
+import { ExamQuestionReplierService } from '../../data-access/exam-question-replier.service';
 import { Exam } from '../../types/model/exam.model';
 import { Question } from '../../types/model/question/question.model';
 
@@ -13,7 +13,7 @@ import { Question } from '../../types/model/question/question.model';
   selector: 'app-exam-in-course',
   templateUrl: './exam-in-course.page.html',
   styleUrls: ['./exam-in-course.page.scss'],
-  providers: [QuestionReplierService],
+  providers: [ExamQuestionReplierService],
 })
 export class ExamInCoursePage implements OnInit {
   exam$!: Observable<Exam>;
@@ -26,7 +26,7 @@ export class ExamInCoursePage implements OnInit {
     private router: Router,
     private examInCourseStore: ExamInCourseStore,
     private authStore: AuthStore,
-    private questionReplierService: QuestionReplierService,
+    private questionReplierService: ExamQuestionReplierService,
     private snackbarService: SnackbarService
   ) {}
 
@@ -46,7 +46,7 @@ export class ExamInCoursePage implements OnInit {
         switchMap(replied => {
           if (replied) {
             const repliedQuestions = this.questionReplierService.repliedQuestions;
-            return this.examInCourseStore.replyExam(repliedQuestions);
+            return this.examInCourseStore.updateExam(repliedQuestions);
           }
 
           return of(null);

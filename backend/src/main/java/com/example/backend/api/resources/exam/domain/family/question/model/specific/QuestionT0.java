@@ -3,9 +3,9 @@ package com.example.backend.api.resources.exam.domain.family.question.model.spec
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT0;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class QuestionT0 extends Question {
@@ -16,17 +16,17 @@ public class QuestionT0 extends Question {
     @Transient
     private String conceptText;
 
-    @OneToMany
-    @JoinTable(name = "questiont0_answerT0_list")
-    private List<AnswerT0> answerT0List;
-
+    @ManyToOne()
+    @JsonManagedReference
+    private AnswerT0 answerT0;
 
     public QuestionT0() {
     }
 
     @Override
-    public void addAnswer(Answer answer) {
-        answerT0List.add((AnswerT0) answer);
+    public void setAnswer(Answer answer) {
+        AnswerT0 answerT0 = (AnswerT0) answer;
+        this.setAnswerT0(answerT0);
     }
 
     public Long getConceptID() {
@@ -45,12 +45,20 @@ public class QuestionT0 extends Question {
         this.conceptText = conceptText;
     }
 
+    public AnswerT0 getAnswerT0() {
+        return answerT0;
+    }
+
+    public void setAnswerT0(AnswerT0 answerT0) {
+        this.answerT0 = answerT0;
+    }
+
     @Override
     public String toString() {
         return "QuestionT0{" +
                 ", conceptID=" + conceptID +
                 ", conceptText='" + conceptText + '\'' +
-                ", answerT0=" + answerT0List +
+                ", answerT0=" + answerT0 +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';

@@ -70,12 +70,7 @@
                 <div class="date">22/02/2020</div>
               </div>
             </div>
-            <button
-              class="submit-button"
-              (click)="onExamCorrection(exam.id)"
-              mat-raised-button
-              color="primary"
-              routerLink="/correction/in-course/{{ exam.id }}">
+            <button class="submit-button" (click)="onExamCorrection(exam.id)" mat-raised-button color="primary">
               Correct <mat-icon>edit_note</mat-icon>
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
-import { QuestionHostDirective } from 'src/app/exam/utils/question-host.directive';
+import { ExamQuestionHostDirective } from 'src/app/exam/utils/exam-question-host.directive';
 import { ExamQuestionComponent } from '../exam-question-types/exam-question.component';
 
 @Component({
@@ -16,8 +16,8 @@ export class ExamQuestionRendererComponent implements OnInit {
 
   @Input() userID!: number;
 
-  @ViewChild(QuestionHostDirective, { static: true })
-  questionHost!: QuestionHostDirective;
+  @ViewChild(ExamQuestionHostDirective, { static: true })
+  questionHost!: ExamQuestionHostDirective;
 
   constructor() {}
 

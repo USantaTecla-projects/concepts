@@ -6,5 +6,5 @@ export interface QuestionType1 extends Question {
   definitionID: number;
   conceptText: string;
   incorrectDefinitionText: string;
-  answer?: AnswerT1;
+  answer: AnswerT1;
 }

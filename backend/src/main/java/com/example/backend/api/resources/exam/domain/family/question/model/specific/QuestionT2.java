@@ -1,11 +1,12 @@
 package com.example.backend.api.resources.exam.domain.family.question.model.specific;
 
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
+import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT1;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT2;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class QuestionT2 extends Question {
@@ -20,16 +21,17 @@ public class QuestionT2 extends Question {
     @Transient
     private String definitionText;
 
-    @OneToMany
-    @JoinTable(name = "questiont2_answerT2_list")
-    private List<AnswerT2> answerT2List;
+    @ManyToOne
+    @JsonManagedReference
+    private AnswerT2 answerT2;
 
     public QuestionT2() {
     }
 
     @Override
-    public void addAnswer(Answer answer) {
-        answerT2List.add((AnswerT2) answer);
+    public void setAnswer(Answer answer) {
+        AnswerT2 answerT2 = (AnswerT2) answer;
+        this.setAnswerT2(answerT2);
     }
 
     public Long getConceptID() {
@@ -64,6 +66,14 @@ public class QuestionT2 extends Question {
         this.definitionText = definitionText;
     }
 
+    public AnswerT2 getAnswerT2() {
+        return answerT2;
+    }
+
+    public void setAnswerT2(AnswerT2 answerT2) {
+        this.answerT2 = answerT2;
+    }
+
     @Override
     public String toString() {
         return "QuestionT2{" +
@@ -71,7 +81,7 @@ public class QuestionT2 extends Question {
                 ", conceptText='" + conceptText + '\'' +
                 ", definitionID=" + definitionID +
                 ", definitionText='" + definitionText + '\'' +
-                ", answerT2=" + answerT2List +
+                ", answerT2=" + answerT2 +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';

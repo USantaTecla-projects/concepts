@@ -40,7 +40,7 @@ public class CreateQuestionService {
 
         while (generatedQuestions.size() < numberOfQuestions) {
             final int randomNum = generateRandomNumber();
-            QuestionGenerator questionGenerator = typeAbstractFactories.get(randomNum).createFiller();
+            QuestionGenerator questionGenerator = typeAbstractFactories.get(randomNum).createGenerator();
 
             try {
                 Question question = questionGenerator.generateQuestion(generatedQuestions);

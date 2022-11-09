@@ -33,7 +33,7 @@ export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.justificationStore.state$.subscribe({
       next: value => (this.state = value),
-      error: error => console.log(error),
+      error: error => console.error(error),
     });
   }
 
@@ -66,7 +66,6 @@ export class KnowledgeJustificationListComponent implements OnInit, OnChanges {
   }
 
   onJustificationUpdate(updatedJustification: Justification) {
-    console.log(updatedJustification);
     this.updateJustification.emit(updatedJustification);
   }
 

@@ -1,7 +1,8 @@
 package com.example.backend.api.resources.exam.domain.family.question.model;
 
-import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.factory.Type;
+import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
+import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT0;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -20,7 +21,11 @@ public abstract class Question {
     @Transient
     protected boolean isFilled;
 
-    public abstract void addAnswer(Answer answer);
+    public Question() {
+    }
+
+    public abstract void setAnswer(Answer answer);
+
 
     public Long getId() {
         return id;

@@ -2,9 +2,9 @@ package com.example.backend.api.resources.exam.service;
 
 import com.example.backend.api.resources.exam.ExamRepository;
 import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
-import com.example.backend.api.resources.exam.dto.ReplyExamDTO;
+import com.example.backend.api.resources.exam.dto.UpdateExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
-import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
 import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
@@ -21,14 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class ReplyExamService {
+public class UpdateExamService {
 
     private final ExamRepository examRepository;
     private final MapQuestionService mapQuestionService;
     private final SaveQuestionService saveQuestionService;
     private final SaveAnswerService answerService;
 
-    public ReplyExamService(
+    public UpdateExamService(
             ExamRepository examRepository,
             MapQuestionService mapQuestionService,
             SaveQuestionService saveQuestionService, SaveAnswerService answerService
@@ -40,18 +40,17 @@ public class ReplyExamService {
     }
 
 
-    public void reply(final ReplyExamDTO replyExamDTO) {
+    public void update(final UpdateExamDTO updateExamDTO) {
 
-        final Long userID = replyExamDTO
-                .getUserIDOptional(replyExamDTO.getUserID())
-                .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field userID in ReplyExam DTO is mandatory"));
+        final Long userID = updateExamDTO
+                .getUserIDOptional(updateExamDTO.getUserID())
+                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field userID in UpdateExam DTO is mandatory"));
 
-        Long examID = checkExamExistOnDatabase(replyExamDTO);
+        Long examID = checkExamExistOnDatabase(updateExamDTO);
 
-        final List<QuestionAndAnswerDTO> questionAndAnswerDTOList = replyExamDTO
-                .getQuestionAndAnswerDTOListOptional(replyExamDTO.getQuestionAndAnswerDTOList())
+        final List<QuestionAndAnswerDTO> questionAndAnswerDTOList = updateExamDTO
+                .getQuestionAndAnswerDTOListOptional(updateExamDTO.getQuestionAndAnswerDTOList())
                 .orElseThrow(() -> new QuestionDTOBadRequestException("Field questionDTOList in ReplyExam DTO is mandatory"));
-
 
         final List<QuestionDTO> questionDTOList = questionAndAnswerDTOList
                 .stream()
@@ -68,17 +67,17 @@ public class ReplyExamService {
 
         saveAnswersOnQuestions(questions, answers);
 
-        replyExamOnDatabase(examID, userID);
+        updateExamOnDatabase(examID, userID);
     }
 
-    private Long checkExamExistOnDatabase(final ReplyExamDTO replyExamDTO) {
-        final Long examID = replyExamDTO
-                .getExamIDOptional(replyExamDTO.getExamID())
-                .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field examID in ReplyExam DTO is mandatory"));
+    private Long checkExamExistOnDatabase(final UpdateExamDTO updateExamDTO) {
+        final Long examID = updateExamDTO
+                .getExamIDOptional(updateExamDTO.getExamID())
+                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field examID in UpdateExam DTO is mandatory"));
 
-        final Timestamp creationDate = replyExamDTO
-                .getCreationDateOptional(replyExamDTO.getCreationDate())
-                .orElseThrow(() -> new ReplyExamDTOBadRequestException("Field creationDate in ReplyExam DTO is mandatory"));
+        final Timestamp creationDate = updateExamDTO
+                .getCreationDateOptional(updateExamDTO.getCreationDate())
+                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field creationDate in UpdateExam DTO is mandatory"));
 
         final Exam exam = examRepository
                 .findById(examID)
@@ -98,12 +97,12 @@ public class ReplyExamService {
         while (questionIterator.hasNext() && answerIterator.hasNext()) {
             final Question question = questionIterator.next();
             final Answer answer = answerIterator.next();
-            question.addAnswer(answer);
+            question.setAnswer(answer);
             saveQuestionService.saveQuestion(question);
         }
     }
 
-    private void replyExamOnDatabase(final Long examID, final Long userID) {
+    private void updateExamOnDatabase(final Long examID, final Long userID) {
         final Exam exam = examRepository
                 .findByIdAndUserID(examID, userID)
                 .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));

@@ -5,6 +5,8 @@ import com.example.backend.api.resources.exam.domain.family.answer.mapper.specif
 import com.example.backend.api.resources.exam.domain.family.answer.repository.AnswerT1Repository;
 import com.example.backend.api.resources.exam.domain.family.answer.service.type.SaveAnswerTypeService;
 import com.example.backend.api.resources.exam.domain.family.answer.service.type.specific.SaveAnswerT1Service;
+import com.example.backend.api.resources.exam.domain.family.question.tools.filler.QuestionFiller;
+import com.example.backend.api.resources.exam.domain.family.question.tools.filler.specific.QuestionT1Filler;
 import com.example.backend.api.resources.exam.domain.family.question.tools.mapper.QuestionMapper;
 import com.example.backend.api.resources.exam.domain.family.question.tools.mapper.specific.QuestionT1Mapper;
 import com.example.backend.api.resources.exam.domain.family.question.repository.QuestionT1Repository;
@@ -38,7 +40,7 @@ public class Type1Factory implements TypeFactory {
     }
 
     @Override
-    public QuestionGenerator createFiller() {
+    public QuestionGenerator createGenerator() {
         return new QuestionT1Generator(conceptRepository, definitionRepository, questionT1Repository);
     }
 
@@ -54,7 +56,12 @@ public class Type1Factory implements TypeFactory {
 
     @Override
     public AnswerMapper createAnswerMapper() {
-        return new AnswerT1Mapper();
+        return new AnswerT1Mapper(answerT1Repository);
+    }
+
+    @Override
+    public SaveAnswerTypeService getAnswerTypeService() {
+        return new SaveAnswerT1Service(answerT1Repository);
     }
 
     @Override
@@ -63,9 +70,7 @@ public class Type1Factory implements TypeFactory {
     }
 
     @Override
-    public SaveAnswerTypeService getAnswerTypeService() {
-        return new SaveAnswerT1Service(answerT1Repository);
+    public QuestionFiller createQuestionFiller() {
+        return new QuestionT1Filler(conceptRepository, definitionRepository);
     }
-
-
 }

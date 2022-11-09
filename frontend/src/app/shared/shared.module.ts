@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { ExamQuestionRendererModule } from '../exam/ui/exam-question/exam-question-renderer/exam-question-renderer.module';
 
 import { InfiniteScrollListModule } from './components/infinite-scroll-list/infinite-scroll-list.module';
 import { NavbarModule } from './components/navbar/navbar.module';
@@ -19,13 +18,6 @@ import { TimeSpentPipe } from './utils/time-spent.pipe';
       useValue: { appearance: 'outline' },
     },
   ],
-  exports: [
-    ShortTextPipe,
-    TimeSpentPipe,
-    ReactiveFormsModule,
-    NavbarModule,
-    InfiniteScrollListModule,
-    ExamQuestionRendererModule,
-  ],
+  exports: [ShortTextPipe, TimeSpentPipe, ReactiveFormsModule, NavbarModule, InfiniteScrollListModule],
 })
 export class SharedModule {}

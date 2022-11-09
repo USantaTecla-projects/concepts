@@ -1,11 +1,14 @@
 package com.example.backend.api.resources.exam.domain.family.question.model.specific;
 
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
+import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT0;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT1;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class QuestionT1 extends Question {
@@ -20,15 +23,17 @@ public class QuestionT1 extends Question {
     @Transient
     private String incorrectDefinitionText;
 
-    @OneToMany
-    @JoinTable(name = "questiont1_answerT1_list")
-    private List<AnswerT1> answerT1List;
+    @ManyToOne()
+    @JsonManagedReference
+    private AnswerT1 answerT1;
+
     public QuestionT1() {
     }
 
     @Override
-    public void addAnswer(Answer answer) {
-        answerT1List.add((AnswerT1) answer);
+    public void setAnswer(Answer answer) {
+        AnswerT1 answerT1 = (AnswerT1) answer;
+        this.setAnswerT1(answerT1);
     }
 
     public Long getConceptID() {
@@ -63,6 +68,14 @@ public class QuestionT1 extends Question {
         this.incorrectDefinitionText = incorrectDefinitionText;
     }
 
+    public AnswerT1 getAnswerT1() {
+        return answerT1;
+    }
+
+    public void setAnswerT1(AnswerT1 answerT1) {
+        this.answerT1 = answerT1;
+    }
+
     @Override
     public String toString() {
         return "QuestionT1{" +
@@ -70,7 +83,7 @@ public class QuestionT1 extends Question {
                 ", conceptText='" + conceptText + '\'' +
                 ", definitionID=" + definitionID +
                 ", incorrectDefinitionText='" + incorrectDefinitionText + '\'' +
-                ", answerT1=" + answerT1List +
+                ", answerT1=" + answerT1 +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';

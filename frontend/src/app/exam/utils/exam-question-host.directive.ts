@@ -3,6 +3,6 @@ import { Directive, ViewContainerRef } from '@angular/core';
 @Directive({
   selector: '[appQuestionHost]',
 })
-export class QuestionHostDirective {
+export class ExamQuestionHostDirective {
   constructor(public viewContainerRef: ViewContainerRef) {}
 }

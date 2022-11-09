@@ -35,7 +35,7 @@ export class KnowledgeManagerPage {
     this.resetDefinitionList = true;
     this.definitionStore.getDefinitions(this.selectedConceptID).subscribe({
       next: () => (this.resetDefinitionList = false),
-      error: (err: Error) => console.log(err.message),
+      error: (err: Error) => console.error(err.message),
     });
     this.justificationStore.resetJustificationList();
   }
@@ -76,7 +76,7 @@ export class KnowledgeManagerPage {
     this.resetJustificationList = true;
     this.justificationStore.getJustifications(this.selectedConceptID, this.selectedDefinitionID).subscribe({
       next: () => (this.resetJustificationList = false),
-      error: error => console.log(error),
+      error: error => console.error(error),
     });
   }
 

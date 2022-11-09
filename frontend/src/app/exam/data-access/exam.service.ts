@@ -24,7 +24,7 @@ export class ExamService {
     return this.httpClient.get<ExamData>(`${userID}/exam/${examID}`).pipe(
       catchError(error => {
         const message = 'Could not get the user exams';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => new Error(message));
       }),
       map(examData => this.examMapperService.mapDTOToExam(examData))
@@ -46,7 +46,7 @@ export class ExamService {
       .pipe(
         catchError(error => {
           const message = 'Could not get the user exams';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => new Error(message));
         }),
         map(examDataPage => {

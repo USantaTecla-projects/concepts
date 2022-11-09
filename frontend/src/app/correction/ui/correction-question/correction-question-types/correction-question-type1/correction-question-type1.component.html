@@ -1,0 +1,15 @@
+<div class="question">
+  <mat-chip-list class="info">
+    <mat-chip class="chip" color="primary" selected>Question #{{ questionNumber }}</mat-chip>
+  </mat-chip-list>
+
+  <p class="question-text">
+    ¿Por qué no es correcto afirmar que {{ question.conceptText }} es {{ question.incorrectDefinitionText }}?
+  </p>
+  <p class="answer-text">{{ question.answer.reply | titlecase }}</p>
+
+  <div class="actions">
+    <button (click)="correctQuestion(true)" mat-raised-button>Correct</button>
+    <button (click)="correctQuestion(false)" mat-raised-button color="warn">Incorrect</button>
+  </div>
+</div>

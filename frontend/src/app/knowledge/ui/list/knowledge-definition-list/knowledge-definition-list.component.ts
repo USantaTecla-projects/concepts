@@ -33,7 +33,7 @@ export class KnowledgeDefinitionListComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.definitionStore.state$.subscribe({
       next: value => (this.state = value),
-      error: error => console.log(error),
+      error: error => console.error(error),
     });
   }
 

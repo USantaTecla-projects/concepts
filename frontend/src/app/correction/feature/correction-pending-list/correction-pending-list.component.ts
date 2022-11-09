@@ -5,7 +5,7 @@ import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { ExamService } from 'src/app/exam/data-access/exam.service';
 import { ExamItemDatasource } from 'src/app/profile/data-access/exam-item.datasource';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
-import { ExamCorrecionInCourseStore } from '../../data-access/exam-correction-in-course.store';
+import { CorrecionInCourseStore } from '../../data-access/correction-in-course.store';
 
 @Component({
   selector: 'app-correction-pending-list',
@@ -20,7 +20,7 @@ export class CorrectionPendingListComponent implements OnInit {
   constructor(
     private router: Router,
     private examService: ExamService,
-    private examCorrectionInCourseStore: ExamCorrecionInCourseStore,
+    private correctionInCourseStore: CorrecionInCourseStore,
     private authStore: AuthStore,
     private snackbarService: SnackbarService
   ) {}
@@ -33,13 +33,10 @@ export class CorrectionPendingListComponent implements OnInit {
     this.authStore.user$
       .pipe(
         map(user => (!user ? -1 : user.id)),
-        mergeMap(userID => this.examCorrectionInCourseStore.getExam(userID, examID))
+        mergeMap(userID => this.correctionInCourseStore.getExam(userID, examID))
       )
       .subscribe({
-        next: exam => {
-          console.log(exam);
-          this.router.navigateByUrl(`/correction/in-course/${examID}`);
-        },
+        next: () => this.router.navigateByUrl('/correction/in-course'),
         error: (err: Error) => this.snackbarService.openSnackBar(err.message),
       });
   }

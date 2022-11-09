@@ -31,7 +31,7 @@ export class ConceptStore {
     return this.httpClient.post<Concept>('concepts/', concept).pipe(
       catchError(error => {
         const message = 'Could not create the concept';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => error);
       }),
       tap(concept => {
@@ -85,7 +85,7 @@ export class ConceptStore {
     return this.httpClient.put<Concept>(`concepts/${conceptID}`, newConcept).pipe(
       catchError((error: HttpErrorResponse) => {
         const message = 'Could not update the concept';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => error);
       }),
       shareReplay()
@@ -104,7 +104,7 @@ export class ConceptStore {
     return this.httpClient.delete<Concept>(`concepts/${conceptID}`).pipe(
       catchError(error => {
         const message = 'Could not delete the concept';
-        console.log(message, error);
+        console.error(message, error);
         return throwError(() => error);
       }),
       tap(() => {
@@ -123,7 +123,7 @@ export class ConceptStore {
       .pipe(
         catchError(error => {
           const message = 'Could not load concepts';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => error);
         }),
         tap(page => this.conceptsPageSubject.next(page)),

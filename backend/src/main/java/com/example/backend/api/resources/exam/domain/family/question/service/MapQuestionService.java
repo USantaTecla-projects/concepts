@@ -25,7 +25,7 @@ public class MapQuestionService {
         return questionDTOList
                 .stream()
                 .map(questionDTO -> {
-                    Type questionType = getQuestionType(questionDTO);
+                    final Type questionType = getQuestionType(questionDTO);
                     final int questionTypeOrdinal = questionType.ordinal();
                     QuestionMapper questionMapper = typeAbstractFactories.get(questionTypeOrdinal).createQuestionMapper();
                     return questionMapper.mapQuestion(questionDTO);

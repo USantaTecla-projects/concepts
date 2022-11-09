@@ -8,5 +8,5 @@ export interface QuestionType3 extends Question {
   conceptText: string;
   incorrectDefinitionText: string;
   justificationText: string;
-  answer?: AnswerT3;
+  answer: AnswerT3;
 }

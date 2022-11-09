@@ -1,7 +1,20 @@
-import { mapFromQuestionType0, mapToQuestionType0 } from '../data-access/mappers/question-type0.mapper';
-import { mapFromQuestionType1, mapToQuestionType1 } from '../data-access/mappers/question-type1.mapper';
-import { mapFromQuestionType2, mapToQuestionType2 } from '../data-access/mappers/question-type2.mapper';
-import { mapFromQuestionType3, mapToQuestionType3 } from '../data-access/mappers/question-type3.mapper';
+import {
+  mapFromQuestionType0,
+  mapToQuestionType0,
+} from '../data-access/mappers/question-mappers/question-type0.mapper';
+import {
+  mapFromQuestionType1,
+  mapToQuestionType1,
+} from '../data-access/mappers/question-mappers/question-type1.mapper';
+import {
+  mapFromQuestionType2,
+  mapToQuestionType2,
+} from '../data-access/mappers/question-mappers/question-type2.mapper';
+import {
+  mapFromQuestionType3,
+  mapToQuestionType3,
+} from '../data-access/mappers/question-mappers/question-type3.mapper';
+
 import { QuestionDTO } from '../types/dto/question.dto';
 import { QuestionType0 } from '../types/model/question/question-type/question-type0.model';
 import { QuestionType1 } from '../types/model/question/question-type/question-type1.model';

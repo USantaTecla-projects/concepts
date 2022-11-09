@@ -4,7 +4,7 @@ package com.example.backend.api.resources.exam.exception;
 import com.example.backend.api.exception.specific.ExceptionDTO;
 import com.example.backend.api.resources.exam.exception.specific.CreateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
-import com.example.backend.api.resources.exam.exception.specific.ReplyExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,8 +27,8 @@ public class ExamExceptionHandler {
         return new ResponseEntity<>(exceptionDTO,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {ReplyExamDTOBadRequestException.class})
-    public ResponseEntity<Object> handleReplyExamDTOBadRequestException(ReplyExamDTOBadRequestException exception){
+    @ExceptionHandler(value = {UpdateExamDTOBadRequestException.class})
+    public ResponseEntity<Object> handleReplyExamDTOBadRequestException(UpdateExamDTOBadRequestException exception){
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 exception.getMessage(),
                 HttpStatus.BAD_REQUEST,

@@ -11,7 +11,16 @@
           <h3>Pending exams</h3>
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <app-correction-question *ngFor="let question of (exam$ | async)!.questionList"></app-correction-question>
+      <ng-container *ngFor="let question of (exam$ | async)!.questionList; let i = index">
+        <app-correction-question-renderer
+          class="question"
+          [componentType]="question.correctionComponentType"
+          [question]="question"
+          [questionNumber]="i + 1"
+          [userID]="(user$ | async)?.id">
+        </app-correction-question-renderer>
+      </ng-container>
+      <button (click)="saveCorrection()" mat-raised-button color="primary">Correct exam</button>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

@@ -24,7 +24,7 @@ export class JustificationStore {
       .pipe(
         catchError(error => {
           const message = 'Could not create the justification';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => error);
         }),
         tap(justification => {
@@ -47,7 +47,7 @@ export class JustificationStore {
       .pipe(
         catchError(error => {
           const message = 'Could not load concepts';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => error);
         }),
         tap(justifications => {
@@ -81,7 +81,7 @@ export class JustificationStore {
       .pipe(
         catchError(error => {
           const message = 'Could not update the definition';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => error);
         }),
         shareReplay()
@@ -100,7 +100,7 @@ export class JustificationStore {
       .pipe(
         catchError(error => {
           const message = 'Could not delete the definition';
-          console.log(message, error);
+          console.error(message, error);
           return throwError(() => error);
         }),
         tap(() => {

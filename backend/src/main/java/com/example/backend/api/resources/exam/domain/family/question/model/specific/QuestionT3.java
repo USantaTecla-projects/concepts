@@ -1,11 +1,12 @@
 package com.example.backend.api.resources.exam.domain.family.question.model.specific;
 
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
+import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT1;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT3;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class QuestionT3 extends Question {
@@ -25,16 +26,17 @@ public class QuestionT3 extends Question {
     @Transient
     private String justificationText;
 
-    @OneToMany
-    @JoinTable(name = "questiont3_answerT3_list")
-    private List<AnswerT3> answerT3List;
+    @ManyToOne
+    @JsonManagedReference
+    private AnswerT3 answerT3;
 
     public QuestionT3() {
     }
 
     @Override
-    public void addAnswer(Answer answer) {
-        answerT3List.add((AnswerT3) answer);
+    public void setAnswer(Answer answer) {
+        AnswerT3 answerT3 = (AnswerT3) answer;
+        this.setAnswerT3(answerT3);
     }
 
     public Long getConceptID() {
@@ -85,6 +87,14 @@ public class QuestionT3 extends Question {
         this.justificationText = justificationText;
     }
 
+    public AnswerT3 getAnswerT3() {
+        return answerT3;
+    }
+
+    public void setAnswerT3(AnswerT3 answerT3) {
+        this.answerT3 = answerT3;
+    }
+
     @Override
     public String toString() {
         return "QuestionT3{" +
@@ -94,7 +104,7 @@ public class QuestionT3 extends Question {
                 ", incorrectDefinitionText='" + incorrectDefinitionText + '\'' +
                 ", justificationID=" + justificationID +
                 ", justificationText='" + justificationText + '\'' +
-                ", answerT3=" + answerT3List +
+                ", answerT3=" + answerT3 +
                 ", type=" + type +
                 ", isFilled=" + isFilled +
                 '}';
