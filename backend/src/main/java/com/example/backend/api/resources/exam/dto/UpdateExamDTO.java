@@ -21,6 +21,8 @@ public class UpdateExamDTO {
 
     private Timestamp creationDate;
 
+    private Boolean corrected;
+
     public Optional<List<QuestionAndAnswerDTO>> getQuestionAndAnswerDTOListOptional(List<QuestionAndAnswerDTO> questionAndAnswerDTOList) {
         return Optional
                 .ofNullable(questionAndAnswerDTOList);
@@ -39,6 +41,11 @@ public class UpdateExamDTO {
     public Optional<Timestamp> getCreationDateOptional(Timestamp creationDate) {
         return Optional
                 .ofNullable(creationDate);
+    }
+
+    public Optional<Boolean> getCorrectedOptional(Boolean corrected) {
+        return Optional
+                .ofNullable(corrected);
     }
 
     @Override

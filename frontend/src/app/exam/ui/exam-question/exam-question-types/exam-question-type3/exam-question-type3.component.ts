@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ExamQuestionReplierService } from 'src/app/exam/data-access/exam-question-replier.service';
-import { AnswerCorrectionStatus } from 'src/app/exam/types/enum/answer-correction-status.enum';
-import { QuestionAnswerType } from 'src/app/exam/types/enum/question-answer-type.enum';
-import { QuestionT3ReplyForm } from 'src/app/exam/types/model/form/questionT3ReplyForm.model';
-import { QuestionType3 } from 'src/app/exam/types/model/question/question-type/question-type3.model';
+import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
+import { QuestionAnswerType } from 'src/app/shared/types/question/enum/question-answer-type.enum';
+import { QuestionType3 } from 'src/app/shared/types/question/model/question-type3.model';
+
 import { ExamQuestionComponent } from '../exam-question.component';
 
 @Component({
@@ -34,10 +34,11 @@ export class ExamQuestionType3Component implements OnInit, ExamQuestionComponent
   }
 
   onQuestionReplied() {
-    const questionReplyFormValue: QuestionT3ReplyForm = this.questionReplyForm.value;
+    const questionReplyFormValue = this.questionReplyForm.value;
     this.question = {
       ...this.question,
       answer: {
+        ...this.question.answer,
         type: QuestionAnswerType.TYPE3,
         correctionStatus: AnswerCorrectionStatus.Pending,
         reply: questionReplyFormValue.bool ? questionReplyFormValue.bool === '0' : null,

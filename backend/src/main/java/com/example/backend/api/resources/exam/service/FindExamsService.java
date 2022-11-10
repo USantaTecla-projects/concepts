@@ -27,9 +27,14 @@ public class FindExamsService {
         this.fillerQuestionService = fillerQuestionService;
     }
 
-    public Page<Exam> findAllByUserID(final Long userID, final int page) {
+    public Page<Exam> findAllByUserID(final Long userID, final int page, final Boolean isCorrected) {
         int pageSize = 10;
-        return examRepository.findAllByUserID(userID, PageRequest.of(page, pageSize));
+
+        return examRepository.findAllByUserIDAndCorrected(
+                userID,
+                PageRequest.of(page, pageSize),
+                isCorrected
+        );
     }
 
     public Exam findByExamID(final Long userID, final Long examID) {
@@ -42,10 +47,7 @@ public class FindExamsService {
         }
 
         List<Question> questionList = exam.getQuestionList();
-
         List<Question> filledQuestionList = fillerQuestionService.fillQuestionList(questionList);
-
-        System.out.println(filledQuestionList);
         exam.setQuestionList(filledQuestionList);
 
         return exam;

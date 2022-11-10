@@ -1,6 +1,7 @@
 package com.example.backend.api.resources.exam.service;
 
 import com.example.backend.api.resources.exam.ExamRepository;
+import com.example.backend.api.resources.exam.domain.family.answer.model.CorrectionStatus;
 import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
 import com.example.backend.api.resources.exam.dto.UpdateExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
@@ -17,6 +18,7 @@ import com.example.backend.api.resources.exam.domain.family.question.service.sav
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class UpdateExamService {
 
         saveAnswersOnQuestions(questions, answers);
 
-        updateExamOnDatabase(examID, userID);
+        updateExamOnDatabase(updateExamDTO, answers, examID, userID);
     }
 
     private Long checkExamExistOnDatabase(final UpdateExamDTO updateExamDTO) {
@@ -102,13 +104,42 @@ public class UpdateExamService {
         }
     }
 
-    private void updateExamOnDatabase(final Long examID, final Long userID) {
+    private void updateExamOnDatabase(
+            final UpdateExamDTO updateExamDTO,
+            final List<Answer> answers,
+            final Long examID,
+            final Long userID
+    ) {
         final Exam exam = examRepository
                 .findByIdAndUserID(examID, userID)
                 .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));
 
         exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
         exam.calculateTimeSpend();
+
+        Boolean corrected = updateExamDTO
+                .getCorrectedOptional(updateExamDTO.getCorrected())
+                .orElse(false);
+
+        if (corrected) {
+            String mark = calculateMark(answers);
+            exam.setMark(mark);
+        }
+
+        exam.setCorrected(corrected);
         examRepository.save(exam);
+    }
+
+    private String calculateMark(List<Answer> answerList) {
+        float correctAnswers = answerList
+                .stream()
+                .filter(answer -> answer.getCorrectionStatus() == CorrectionStatus.CORRECT)
+                .toList()
+                .size();
+        float totalAnswers = answerList.size();
+
+        DecimalFormat df = new DecimalFormat("#.##");
+        
+        return df.format((correctAnswers / totalAnswers) * 10);
     }
 }

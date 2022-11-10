@@ -3,9 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { Credentials } from '../../shared/types/auth/dto/credentials.dto';
+import { RegisterUserData } from '../../shared/types/auth/dto/register-user.dto';
 import { AuthStore } from '../data-access/auth.store';
-import { Credentials } from '../types/dto/credentials.dto';
-import { RegisterUserData } from '../types/dto/register-user.dto';
 
 @Component({
   selector: 'app-auth',

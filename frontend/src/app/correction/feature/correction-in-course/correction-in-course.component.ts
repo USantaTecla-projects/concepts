@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
-import { User } from 'src/app/auth/types/model/user.model';
-import { Exam } from 'src/app/exam/types/model/exam.model';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { User } from 'src/app/shared/types/auth/model/user.model';
+import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { CorrecionInCourseStore } from '../../data-access/correction-in-course.store';
 import { CorrectionQuestionReplierService } from '../../data-access/correction-question-replier.service';
 
@@ -30,13 +30,21 @@ export class CorrectionInCourseComponent implements OnInit {
   ngOnInit(): void {
     this.exam$ = this.correcionInCourseStore.correctionInCourse$;
     this.user$ = this.authStore.user$;
+
+    const numberOfQuestions = this.correcionInCourseStore.getNumberOfQuestions();
+    if (!numberOfQuestions) this.router.navigateByUrl('/correction');
+    this.correctionQuestionReplierService.setNumberOfQuestions(numberOfQuestions);
   }
 
   saveCorrection() {
     const correctedQuestions = this.correctionQuestionReplierService.getCorrectedQuestions();
-    this.correcionInCourseStore.updateExam(correctedQuestions).subscribe({
-      next: () => this.router.navigateByUrl(''),
-      error: (error: Error) => this.snackbarService.openSnackBar(error.message),
-    });
+    if (correctedQuestions.length === this.correcionInCourseStore.getNumberOfQuestions()) {
+      return this.correcionInCourseStore.updateExam(correctedQuestions).subscribe({
+        next: () => this.router.navigateByUrl(''),
+        error: (error: Error) => this.snackbarService.openSnackBar(error.message),
+      });
+    }
+
+    return this.snackbarService.openSnackBar('All questions should be corrected to finish');
   }
 }

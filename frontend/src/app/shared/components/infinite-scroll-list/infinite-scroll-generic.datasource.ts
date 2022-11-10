@@ -1,7 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
-import { Page } from '../../interfaces/page-response.dto';
+import { Page } from '../../types/misc/dto/page-response.dto';
 
 @Injectable({ providedIn: 'root' })
 export abstract class InfiniteScrollDatasource<T> extends DataSource<T | undefined> {

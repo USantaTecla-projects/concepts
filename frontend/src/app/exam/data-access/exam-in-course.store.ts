@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwError } from 'rxjs';
-import { GenerateExamData } from '../types/dto/exam/create-exam.dto';
-import { ExamData } from '../types/dto/exam/exam.dto';
-import { Exam } from '../types/model/exam.model';
-import { Question } from '../types/model/question/question.model';
+import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
+import { Exam } from 'src/app/shared/types/exam/model/exam.model';
+import { GenerateExamData } from '../../shared/types/exam/dto/create-exam.dto';
+import { Question } from '../../shared/types/question/model/question.model';
+
 import { ExamMapperService } from './exam-mapper.service';
 
 @Injectable({
@@ -16,6 +17,8 @@ export class ExamInCourseStore {
     userID: 0,
     creationDate: '',
     questionList: [],
+    corrected: false,
+    mark: '0',
   });
 
   examInCourse$: Observable<Exam> = this.examInCourseSubject.asObservable();
@@ -39,9 +42,12 @@ export class ExamInCourseStore {
   }
 
   updateExam(repliedQuestions: Question[]) {
-    const { id: examID, userID, creationDate } = this.examInCourseSubject.getValue();
+    const { id: examID, userID, creationDate, corrected } = this.examInCourseSubject.getValue();
 
-    const updatedExamDTO = this.examMapperService.mapExamToDTO({ examID, userID, creationDate }, repliedQuestions);
+    const updatedExamDTO = this.examMapperService.mapExamToDTO(
+      { examID, userID, creationDate, corrected },
+      repliedQuestions
+    );
 
     return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
       catchError(error => {

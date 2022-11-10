@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
-import { User } from 'src/app/auth/types/model/user.model';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { User } from 'src/app/shared/types/auth/model/user.model';
+import { Exam } from 'src/app/shared/types/exam/model/exam.model';
+import { Question } from '../../../shared/types/question/model/question.model';
 import { ExamInCourseStore } from '../../data-access/exam-in-course.store';
 import { ExamQuestionReplierService } from '../../data-access/exam-question-replier.service';
-import { Exam } from '../../types/model/exam.model';
-import { Question } from '../../types/model/question/question.model';
 
 @Component({
   selector: 'app-exam-in-course',

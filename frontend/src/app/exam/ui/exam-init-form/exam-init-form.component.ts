@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
+import { GenerateExamData } from '../../../shared/types/exam/dto/create-exam.dto';
 
 @Component({
   selector: 'app-exam-init-form',

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Justification } from 'src/app/knowledge/types/justification.model';
+import { Justification } from 'src/app/shared/types/justification/justification.model';
 
 @Component({
   selector: 'app-knowledge-justification-update-form',

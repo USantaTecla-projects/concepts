@@ -1,8 +1,10 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Question } from 'src/app/exam/types/model/question/question.model';
+import { Question } from 'src/app/shared/types/question/model/question.model';
 
 export class CorrectionQuestionReplierService {
   private correctedQuestionsSubject = new BehaviorSubject<Question[]>([]);
+
+  private numberOfQuestions = 0;
 
   correctedQuestions$: Observable<Question[]> = this.correctedQuestionsSubject.asObservable();
 
@@ -21,6 +23,11 @@ export class CorrectionQuestionReplierService {
   }
 
   getCorrectedQuestions() {
+    console.log(this.numberOfQuestions);
     return this.correctedQuestionsSubject.getValue();
+  }
+
+  setNumberOfQuestions(numberOfQuestions: number) {
+    this.numberOfQuestions = numberOfQuestions;
   }
 }

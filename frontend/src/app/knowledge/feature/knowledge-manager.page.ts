@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { Concept } from '../../shared/types/concept/concept.model';
+import { Definition } from '../../shared/types/definition/definition.model';
+import { Justification } from '../../shared/types/justification/justification.model';
 import { ConceptStore } from '../data-access/concept.store';
 import { DefinitionStore } from '../data-access/definition.store';
 import { JustificationStore } from '../data-access/justification.store';
-import { Concept } from '../types/concept.model';
-import { Definition } from '../types/definition.model';
-import { Justification } from '../types/justification.model';
 
 @Component({
   selector: 'app-knowledge-manager',

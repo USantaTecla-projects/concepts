@@ -23,6 +23,10 @@ public class Exam {
 
     private Long timeSpent;
 
+    private Boolean corrected = false;
+
+    private String mark;
+
     @JsonProperty("questionDataList")
     @ManyToMany
     private List<Question> questionList;
@@ -85,6 +89,14 @@ public class Exam {
         this.timeSpent = timeSpent;
     }
 
+    public Boolean getCorrected() {
+        return corrected;
+    }
+
+    public void setCorrected(Boolean corrected) {
+        this.corrected = corrected;
+    }
+
     public List<Question> getQuestionList() {
         return questionList;
     }
@@ -93,6 +105,13 @@ public class Exam {
         this.questionList = questionList;
     }
 
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
 
     @Override
     public String toString() {
@@ -101,9 +120,9 @@ public class Exam {
                 ", userID=" + userID +
                 ", creationDate=" + creationDate +
                 ", replyDate=" + replyDate +
+                ", timeSpent=" + timeSpent +
+                ", corrected=" + corrected +
                 ", questionList=" + questionList +
                 '}';
     }
-
-
 }

@@ -11,78 +11,43 @@
           <h3>Pending exams</h3>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <mat-card class="filters">
-        <div class="filter-title">
-          <mat-icon>filter_alt</mat-icon>
-          <span>Filters</span>
-        </div>
-        <div class="filter-inputs-layout">
-          <div class="filter-inputs">
-            <mat-form-field appearance="outline">
-              <mat-label>Filter by student</mat-label>
-              <input matInput type="text" />
-              <mat-icon matSuffix>person</mat-icon>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Filter by date</mat-label>
-              <input [matDatepicker]="picker" matInput />
-              <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-            <div class="slider">
-              <mat-slide-toggle></mat-slide-toggle>
-              <span>Name order</span>
-              <mat-icon>arrow_right</mat-icon>
-              <span class="order">ASC</span>
-            </div>
-
-            <div class="slider">
-              <mat-slide-toggle></mat-slide-toggle>
-              <span>Date order</span>
-              <mat-icon>arrow_right</mat-icon>
-              <span class="order">ASC</span>
-            </div>
-          </div>
-
-          <div class="filter-actions">
-            <button mat-raised-button color="primary">
-              <span>Buscar</span>
-              <mat-icon>search</mat-icon>
-            </button>
-          </div>
-        </div>
-      </mat-card>
-
-      <app-infinite-scroll-list
-        class="pending-exam-list"
-        *ngIf="list.length; else noExamsYet"
-        [elementSize]="120"
-        [datasource]="examItemDatasource">
-        <ng-template #elementTemplate let-exam="element">
-          <div class="list-item" *ngIf="exam; else noExam">
-            <div class="item-decoration">
-              <mat-icon mat-list-icon>description</mat-icon>
-              <div class="info">
-                <div class="username">Cristian de Gracia Nuero {{ exam.userID }}</div>
-                <div class="exam-name">Exam #{{ exam.id }}</div>
-                <div class="date">22/02/2020</div>
+      <ng-container *ngIf="(hasRepliedExams$ | async)?.content as repliedExamList">
+        <app-infinite-scroll-list
+          class="pending-exam-list"
+          *ngIf="repliedExamList.length; else noExamsYet"
+          [elementSize]="120"
+          [datasource]="examItemDatasource">
+          <ng-template #elementTemplate let-exam="element">
+            <div class="list-item" *ngIf="exam; else noExam">
+              <div class="item-decoration">
+                <mat-icon mat-list-icon>description</mat-icon>
+                <div class="info">
+                  <div class="username">Cristian de Gracia Nuero {{ exam.userID }}</div>
+                  <div class="exam-name">Exam #{{ exam.id }}</div>
+                  <div class="date">22/02/2020</div>
+                </div>
               </div>
+              <button class="submit-button" (click)="onExamCorrection(exam.id)" mat-raised-button color="primary">
+                Correct <mat-icon>edit_note</mat-icon>
+              </button>
             </div>
-            <button class="submit-button" (click)="onExamCorrection(exam.id)" mat-raised-button color="primary">
-              Correct <mat-icon>edit_note</mat-icon>
-            </button>
-          </div>
-          <ng-template #noExam>
-            <div class="list-item">
-              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </div>
+            <ng-template #noExam>
+              <div class="list-item">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </ng-template>
           </ng-template>
-        </ng-template>
-      </app-infinite-scroll-list>
+        </app-infinite-scroll-list>
 
-      <ng-template #noExamsYet></ng-template>
+        <ng-template #noExamsYet>
+          <div class="empty-history">
+            <mat-icon>rule</mat-icon>
+            <span class="first-empty-title">No exams to correct yet</span>
+            <br />
+            <span class="second-empty-title">Congratulations! You have no more work to do.</span>
+          </div>
+        </ng-template>
+      </ng-container>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

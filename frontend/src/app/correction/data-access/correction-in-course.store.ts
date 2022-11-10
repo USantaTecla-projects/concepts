@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { ExamMapperService } from 'src/app/exam/data-access/exam-mapper.service';
-import { ExamData } from 'src/app/exam/types/dto/exam/exam.dto';
-import { Exam } from 'src/app/exam/types/model/exam.model';
-import { Question } from 'src/app/exam/types/model/question/question.model';
+import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
+import { Exam } from 'src/app/shared/types/exam/model/exam.model';
+import { Question } from 'src/app/shared/types/question/model/question.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,8 @@ export class CorrecionInCourseStore {
     userID: 0,
     creationDate: '',
     questionList: [],
+    corrected: false,
+    mark: '0',
   });
 
   correctionInCourse$: Observable<Exam> = this.correctionInCourseSubject.asObservable();
@@ -36,7 +38,10 @@ export class CorrecionInCourseStore {
   updateExam(correctedQuestions: Question[]) {
     const { id: examID, userID, creationDate } = this.correctionInCourseSubject.getValue();
 
-    const updatedExamDTO = this.examMapperService.mapExamToDTO({ examID, userID, creationDate }, correctedQuestions);
+    const updatedExamDTO = this.examMapperService.mapExamToDTO(
+      { examID, userID, creationDate, corrected: true },
+      correctedQuestions
+    );
 
     return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
       catchError(error => {
@@ -45,5 +50,9 @@ export class CorrecionInCourseStore {
         return throwError(() => new Error(message));
       })
     );
+  }
+
+  getNumberOfQuestions(): number {
+    return this.correctionInCourseSubject.getValue().questionList.length;
   }
 }

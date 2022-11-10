@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Definition } from 'src/app/knowledge/types/definition.model';
-import { State } from 'src/app/shared/interfaces/enums/state.enum';
+import { Definition } from 'src/app/shared/types/definition/definition.model';
+import { State } from 'src/app/shared/types/misc/enum/state.enum';
 import { DefinitionStore } from '../../../data-access/definition.store';
 import { KnowledgeDialogDefinitionCreateComponent } from '../../dialog/knowledge-dialog-definition-create/knowledge-dialog-definition-create.component';
 import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';

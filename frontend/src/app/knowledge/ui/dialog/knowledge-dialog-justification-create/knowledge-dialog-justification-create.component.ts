@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Justification } from 'src/app/knowledge/types/justification.model';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
+import { Justification } from 'src/app/shared/types/justification/justification.model';
 
 @Component({
   selector: 'app-knowledge-dialog-justification-create',

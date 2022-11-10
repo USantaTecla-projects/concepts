@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Question } from '../types/model/question/question.model';
+import { Question } from '../../shared/types/question/model/question.model';
 
 export class ExamQuestionReplierService {
   private replyQuestionsSubject = new BehaviorSubject<boolean>(false);

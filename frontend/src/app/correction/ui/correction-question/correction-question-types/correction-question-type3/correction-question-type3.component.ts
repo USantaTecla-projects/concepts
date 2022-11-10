@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CorrectionQuestionReplierService } from 'src/app/correction/data-access/correction-question-replier.service';
-import { AnswerCorrectionStatus } from 'src/app/exam/types/enum/answer-correction-status.enum';
-import { QuestionType3 } from 'src/app/exam/types/model/question/question-type/question-type3.model';
+import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
+import { QuestionType3 } from 'src/app/shared/types/question/model/question-type3.model';
 import { CorrectionQuestionComponent } from '../correction-question.component';
 
 @Component({

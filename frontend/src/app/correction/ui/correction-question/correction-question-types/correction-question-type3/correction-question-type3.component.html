@@ -1,5 +1,17 @@
 <div class="question">
   <mat-chip-list class="info">
+    <ng-container [ngSwitch]="question.answer.correctionStatus">
+      <mat-chip class="chip" *ngSwitchCase="'PENDING'" color="accent" selected>
+        <mat-icon>pending</mat-icon>
+      </mat-chip>
+      <mat-chip class="chip correct" *ngSwitchCase="'CORRECT'" color="primary" selected>
+        <mat-icon>done</mat-icon>
+      </mat-chip>
+      <mat-chip class="chip" *ngSwitchCase="'INCORRECT'" color="warn" selected>
+        <mat-icon>close</mat-icon>
+      </mat-chip>
+    </ng-container>
+
     <mat-chip class="chip" color="primary" selected>Question #{{ questionNumber }}</mat-chip>
   </mat-chip-list>
 

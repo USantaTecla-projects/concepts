@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Definition } from 'src/app/knowledge/types/definition.model';
+import { Definition } from 'src/app/shared/types/definition/definition.model';
 
 @Component({
   selector: 'app-knowledge-definition-update-form',

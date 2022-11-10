@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, mergeMap } from 'rxjs';
+import { map, mergeMap, Observable } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { ExamService } from 'src/app/exam/data-access/exam.service';
-import { ExamItemDatasource } from 'src/app/profile/data-access/exam-item.datasource';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
+import { Exam } from 'src/app/shared/types/exam/model/exam.model';
+import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
+import { CorredtedExamItemDatasource } from '../../data-access/corrected-exam-item.datasource';
 import { CorrecionInCourseStore } from '../../data-access/correction-in-course.store';
 
 @Component({
@@ -13,9 +15,9 @@ import { CorrecionInCourseStore } from '../../data-access/correction-in-course.s
   styleUrls: ['./correction-pending-list.component.scss'],
 })
 export class CorrectionPendingListComponent implements OnInit {
-  examItemDatasource!: ExamItemDatasource;
+  examItemDatasource!: CorredtedExamItemDatasource;
 
-  list = ['Exam 1'];
+  hasRepliedExams$!: Observable<Page<Exam>>;
 
   constructor(
     private router: Router,
@@ -26,7 +28,8 @@ export class CorrectionPendingListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.examItemDatasource = new ExamItemDatasource(this.examService, this.authStore);
+    this.examItemDatasource = new CorredtedExamItemDatasource(this.examService, this.authStore);
+    this.hasRepliedExams$ = this.examService.getUserExams(this.authStore.user$, 0, false);
   }
 
   onExamCorrection(examID: number) {

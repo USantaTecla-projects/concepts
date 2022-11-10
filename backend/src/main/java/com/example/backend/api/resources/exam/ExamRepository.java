@@ -15,4 +15,6 @@ public interface ExamRepository extends CrudRepository<Exam, Long>, PagingAndSor
 
     Page<Exam> findAllByUserID(final Long userID, Pageable pageable);
 
+    Page<Exam> findAllByUserIDAndCorrected(final Long userID, Pageable pageable, Boolean isCorrected);
+
 }

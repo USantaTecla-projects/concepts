@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Definition } from 'src/app/knowledge/types/definition.model';
 import { DialogData } from 'src/app/knowledge/utils/dialog-data.interface';
+import { Definition } from 'src/app/shared/types/definition/definition.model';
 
 @Component({
   selector: 'app-knowledge-dialog-definition-create',

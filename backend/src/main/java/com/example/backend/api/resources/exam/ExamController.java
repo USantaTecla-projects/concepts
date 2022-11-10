@@ -30,14 +30,18 @@ public class ExamController {
 
     @GetMapping("/exams")
     @ResponseStatus(code = HttpStatus.OK)
-    public Page<Exam> findAll(@PathVariable final Long userID, @RequestParam final Integer page) {
-        return findExamsService.findAllByUserID(userID, page);
+    public Page<Exam> findAll(
+            @PathVariable final Long userID,
+            @RequestParam final Integer page,
+            @RequestParam final Boolean isCorrected
+    ) {
+        return findExamsService.findAllByUserID(userID, page, isCorrected);
     }
 
     @GetMapping("/exam/{examID}")
     @ResponseStatus(code = HttpStatus.OK)
     public Exam findOne(@PathVariable final Long userID, @PathVariable final Long examID) {
-        return findExamsService.findByExamID(userID,examID);
+        return findExamsService.findByExamID(userID, examID);
     }
 
     @PostMapping("/exam")

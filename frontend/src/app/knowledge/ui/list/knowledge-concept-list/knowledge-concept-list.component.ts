@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { Concept } from 'src/app/knowledge/types/concept.model';
-import { State } from 'src/app/shared/interfaces/enums/state.enum';
-import { Page } from 'src/app/shared/interfaces/page-response.dto';
+import { Concept } from 'src/app/shared/types/concept/concept.model';
+import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
+import { State } from 'src/app/shared/types/misc/enum/state.enum';
 import { KnowledgeDialogCreateConceptComponent } from '../../dialog/knowledge-dialog-concept-create/knowledge-dialog-concept-create.component';
 import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-delete/knowledge-dialog-delete.component';
 

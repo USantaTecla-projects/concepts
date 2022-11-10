@@ -4,8 +4,8 @@ import { mergeMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { AuthStore } from '../../../auth/data-access/auth.store';
+import { GenerateExamData } from '../../../shared/types/exam/dto/create-exam.dto';
 import { ExamInCourseStore } from '../../data-access/exam-in-course.store';
-import { GenerateExamData } from '../../types/dto/exam/create-exam.dto';
 
 @Component({
   selector: 'app-exam-init',
