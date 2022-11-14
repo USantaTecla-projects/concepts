@@ -16,9 +16,9 @@ export class ExamMapperService {
   constructor() {}
 
   mapDTOToExam(examData: ExamData): Exam {
-    const { questionDataList } = examData;
+    const { questionList } = examData;
 
-    const mappedList: Question[] = questionDataList.map(questionData => {
+    const mappedList: Question[] = questionList.map(questionData => {
       const { type } = questionData;
       return toQuestionTypeMappers[type](questionData);
     });

@@ -5,8 +5,8 @@ import { QuestionDTO } from '../../../shared/types/question/dto/question.dto';
 import { QuestionAnswerType } from '../../../shared/types/question/enum/question-answer-type.enum';
 import { Question } from '../../../shared/types/question/model/question.model';
 
-export const mapToQuestionType0 = (questionData: QuestionDTO): QuestionType0 => {
-  const { id, conceptID, conceptText, answerT0 } = questionData;
+export const mapToQuestionType0 = (questionDTO: QuestionDTO): QuestionType0 => {
+  const { id, conceptID, conceptText, answerT0 } = questionDTO;
   return {
     id,
     type: QuestionAnswerType.TYPE0,

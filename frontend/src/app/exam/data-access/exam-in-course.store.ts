@@ -27,6 +27,7 @@ export class ExamInCourseStore {
 
   createExam(generateExamData: GenerateExamData): Observable<Exam> {
     const { userID } = generateExamData;
+
     return this.httpClient.post<ExamData>(`${userID}/exam`, generateExamData).pipe(
       catchError(error => {
         const message = 'Could not generate the exam';

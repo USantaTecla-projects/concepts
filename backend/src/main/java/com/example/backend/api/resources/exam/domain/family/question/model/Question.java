@@ -1,15 +1,13 @@
 package com.example.backend.api.resources.exam.domain.family.question.model;
 
 import com.example.backend.api.resources.exam.domain.factory.Type;
-import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
-import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT0;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Question {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,8 +21,6 @@ public abstract class Question {
 
     public Question() {
     }
-
-    public abstract void setAnswer(Answer answer);
 
 
     public Long getId() {

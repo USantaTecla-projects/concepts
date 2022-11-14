@@ -1,12 +1,13 @@
 package com.example.backend.api.resources.exam.domain.family.answer.model;
 
 import com.example.backend.api.resources.exam.domain.factory.Type;
+import com.example.backend.api.resources.exam.domain.family.question.model.Question;
 
 import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Answer {
+public abstract class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +21,8 @@ public class Answer {
 
     public Answer() {
     }
+
+    public abstract void setQuestion(Question question);
 
     public Long getId() {
         return id;

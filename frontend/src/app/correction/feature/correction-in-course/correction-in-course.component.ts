@@ -30,7 +30,7 @@ export class CorrectionInCourseComponent implements OnInit {
   ngOnInit(): void {
     this.exam$ = this.correcionInCourseStore.correctionInCourse$;
     this.user$ = this.authStore.user$;
-
+    // this.exam$.subscribe(res => console.log(res));
     const numberOfQuestions = this.correcionInCourseStore.getNumberOfQuestions();
     if (!numberOfQuestions) this.router.navigateByUrl('/correction');
     this.correctionQuestionReplierService.setNumberOfQuestions(numberOfQuestions);

@@ -44,15 +44,24 @@ public class QuestionT2Generator implements QuestionGenerator {
         List<Long> usedDefinitionIDs = getUsedDefinitionIDs(questionT2List);
 
         final Definition definition = getDefinition(randomNum, usedDefinitionIDs);
+        if (definition == null) {
+            return null;
+        }
+
         final long conceptID = definition.getConceptID();
 
         final Concept concept = getConcept(conceptID);
+        if (concept == null) {
+            return null;
+        }
+
         final long definitionID = definition.getId();
 
         if (questionT2Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
             QuestionT2 questionT2 = questionT2Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
             questionT2.setConceptText(concept.getText());
             questionT2.setDefinitionText(definition.getText());
+            questionT2.setFilled(true);
             return questionT2;
         }
 
@@ -71,21 +80,19 @@ public class QuestionT2Generator implements QuestionGenerator {
         questionT2.setConceptID(conceptID);
         questionT2.setDefinitionText(definitionText);
         questionT2.setDefinitionID(definitionID);
+        questionT2.setFilled(true);
     }
 
     private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
-                .orElseThrow(() -> {
-                    throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
-                });
+                .orElse(null);
     }
 
     private Definition getDefinition(int randomNum, List<Long> usedDefinitionIDs) {
         return definitionRepository
-                .findRandomDefinition(usedDefinitionIDs, randomNum).orElseThrow(() -> {
-                    throw new DefinitionNotFoundException("No definition was found, probably all definitions have been used in this type of question");
-                });
+                .findRandomDefinition(usedDefinitionIDs, randomNum)
+                .orElse(null);
     }
 
     private static List<Long> getUsedDefinitionIDs(List<QuestionT2> questionT2List) {

@@ -1,9 +1,8 @@
-package com.example.backend.api.resources.exam.domain.family.answer.mapper.specific;
+package com.example.backend.api.resources.exam.domain.family.answer.tools.mapper.specific;
 
 import com.example.backend.api.resources.exam.domain.family.answer.exception.specific.AnswerNotFoundException;
-import com.example.backend.api.resources.exam.domain.family.answer.mapper.AnswerMapper;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.mapper.AnswerMapper;
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
-import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT2;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT3;
 import com.example.backend.api.resources.exam.domain.factory.Type;
 import com.example.backend.api.resources.exam.domain.family.answer.repository.AnswerT3Repository;

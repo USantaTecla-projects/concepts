@@ -7,4 +7,5 @@ export interface AnswerDTO {
   type: QuestionAnswerType;
   reply: any;
   correctionStatus: AnswerCorrectionStatus;
+  [key: string]: any;
 }

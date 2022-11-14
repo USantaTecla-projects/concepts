@@ -1,19 +1,16 @@
 package com.example.backend.api.resources.exam.domain.family.question.tools.generator.specific;
 
-import com.example.backend.api.resources.exam.domain.family.question.tools.generator.QuestionGenerator;
-import com.example.backend.api.resources.exam.domain.family.question.repository.QuestionT3Repository;
-import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
-import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
-import com.example.backend.api.resources.knowledge.definition.model.Definition;
-import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
-import com.example.backend.api.resources.knowledge.concept.model.Concept;
-import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
-import com.example.backend.api.resources.knowledge.justification.exception.specific.JustificationNotFoundException;
-import com.example.backend.api.resources.knowledge.justification.model.Justification;
+import com.example.backend.api.resources.exam.domain.factory.Type;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
 import com.example.backend.api.resources.exam.domain.family.question.model.specific.QuestionT3;
-import com.example.backend.api.resources.exam.domain.factory.Type;
+import com.example.backend.api.resources.exam.domain.family.question.repository.QuestionT3Repository;
+import com.example.backend.api.resources.exam.domain.family.question.tools.generator.QuestionGenerator;
+import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
+import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
+import com.example.backend.api.resources.knowledge.justification.model.Justification;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -48,20 +45,37 @@ public class QuestionT3Generator implements QuestionGenerator {
         List<Long> usedJustificationRelatedWithIncorrectDefinitionIDs = getUsedJustificationRelatedWithIncorrectDefinitionIDs(questionT3List);
 
         final Justification justification = getJustification(randomNum, usedJustificationRelatedWithIncorrectDefinitionIDs);
+        if (justification == null) {
+            return null;
+        }
+
         final long definitionID = justification.getDefinitionID();
 
+
         final Definition incorrectDefinition = getDefinition(definitionID);
+        if (incorrectDefinition == null) {
+            return null;
+        }
+
         final long conceptID = justification.getConceptID();
 
         final Concept concept = getConcept(conceptID);
+        if (concept == null) {
+            return null;
+        }
+
         final long justificationID = justification.getId();
 
+
+        System.out.println(questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID));
 
         if (questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID)) {
             QuestionT3 questionT3 = questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();
             questionT3.setConceptText(concept.getText());
             questionT3.setIncorrectDefinitionText(incorrectDefinition.getText());
             questionT3.setJustificationText(justification.getText());
+            questionT3.setFilled(true);
+            return questionT3;
         }
 
         QuestionT3 questionT3 = new QuestionT3();
@@ -81,30 +95,25 @@ public class QuestionT3Generator implements QuestionGenerator {
         questionT3.setDefinitionID(definitionID);
         questionT3.setConceptText(conceptText);
         questionT3.setConceptID(conceptID);
+        questionT3.setFilled(true);
     }
 
     private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
-                .orElseThrow(() -> {
-                    throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
-                });
+                .orElse(null);
     }
 
     private Definition getDefinition(long definitionID) {
         return definitionRepository
                 .findById(definitionID)
-                .orElseThrow(() -> {
-                    throw new DefinitionNotFoundException("The definition with id = " + definitionID + " has not been found");
-                });
+                .orElse(null);
     }
 
     private Justification getJustification(int randomNum, List<Long> usedJustificationRelatedWithIncorrectDefinitionIDs) {
         return justificationRepository
                 .findOneJustificationLinkedToIncorrectDefinition(usedJustificationRelatedWithIncorrectDefinitionIDs, randomNum)
-                .orElseThrow(() -> {
-                    throw new JustificationNotFoundException("No justification was found, probably all justifications have been used in this type of question");
-                });
+                .orElse(null);
     }
 
     private List<Long> getUsedJustificationRelatedWithIncorrectDefinitionIDs(List<QuestionT3> questionT3List) {

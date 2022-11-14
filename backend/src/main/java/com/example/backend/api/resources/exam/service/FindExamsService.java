@@ -1,6 +1,7 @@
 package com.example.backend.api.resources.exam.service;
 
 import com.example.backend.api.resources.exam.ExamRepository;
+import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
 import com.example.backend.api.resources.exam.domain.family.question.service.FillerQuestionService;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
@@ -48,7 +49,8 @@ public class FindExamsService {
 
         List<Question> questionList = exam.getQuestionList();
         List<Question> filledQuestionList = fillerQuestionService.fillQuestionList(questionList);
-        exam.setQuestionList(filledQuestionList);
+        List<Answer> answerList = exam.getAnswerList();
+        exam.setAnswerList(answerList);
 
         return exam;
     }

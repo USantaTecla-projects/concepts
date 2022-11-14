@@ -16,7 +16,9 @@ export class DefinitionStore {
 
   state$: Observable<string> = this.stateSubject.asObservable();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+    console.log('???');
+  }
 
   createDefinition(conceptID: number, definition: Definition) {
     return this.httpClient.post<Definition>(`concepts/${conceptID}/definitions/`, definition).pipe(

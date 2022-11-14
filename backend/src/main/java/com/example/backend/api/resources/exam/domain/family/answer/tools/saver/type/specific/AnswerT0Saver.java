@@ -1,18 +1,18 @@
-package com.example.backend.api.resources.exam.domain.family.answer.service.type.specific;
+package com.example.backend.api.resources.exam.domain.family.answer.tools.saver.type.specific;
 
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.answer.model.specific.AnswerT0;
 import com.example.backend.api.resources.exam.domain.family.answer.repository.AnswerT0Repository;
-import com.example.backend.api.resources.exam.domain.family.answer.service.type.SaveAnswerTypeService;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.saver.type.AnswerTypeSaver;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaveAnswerT0Service implements SaveAnswerTypeService {
+public class AnswerT0Saver implements AnswerTypeSaver {
 
 
     private final AnswerT0Repository answerT0Repository;
 
-    public SaveAnswerT0Service(AnswerT0Repository answerT0Repository) {
+    public AnswerT0Saver(AnswerT0Repository answerT0Repository) {
         this.answerT0Repository = answerT0Repository;
     }
 

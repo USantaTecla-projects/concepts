@@ -42,13 +42,11 @@ public class CreateQuestionService {
             final int randomNum = generateRandomNumber();
             QuestionGenerator questionGenerator = typeAbstractFactories.get(randomNum).createGenerator();
 
-            try {
-                Question question = questionGenerator.generateQuestion(generatedQuestions);
+            Question question = questionGenerator.generateQuestion(generatedQuestions);
+            if (question != null && question.isFilled()) {
                 generatedQuestions.add(question);
-            } catch (Exception exception) {
-                LOG.error(exception.getMessage());
+                LOG.debug("Question created");
             }
-
         }
 
         return generatedQuestions;

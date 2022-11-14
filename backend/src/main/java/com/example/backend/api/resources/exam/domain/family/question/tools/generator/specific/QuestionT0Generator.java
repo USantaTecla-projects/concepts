@@ -34,11 +34,16 @@ public class QuestionT0Generator implements QuestionGenerator {
         List<Long> usedConceptIds = getUsedConceptIDs(questionT0List);
 
         final Concept concept = getConcept(randomNum, usedConceptIds);
+        if (concept == null){
+            return null;
+        }
+
         final Long conceptID = concept.getId();
 
         if (questionT0Repository.existsByConceptID(conceptID)) {
             QuestionT0 questionT0 = questionT0Repository.findByConceptID(conceptID).orElseThrow();
             questionT0.setConceptText(concept.getText());
+            questionT0.setFilled(true);
             return questionT0;
         }
 
@@ -60,9 +65,7 @@ public class QuestionT0Generator implements QuestionGenerator {
     private Concept getConcept(int randomNum, List<Long> usedConceptIds) {
         return conceptRepository
                 .findRandomConcept(usedConceptIds, randomNum)
-                .orElseThrow(() -> {
-                    throw new ConceptNotFoundException("No concept was found, probably all concepts have been used in this type of question");
-                });
+                .orElse(null);
     }
 
     private List<Long> getUsedConceptIDs(List<QuestionT0> questionT0List) {

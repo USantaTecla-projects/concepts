@@ -1,24 +1,26 @@
 package com.example.backend.api.resources.exam.service;
 
 import com.example.backend.api.resources.exam.ExamRepository;
+import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
+import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.answer.model.CorrectionStatus;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.saver.AnswerSaver;
+import com.example.backend.api.resources.exam.domain.family.question.dto.QuestionDTO;
+import com.example.backend.api.resources.exam.domain.family.question.exception.specific.QuestionDTOBadRequestException;
+import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.example.backend.api.resources.exam.domain.family.question.service.MapQuestionService;
 import com.example.backend.api.resources.exam.dto.QuestionAndAnswerDTO;
 import com.example.backend.api.resources.exam.dto.UpdateExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
 import com.example.backend.api.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
-import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
-import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
-import com.example.backend.api.resources.exam.domain.family.answer.service.SaveAnswerService;
-import com.example.backend.api.resources.exam.domain.family.question.dto.QuestionDTO;
-import com.example.backend.api.resources.exam.domain.family.question.exception.specific.QuestionDTOBadRequestException;
-import com.example.backend.api.resources.exam.domain.family.question.model.Question;
-import com.example.backend.api.resources.exam.domain.family.question.service.MapQuestionService;
-import com.example.backend.api.resources.exam.domain.family.question.service.saver.SaveQuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,17 +29,20 @@ public class UpdateExamService {
 
     private final ExamRepository examRepository;
     private final MapQuestionService mapQuestionService;
-    private final SaveQuestionService saveQuestionService;
-    private final SaveAnswerService answerService;
+    private final AnswerSaver answerSaver;
+    private final AnswerSaver answerService;
+
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateExamService.class);
+
 
     public UpdateExamService(
             ExamRepository examRepository,
             MapQuestionService mapQuestionService,
-            SaveQuestionService saveQuestionService, SaveAnswerService answerService
+            AnswerSaver answerSaver, AnswerSaver answerService
     ) {
         this.examRepository = examRepository;
         this.mapQuestionService = mapQuestionService;
-        this.saveQuestionService = saveQuestionService;
+        this.answerSaver = answerSaver;
         this.answerService = answerService;
     }
 
@@ -65,9 +70,9 @@ public class UpdateExamService {
                 .toList();
 
         final List<Question> questions = mapQuestionService.mapQuestionDTOToQuestion(questionDTOList);
-        final List<Answer> answers = answerService.saveAndGetAnswers(answerDTOList);
+        final List<Answer> answers = answerService.saveManyAnswers(answerDTOList);
 
-        saveAnswersOnQuestions(questions, answers);
+        relateAnswerWithQuestion(questions, answers);
 
         updateExamOnDatabase(updateExamDTO, answers, examID, userID);
     }
@@ -92,15 +97,15 @@ public class UpdateExamService {
         return examID;
     }
 
-    private void saveAnswersOnQuestions(final List<Question> questions, final List<Answer> answers) {
+    private void relateAnswerWithQuestion(final List<Question> questions, final List<Answer> answers) {
         final Iterator<Question> questionIterator = questions.iterator();
         final Iterator<Answer> answerIterator = answers.iterator();
 
         while (questionIterator.hasNext() && answerIterator.hasNext()) {
             final Question question = questionIterator.next();
             final Answer answer = answerIterator.next();
-            question.setAnswer(answer);
-            saveQuestionService.saveQuestion(question);
+            answer.setQuestion(question);
+            answerSaver.saveAnswer(answer);
         }
     }
 
@@ -127,6 +132,8 @@ public class UpdateExamService {
         }
 
         exam.setCorrected(corrected);
+        exam.setAnswerList(new ArrayList<>(answers));
+
         examRepository.save(exam);
     }
 
@@ -139,7 +146,7 @@ public class UpdateExamService {
         float totalAnswers = answerList.size();
 
         DecimalFormat df = new DecimalFormat("#.##");
-        
+
         return df.format((correctAnswers / totalAnswers) * 10);
     }
 }

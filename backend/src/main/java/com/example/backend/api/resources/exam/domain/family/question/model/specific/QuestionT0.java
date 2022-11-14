@@ -16,17 +16,7 @@ public class QuestionT0 extends Question {
     @Transient
     private String conceptText;
 
-    @ManyToOne()
-    @JsonManagedReference
-    private AnswerT0 answerT0;
-
     public QuestionT0() {
-    }
-
-    @Override
-    public void setAnswer(Answer answer) {
-        AnswerT0 answerT0 = (AnswerT0) answer;
-        this.setAnswerT0(answerT0);
     }
 
     public Long getConceptID() {
@@ -44,25 +34,4 @@ public class QuestionT0 extends Question {
     public void setConceptText(String conceptText) {
         this.conceptText = conceptText;
     }
-
-    public AnswerT0 getAnswerT0() {
-        return answerT0;
-    }
-
-    public void setAnswerT0(AnswerT0 answerT0) {
-        this.answerT0 = answerT0;
-    }
-
-    @Override
-    public String toString() {
-        return "QuestionT0{" +
-                ", conceptID=" + conceptID +
-                ", conceptText='" + conceptText + '\'' +
-                ", answerT0=" + answerT0 +
-                ", type=" + type +
-                ", isFilled=" + isFilled +
-                '}';
-    }
-
-
 }

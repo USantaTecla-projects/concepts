@@ -1,9 +1,9 @@
-package com.example.backend.api.resources.exam.domain.family.answer.service;
+package com.example.backend.api.resources.exam.domain.family.answer.tools.saver;
 
 import com.example.backend.api.resources.exam.domain.family.answer.dto.AnswerDTO;
-import com.example.backend.api.resources.exam.domain.family.answer.mapper.AnswerMapper;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.saver.type.AnswerTypeSaver;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.mapper.AnswerMapper;
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
-import com.example.backend.api.resources.exam.domain.family.answer.service.type.SaveAnswerTypeService;
 import com.example.backend.api.resources.exam.domain.family.question.exception.specific.QuestionDTOBadRequestException;
 import com.example.backend.api.resources.exam.domain.factory.Type;
 import com.example.backend.api.resources.exam.domain.factory.TypeFactory;
@@ -13,15 +13,22 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SaveAnswerService {
+public class AnswerSaver {
 
     private final List<TypeFactory> typeAbstractFactories;
 
-    public SaveAnswerService(TypeFactoryProvider typeFactoryProvider) {
+    public AnswerSaver(TypeFactoryProvider typeFactoryProvider) {
         this.typeAbstractFactories = typeFactoryProvider.getTypeAbstractFactories();
     }
 
-    public List<Answer> saveAndGetAnswers(List<AnswerDTO> answerDTOList) {
+    public void saveAnswer(Answer answer){
+        final Type answerType = answer.getType();
+        final int answerTypeOrdinal = answerType.ordinal();
+        AnswerTypeSaver answerTypeSaver = typeAbstractFactories.get(answerTypeOrdinal).getAnswerTypeService();
+        answerTypeSaver.saveAnswer(answer);
+    }
+
+    public List<Answer> saveManyAnswers(List<AnswerDTO> answerDTOList) {
         return answerDTOList
                 .stream()
                 .map(answerDTO -> {
@@ -45,7 +52,7 @@ public class SaveAnswerService {
     }
 
     private void saveAnswerOnDatabase(Type answerType, Answer answer) {
-        SaveAnswerTypeService saveAnswerTypeService = typeAbstractFactories.get(answerType.ordinal()).getAnswerTypeService();
-        saveAnswerTypeService.saveAnswer(answer);
+        AnswerTypeSaver answerTypeSaver = typeAbstractFactories.get(answerType.ordinal()).getAnswerTypeService();
+        answerTypeSaver.saveAnswer(answer);
     }
 }

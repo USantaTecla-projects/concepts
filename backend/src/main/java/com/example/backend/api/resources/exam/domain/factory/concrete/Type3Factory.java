@@ -1,17 +1,15 @@
 package com.example.backend.api.resources.exam.domain.factory.concrete;
 
-import com.example.backend.api.resources.exam.domain.family.answer.mapper.AnswerMapper;
-import com.example.backend.api.resources.exam.domain.family.answer.mapper.specific.AnswerT3Mapper;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.saver.type.AnswerTypeSaver;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.saver.type.specific.AnswerT3Saver;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.mapper.AnswerMapper;
+import com.example.backend.api.resources.exam.domain.family.answer.tools.mapper.specific.AnswerT3Mapper;
 import com.example.backend.api.resources.exam.domain.family.answer.repository.AnswerT3Repository;
-import com.example.backend.api.resources.exam.domain.family.answer.service.type.SaveAnswerTypeService;
-import com.example.backend.api.resources.exam.domain.family.answer.service.type.specific.SaveAnswerT3Service;
 import com.example.backend.api.resources.exam.domain.family.question.tools.filler.QuestionFiller;
 import com.example.backend.api.resources.exam.domain.family.question.tools.filler.specific.QuestionT3Filler;
 import com.example.backend.api.resources.exam.domain.family.question.tools.mapper.QuestionMapper;
 import com.example.backend.api.resources.exam.domain.family.question.tools.mapper.specific.QuestionT3Mapper;
 import com.example.backend.api.resources.exam.domain.family.question.repository.QuestionT3Repository;
-import com.example.backend.api.resources.exam.domain.family.question.service.saver.type.SaveQuestionTypeService;
-import com.example.backend.api.resources.exam.domain.family.question.service.saver.type.specific.SaveQuestionT3Service;
 import com.example.backend.api.resources.exam.domain.factory.TypeFactory;
 import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
 import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
@@ -61,14 +59,10 @@ public class Type3Factory implements TypeFactory {
         return new AnswerT3Mapper(answerT3Repository);
     }
 
-    @Override
-    public SaveAnswerTypeService getAnswerTypeService() {
-        return new SaveAnswerT3Service(answerT3Repository);
-    }
 
     @Override
-    public SaveQuestionTypeService getQuestionTypeService() {
-        return new SaveQuestionT3Service(questionT3Repository);
+    public AnswerTypeSaver getAnswerTypeService() {
+        return new AnswerT3Saver(answerT3Repository);
     }
 
     @Override

@@ -43,9 +43,17 @@ public class QuestionT1Generator implements QuestionGenerator {
         List<Long> usedIncorrectDefinitionIDs = getUsedIncorrectDefinitionIDs(questionT1List);
 
         final Definition definition = getDefinition(randomNum, usedIncorrectDefinitionIDs);
+        if (definition == null) {
+            return null;
+        }
+
         final long conceptID = definition.getConceptID();
 
         final Concept concept = getConcept(conceptID);
+        if (concept == null) {
+            return null;
+        }
+
         final long definitionID = definition.getId();
 
 
@@ -53,6 +61,7 @@ public class QuestionT1Generator implements QuestionGenerator {
             QuestionT1 questionT1 = questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
             questionT1.setConceptText(concept.getText());
             questionT1.setIncorrectDefinitionText(definition.getText());
+            questionT1.setFilled(true);
             return questionT1;
         }
 
@@ -77,17 +86,13 @@ public class QuestionT1Generator implements QuestionGenerator {
     private Concept getConcept(long conceptID) {
         return conceptRepository
                 .findById(conceptID)
-                .orElseThrow(() -> {
-                    throw new ConceptNotFoundException("The concept with id = " + conceptID + " has not been found");
-                });
+                .orElse(null);
     }
 
     private Definition getDefinition(int randomNum, List<Long> usedIncorrectDefinitionIDs) {
         return definitionRepository
                 .findRandomDefinitionBasedOnCorrect(usedIncorrectDefinitionIDs, false, randomNum)
-                .orElseThrow(() -> {
-                    throw new DefinitionNotFoundException("No definition was found, probably all definitions have been used in this type of question");
-                });
+                .orElse(null);
     }
 
     private List<Long> getUsedIncorrectDefinitionIDs(List<QuestionT1> questionT1List) {

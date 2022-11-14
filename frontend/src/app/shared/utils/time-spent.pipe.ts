@@ -16,7 +16,7 @@ export class TimeSpentPipe implements PipeTransform {
         seconds = `0${seconds}`;
       }
 
-      return `${minutes} minutess & ${seconds} seconds`;
+      return `${minutes} minutes & ${seconds} seconds`;
     }
 
     return 'Cannot parse this number of milliseconds';

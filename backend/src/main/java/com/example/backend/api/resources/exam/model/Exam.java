@@ -1,14 +1,16 @@
 package com.example.backend.api.resources.exam.model;
 
 
+import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Exam {
 
     @Id
@@ -27,10 +29,12 @@ public class Exam {
 
     private String mark;
 
-    @JsonProperty("questionDataList")
+
     @ManyToMany
     private List<Question> questionList;
 
+    @OneToMany
+    private List<Answer> answerList;
 
     public Exam() {
     }
@@ -97,14 +101,6 @@ public class Exam {
         this.corrected = corrected;
     }
 
-    public List<Question> getQuestionList() {
-        return questionList;
-    }
-
-    public void setQuestionList(List<Question> questionList) {
-        this.questionList = questionList;
-    }
-
     public String getMark() {
         return mark;
     }
@@ -113,16 +109,19 @@ public class Exam {
         this.mark = mark;
     }
 
-    @Override
-    public String toString() {
-        return "Exam{" +
-                "id=" + id +
-                ", userID=" + userID +
-                ", creationDate=" + creationDate +
-                ", replyDate=" + replyDate +
-                ", timeSpent=" + timeSpent +
-                ", corrected=" + corrected +
-                ", questionList=" + questionList +
-                '}';
+    public List<Question> getQuestionList() {
+        return questionList;
+    }
+
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
     }
 }
