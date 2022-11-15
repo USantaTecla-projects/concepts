@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -72,7 +71,6 @@ public class UpdateExamService {
         final List<Question> questions = mapQuestionService.mapQuestionDTOToQuestion(questionDTOList);
         final List<Answer> answers = answerService.saveManyAnswers(answerDTOList);
 
-        relateAnswerWithQuestion(questions, answers);
 
         updateExamOnDatabase(updateExamDTO, answers, examID, userID);
     }
@@ -95,18 +93,6 @@ public class UpdateExamService {
         }
 
         return examID;
-    }
-
-    private void relateAnswerWithQuestion(final List<Question> questions, final List<Answer> answers) {
-        final Iterator<Question> questionIterator = questions.iterator();
-        final Iterator<Answer> answerIterator = answers.iterator();
-
-        while (questionIterator.hasNext() && answerIterator.hasNext()) {
-            final Question question = questionIterator.next();
-            final Answer answer = answerIterator.next();
-            answer.setQuestion(question);
-            answerSaver.saveAnswer(answer);
-        }
     }
 
     private void updateExamOnDatabase(

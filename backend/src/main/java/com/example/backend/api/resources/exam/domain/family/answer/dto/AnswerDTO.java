@@ -17,6 +17,8 @@ public class AnswerDTO {
 
     private Long userID;
 
+    private Long questionID;
+
     private Type type;
 
     private CorrectionStatus correctionStatus;
@@ -37,6 +39,12 @@ public class AnswerDTO {
         return Optional
                 .ofNullable(userID);
     }
+
+    public Optional<Long> getQuestionIDOptional(Long questionID) {
+        return Optional
+                .ofNullable(questionID);
+    }
+
 
     public Optional<CorrectionStatus> getCorrectionStatusOptional(CorrectionStatus correctionStatus) {
         return Optional

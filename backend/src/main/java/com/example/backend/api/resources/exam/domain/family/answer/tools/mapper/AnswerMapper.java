@@ -14,6 +14,8 @@ public abstract class AnswerMapper {
 
     protected Long userID;
 
+    protected Long questionID;
+
     protected CorrectionStatus correctionStatus;
 
     protected JsonNode replyAsJson;
@@ -22,6 +24,7 @@ public abstract class AnswerMapper {
         this.answerDTO = answerDTO;
         setId();
         setUserID();
+        setQuestionID();
         setCorrectionStatus();
         setReplyAsJson();
         return getAnswerFromDTO();
@@ -38,7 +41,13 @@ public abstract class AnswerMapper {
     private void setUserID() {
         userID = answerDTO
                 .getUserIDOptional(answerDTO.getUserID())
-                .orElseThrow(() -> new AnswerDTOBadRequestException("The field userId on AnswerDTO is mandatory"));
+                .orElseThrow(() -> new AnswerDTOBadRequestException("The field userID on AnswerDTO is mandatory"));
+    }
+
+    private void setQuestionID() {
+        questionID = answerDTO
+                .getQuestionIDOptional(answerDTO.getQuestionID())
+                .orElseThrow(() -> new AnswerDTOBadRequestException("The field questionID on AnswerDTO is mandatory"));
     }
 
     private void setCorrectionStatus() {

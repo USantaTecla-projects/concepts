@@ -49,6 +49,8 @@ public class FindExamsService {
 
         List<Question> questionList = exam.getQuestionList();
         List<Question> filledQuestionList = fillerQuestionService.fillQuestionList(questionList);
+        exam.setQuestionList(filledQuestionList);
+
         List<Answer> answerList = exam.getAnswerList();
         exam.setAnswerList(answerList);
 

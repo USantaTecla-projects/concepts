@@ -4,8 +4,7 @@ import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'r
 import { ExamMapperService } from 'src/app/exam/data-access/exam-mapper.service';
 import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
-import { Question } from 'src/app/shared/types/question/model/question.model';
-import { CorrectionExamMapperService } from './correction-exam-mapper.service';
+import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,17 +15,14 @@ export class CorrecionInCourseStore {
     userID: 0,
     creationDate: '',
     questionList: [],
+    answerList: [],
     corrected: false,
     mark: '0',
   });
 
   correctionInCourse$: Observable<Exam> = this.correctionInCourseSubject.asObservable();
 
-  constructor(
-    private httpClient: HttpClient,
-    private correctionExamMapperService: CorrectionExamMapperService,
-    private examMapperService: ExamMapperService
-  ) {}
+  constructor(private httpClient: HttpClient, private examMapperService: ExamMapperService) {}
 
   getExam(userID: number, examID: number) {
     console.log('???');
@@ -36,19 +32,21 @@ export class CorrecionInCourseStore {
         console.error(message, error);
         return throwError(() => new Error(message));
       }),
-      map(examData => this.correctionExamMapperService.mapDTOToExam(examData)),
+      map(examData => this.examMapperService.mapDTOToExam(examData)),
       tap(res => console.log(res)),
       tap(exam => this.correctionInCourseSubject.next(exam))
     );
   }
 
-  updateExam(correctedQuestions: Question[]) {
+  updateExam(examResponses: ExamResponse[]) {
     const { id: examID, userID, creationDate } = this.correctionInCourseSubject.getValue();
 
     const updatedExamDTO = this.examMapperService.mapExamToDTO(
       { examID, userID, creationDate, corrected: true },
-      correctedQuestions
+      examResponses
     );
+
+    console.log(updatedExamDTO);
 
     return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
       catchError(error => {

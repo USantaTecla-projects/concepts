@@ -43,6 +43,7 @@ public class AnswerT0Mapper extends AnswerMapper {
     private void updateAnswerInfo(String reply, AnswerT0 answerT0) {
         answerT0.setType(Type.TYPE0);
         answerT0.setUserID(userID);
+        answerT0.setQuestionID(questionID);
         answerT0.setReply(reply);
         answerT0.setCorrectionStatus(correctionStatus);
     }

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CorrectionQuestionReplierService } from 'src/app/correction/data-access/correction-question-replier.service';
 import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
+import { AnswerT3 } from 'src/app/shared/types/answer/model/answer-type3.model';
 import { QuestionType3 } from 'src/app/shared/types/question/model/question-type3.model';
 import { CorrectionQuestionComponent } from '../correction-question.component';
 
@@ -12,6 +13,8 @@ import { CorrectionQuestionComponent } from '../correction-question.component';
 export class CorrectionQuestionType3Component implements CorrectionQuestionComponent {
   @Input() question!: QuestionType3;
 
+  @Input() answer!: AnswerT3;
+
   @Input() questionNumber!: number;
 
   @Input() userID!: number;
@@ -19,10 +22,8 @@ export class CorrectionQuestionType3Component implements CorrectionQuestionCompo
   constructor(private correctionQuestionReplierService: CorrectionQuestionReplierService) {}
 
   correctQuestion(isCorrect: boolean) {
-    this.question.answer.correctionStatus = isCorrect
-      ? AnswerCorrectionStatus.Correct
-      : AnswerCorrectionStatus.Incorrect;
+    this.answer.correctionStatus = isCorrect ? AnswerCorrectionStatus.Correct : AnswerCorrectionStatus.Incorrect;
 
-    this.correctionQuestionReplierService.addCorrectedQuestion(this.question);
+    this.correctionQuestionReplierService.addCorrectedQuestion({ question: this.question, answer: this.answer });
   }
 }

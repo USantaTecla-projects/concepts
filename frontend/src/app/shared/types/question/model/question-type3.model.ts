@@ -1,4 +1,3 @@
-import { AnswerT3 } from '../../answer/model/answer-type3.model';
 import { Question } from './question.model';
 
 export interface QuestionType3 extends Question {
@@ -8,5 +7,4 @@ export interface QuestionType3 extends Question {
   conceptText: string;
   incorrectDefinitionText: string;
   justificationText: string;
-  answer: AnswerT3;
 }

@@ -1,7 +1,6 @@
 package com.example.backend.api.resources.exam.domain.family.answer.model;
 
 import com.example.backend.api.resources.exam.domain.factory.Type;
-import com.example.backend.api.resources.exam.domain.family.question.model.Question;
 
 import javax.persistence.*;
 
@@ -17,12 +16,16 @@ public abstract class Answer {
 
     protected Long userID;
 
+    protected Long questionID;
+
     protected CorrectionStatus correctionStatus = CorrectionStatus.PENDING;
 
     public Answer() {
     }
 
-    public abstract void setQuestion(Question question);
+    public void setQuestionId(Long questionID) {
+        this.questionID = questionID;
+    }
 
     public Long getId() {
         return id;
@@ -46,6 +49,14 @@ public abstract class Answer {
 
     public void setUserID(Long userID) {
         this.userID = userID;
+    }
+
+    public Long getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(Long questionID) {
+        this.questionID = questionID;
     }
 
     public CorrectionStatus getCorrectionStatus() {

@@ -45,8 +45,8 @@ export class ExamInCoursePage implements OnInit {
       .pipe(
         switchMap(replied => {
           if (replied) {
-            const repliedQuestions = this.questionReplierService.repliedQuestions;
-            return this.examInCourseStore.updateExam(repliedQuestions);
+            const examResponses = this.questionReplierService.examResponses;
+            return this.examInCourseStore.updateExam(examResponses);
           }
 
           return of(null);

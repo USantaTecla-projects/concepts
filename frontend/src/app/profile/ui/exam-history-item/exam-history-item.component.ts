@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
+import { Answer } from 'src/app/shared/types/answer/model/answer.model';
 import { Question } from 'src/app/shared/types/question/model/question.model';
 
 @Component({
@@ -7,7 +8,7 @@ import { Question } from 'src/app/shared/types/question/model/question.model';
   templateUrl: './exam-history-item.component.html',
   styleUrls: ['./exam-history-item.component.scss'],
 })
-export class ExamHistoryItemComponent implements OnInit {
+export class ExamHistoryItemComponent {
   @Input() title!: string;
 
   @Input() mark!: string;
@@ -20,13 +21,12 @@ export class ExamHistoryItemComponent implements OnInit {
 
   @Input() questionList!: Question[];
 
+  @Input()
+  set answerList(answers: Answer[]) {
+    this.correctQuestions = answers.filter(answer => answer.correctionStatus === AnswerCorrectionStatus.Correct).length;
+  }
+
   correctQuestions!: number;
 
   constructor() {}
-
-  ngOnInit(): void {
-    this.correctQuestions = this.questionList.filter(
-      question => question['answer'].correctionStatus === AnswerCorrectionStatus.Correct
-    ).length;
-  }
 }

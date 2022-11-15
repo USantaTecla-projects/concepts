@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
 import { CorrectionQuestionHostDirective } from 'src/app/correction/util/correction-question-host.directive';
-import { ExamQuestionComponent } from 'src/app/exam/ui/exam-question/exam-question-types/exam-question.component';
+import { CorrectionQuestionComponent } from '../correction-question-types/correction-question.component';
 
 @Component({
   selector: 'app-correction-question-renderer',
@@ -8,9 +8,11 @@ import { ExamQuestionComponent } from 'src/app/exam/ui/exam-question/exam-questi
   styleUrls: ['./correction-question-renderer.component.scss'],
 })
 export class CorrectionQuestionRendererComponent implements OnInit {
-  @Input() componentType!: Type<ExamQuestionComponent>;
+  @Input() componentType!: Type<CorrectionQuestionComponent>;
 
   @Input() question!: any;
+
+  @Input() answer!: any;
 
   @Input() questionNumber!: number;
 
@@ -28,9 +30,10 @@ export class CorrectionQuestionRendererComponent implements OnInit {
   createDynamicComponent() {
     const viewContainerRef = this.questionHost.viewContainerRef;
     viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent<ExamQuestionComponent>(this.componentType);
+    const componentRef = viewContainerRef.createComponent<CorrectionQuestionComponent>(this.componentType);
     componentRef.instance['question'] = this.question;
     componentRef.instance['questionNumber'] = this.questionNumber;
+    componentRef.instance['answer'] = this.answer;
     componentRef.instance['userID'] = this.userID ?? 0;
   }
 }

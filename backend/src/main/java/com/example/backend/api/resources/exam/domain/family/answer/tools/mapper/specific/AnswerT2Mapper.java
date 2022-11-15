@@ -42,6 +42,7 @@ public class AnswerT2Mapper extends AnswerMapper {
     private void updateAnswerInfo(Boolean reply, AnswerT2 answerT2) {
         answerT2.setType(Type.TYPE2);
         answerT2.setUserID(userID);
+        answerT2.setQuestionID(questionID);
         answerT2.setReply(reply);
         answerT2.setCorrectionStatus(correctionStatus);
     }

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
+import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 import { GenerateExamData } from '../../shared/types/exam/dto/create-exam.dto';
-import { Question } from '../../shared/types/question/model/question.model';
 
 import { ExamMapperService } from './exam-mapper.service';
 
@@ -17,6 +17,7 @@ export class ExamInCourseStore {
     userID: 0,
     creationDate: '',
     questionList: [],
+    answerList: [],
     corrected: false,
     mark: '0',
   });
@@ -34,6 +35,7 @@ export class ExamInCourseStore {
         console.error(message, error);
         return throwError(() => new Error(message));
       }),
+      tap(res => console.log(res)),
       map(examData => this.examMapperService.mapDTOToExam(examData)),
       tap(exam => {
         this.examInCourseSubject.next(exam);
@@ -42,12 +44,12 @@ export class ExamInCourseStore {
     );
   }
 
-  updateExam(repliedQuestions: Question[]) {
+  updateExam(examResponses: ExamResponse[]) {
     const { id: examID, userID, creationDate, corrected } = this.examInCourseSubject.getValue();
 
     const updatedExamDTO = this.examMapperService.mapExamToDTO(
       { examID, userID, creationDate, corrected },
-      repliedQuestions
+      examResponses
     );
 
     return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(

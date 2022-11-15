@@ -11,12 +11,13 @@
           <h3>Pending exams</h3>
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngFor="let question of (exam$ | async)!.questionList; let i = index">
+      <ng-container *ngFor="let examResponse of examResponses$ | async; let i = index">
         <app-correction-question-renderer
           class="question"
-          [componentType]="question.correctionComponentType"
-          [question]="question"
+          [componentType]="examResponse.question.correctionComponentType"
+          [question]="examResponse.question"
           [questionNumber]="i + 1"
+          [answer]="examResponse.answer"
           [userID]="(user$ | async)?.id">
         </app-correction-question-renderer>
       </ng-container>

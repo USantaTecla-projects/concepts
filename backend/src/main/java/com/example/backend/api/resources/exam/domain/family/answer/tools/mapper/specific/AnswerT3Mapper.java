@@ -42,6 +42,7 @@ public class AnswerT3Mapper extends AnswerMapper {
     private void updateAnswerInfo(Boolean reply, AnswerT3 answerT3) {
         answerT3.setType(Type.TYPE3);
         answerT3.setUserID(userID);
+        answerT3.setQuestionID(questionID);
         answerT3.setReply(reply);
         answerT3.setCorrectionStatus(correctionStatus);
     }

@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Question } from '../../shared/types/question/model/question.model';
+import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 
 export class ExamQuestionReplierService {
   private replyQuestionsSubject = new BehaviorSubject<boolean>(false);
@@ -12,14 +12,14 @@ export class ExamQuestionReplierService {
 
   private numberOfQuestions = 0;
 
-  repliedQuestions: Question[] = [];
+  examResponses: ExamResponse[] = [];
 
   constructor() {}
 
-  addRepliedQuestion(question: Question) {
-    this.repliedQuestions = [...this.repliedQuestions, question];
+  addRepliedQuestion(response: ExamResponse) {
+    this.examResponses = [...this.examResponses, response];
 
-    if (this.repliedQuestions.length === this.numberOfQuestions) {
+    if (this.examResponses.length === this.numberOfQuestions) {
       this.examFullyRepliedSubject.next(true);
     }
   }

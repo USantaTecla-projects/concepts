@@ -2,10 +2,10 @@ import { QuestionAnswerType } from '../../question/enum/question-answer-type.enu
 import { AnswerCorrectionStatus } from '../enum/answer-correction-status.enum';
 
 export interface AnswerDTO {
-  id: number;
+  id?: number;
   userID: number;
+  questionID: number;
   type: QuestionAnswerType;
-  reply: any;
   correctionStatus: AnswerCorrectionStatus;
-  [key: string]: any;
+  [x: string]: any;
 }

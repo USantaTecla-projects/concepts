@@ -1,6 +1,6 @@
 <div class="question">
   <mat-chip-list class="info">
-    <ng-container [ngSwitch]="question.answer.correctionStatus">
+    <ng-container [ngSwitch]="answer.correctionStatus">
       <mat-chip class="chip" *ngSwitchCase="'PENDING'" color="accent" selected>
         <mat-icon>pending</mat-icon>
       </mat-chip>
@@ -17,7 +17,7 @@
   <p class="question-text">
     ¿Por qué no es correcto afirmar que {{ question.conceptText }} es {{ question.incorrectDefinitionText }}?
   </p>
-  <p class="answer-text">{{ question.answer.reply | titlecase }}</p>
+  <p class="answer-text">{{ answer.reply | titlecase }}</p>
 
   <div class="actions">
     <button (click)="correctQuestion(true)" mat-raised-button>Correct</button>
