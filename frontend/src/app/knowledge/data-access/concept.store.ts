@@ -133,4 +133,8 @@ export class ConceptStore {
         })
       );
   }
+
+  resetConceptList() {
+    this.stateSubject.next(State.INIT);
+  }
 }

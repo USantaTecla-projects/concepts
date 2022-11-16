@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, mergeMap, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, mergeMap, Observable, tap, throwError } from 'rxjs';
 import { AuthResponse } from '../../shared/types/auth/dto/auth-response.dto';
 import { Credentials } from '../../shared/types/auth/dto/credentials.dto';
 import { RegisterUserData } from '../../shared/types/auth/dto/register-user.dto';
@@ -32,8 +32,11 @@ export class AuthStore {
   login(credentials: Credentials): Observable<User> {
     return this.httpClient.post<AuthResponse>('auth/login', credentials).pipe(
       catchError((httpError: HttpErrorResponse) => {
-        if (httpError.status === 409) throw 'User with this email or username already exists';
-        throw 'Unexpected error, try again later';
+        const errorMessage =
+          httpError.status === 409
+            ? 'User with this email or username already exists'
+            : 'Unexpected error, try again later';
+        return throwError(() => new Error(errorMessage));
       }),
       mergeMap(() => this.getUser(credentials.username)),
       tap(user => {
@@ -43,16 +46,29 @@ export class AuthStore {
     );
   }
 
-  logout(): void {
+  logout(): Observable<any> {
     this.userSubject.next(null);
     localStorage.removeItem(this.AUTH_DATA);
+
+    return this.httpClient.post<AuthResponse>('auth/logout', {}).pipe(
+      catchError((httpError: HttpErrorResponse) => {
+        const errorMessage =
+          httpError.status === 409
+            ? 'User with this email or username already exists'
+            : 'Unexpected error, try again later';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
-  register(registerUserData: RegisterUserData) {
+  register(registerUserData: RegisterUserData): Observable<any> {
     return this.httpClient.post<User>('users/', registerUserData).pipe(
       catchError((httpError: HttpErrorResponse) => {
-        if (httpError.status === 409) throw 'User with this email or username already exists';
-        throw 'Unexpected error, try again later';
+        const errorMessage =
+          httpError.status === 409
+            ? 'User with this email or username already exists'
+            : 'Unexpected error, try again later';
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
@@ -64,8 +80,9 @@ export class AuthStore {
   private getUser(username: string): Observable<User> {
     return this.httpClient.get<User>(`users/${username}`).pipe(
       catchError((httpError: HttpErrorResponse) => {
-        if (httpError.status === 404) throw 'User with this username has not been found';
-        throw 'Unexpected error, try again later';
+        const errorMessage =
+          httpError.status === 404 ? 'User with this username has not been found' : 'Unexpected error, try again later';
+        return throwError(() => new Error(errorMessage));
       })
     );
   }

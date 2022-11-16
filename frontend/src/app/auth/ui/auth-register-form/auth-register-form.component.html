@@ -1,34 +1,67 @@
 <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field" appearance="outline">
+    <mat-label>Fullname</mat-label>
+    <input
+      matInput
+      data-cy="register-fullname-input"
+      type="text"
+      formControlName="fullName"
+      placeholder="Your full name" />
+    <mat-icon matSuffix>person</mat-icon>
+    <mat-error *ngIf="registerForm.controls['fullName'].errors?.['required']">Username is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form-field" appearance="outline">
     <mat-label>Username</mat-label>
-    <input matInput type="text" formControlName="username" placeholder="Your username" />
+    <input
+      matInput
+      data-cy="register-username-input"
+      type="text"
+      formControlName="username"
+      placeholder="Your username" />
     <mat-icon matSuffix>person</mat-icon>
     <mat-error *ngIf="registerForm.controls['username'].errors?.['required']">Username is required</mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Email</mat-label>
-    <input matInput type="text" formControlName="email" placeholder="Your email" />
+    <input matInput data-cy="register-email-input" type="text" formControlName="email" placeholder="Your email" />
     <mat-icon matSuffix>person</mat-icon>
     <mat-error *ngIf="registerForm.controls['email'].errors?.['required']">Email is required</mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Password</mat-label>
-    <input matInput type="password" formControlName="password" placeholder="Your password" />
+    <input
+      matInput
+      data-cy="register-password1-input"
+      type="password"
+      formControlName="password"
+      placeholder="Your password" />
     <mat-icon matSuffix>lock</mat-icon>
     <mat-error *ngIf="registerForm.controls['password'].errors?.['required']">Password is required</mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Repeat your password</mat-label>
-    <input matInput type="password" formControlName="repeatedPassword" placeholder="Your password again" />
+    <input
+      matInput
+      data-cy="register-password2-input"
+      type="password"
+      formControlName="repeatedPassword"
+      placeholder="Your password again" />
     <mat-icon matSuffix>lock</mat-icon>
     <mat-error *ngIf="registerForm.controls['repeatedPassword'].errors?.['required']"> Password is required </mat-error>
   </mat-form-field>
 
   <div mat-dialog-actions>
-    <button class="submit-button" [disabled]="!registerForm.valid" mat-raised-button color="primary" type="submit">
+    <button
+      class="submit-button"
+      [disabled]="!registerForm.valid"
+      data-cy="register-button"
+      mat-raised-button
+      color="primary"
+      type="submit">
       Register
     </button>
   </div>

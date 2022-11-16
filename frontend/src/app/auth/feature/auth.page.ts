@@ -20,6 +20,7 @@ export class AuthPage {
   constructor(private authStore: AuthStore, private snackbarService: SnackbarService, private router: Router) {}
 
   onLoginUser(credentials: Credentials): void {
+    console.log(credentials);
     this.authStore.login(credentials).subscribe({
       next: () => this.router.navigateByUrl(''),
       error: () => this.snackbarService.openSnackBar('Invalid credentials'),
@@ -29,7 +30,7 @@ export class AuthPage {
   onRegisterUser(registerUserData: RegisterUserData): void {
     this.authStore.register(registerUserData).subscribe({
       next: () => this.onLoginUser({ ...registerUserData }),
-      error: message => this.snackbarService.openSnackBar(message),
+      error: ({ message }) => this.snackbarService.openSnackBar(message),
     });
   }
 }

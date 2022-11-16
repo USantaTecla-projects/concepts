@@ -11,11 +11,17 @@ import java.util.Optional;
 @NoArgsConstructor
 public class UserDTO {
 
+    private String fullName;
+
     private String username;
 
     private String email;
 
     private String password;
+
+    public Optional<String> getFullNameOptional(final String fullName) {
+        return getTextOptional(fullName);
+    }
 
     public Optional<String> getUsernameOptional(final String username) {
         return getTextOptional(username);

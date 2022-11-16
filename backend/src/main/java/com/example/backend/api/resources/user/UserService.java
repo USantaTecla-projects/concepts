@@ -35,6 +35,10 @@ public class UserService {
      * @author Cristian
      */
     public User create(final UserDTO userDTO) {
+        System.out.println(userDTO);
+        final String fullNameFromDTO = userDTO
+                .getFullNameOptional(userDTO.getFullName())
+                .orElseThrow(() -> new UserDTOBadRequestException("Field fullName in User DTO is mandatory"));
 
         final String usernameFromDTO = userDTO
                 .getUsernameOptional(userDTO.getUsername())
@@ -49,6 +53,7 @@ public class UserService {
                 .orElseThrow(() -> new UserDTOBadRequestException("Field password in User DTO is mandatory"));
 
         User userToSave = new User(
+                fullNameFromDTO,
                 usernameFromDTO,
                 emailFromDTO,
                 passwordEncoder.encode(passwordFromDTO),

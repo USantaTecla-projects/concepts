@@ -1,18 +1,29 @@
 <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Username</mat-label>
-    <input matInput type="text" formControlName="username" placeholder="Your username" />
+    <input matInput data-cy="login-username-input" type="text" formControlName="username" placeholder="Your username" />
     <mat-icon matSuffix>person</mat-icon>
   </mat-form-field>
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Password</mat-label>
-    <input matInput type="password" formControlName="password" placeholder="Your password" />
+    <input
+      matInput
+      data-cy="login-password-input"
+      type="password"
+      formControlName="password"
+      placeholder="Your password" />
     <mat-icon matSuffix>lock</mat-icon>
   </mat-form-field>
 
   <div mat-dialog-actions>
-    <button class="submit-button" [disabled]="!loginForm.valid" mat-raised-button color="primary" type="submit">
+    <button
+      class="submit-button"
+      [disabled]="!loginForm.valid"
+      data-cy="login-button"
+      mat-raised-button
+      color="primary"
+      type="submit">
       Login
     </button>
   </div>

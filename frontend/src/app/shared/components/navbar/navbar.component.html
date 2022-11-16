@@ -30,6 +30,6 @@
         <span class="text">{{ (authStore.user$ | async)?.username | titlecase }}</span>
       </div>
     </button>
-    <button class="logout-button" mat-flat-button color="basic" routerLink="/auth">Logout</button>
+    <button class="logout-button" (click)="logout()" mat-flat-button color="basic" routerLink="/auth">Logout</button>
   </div>
 </mat-toolbar>

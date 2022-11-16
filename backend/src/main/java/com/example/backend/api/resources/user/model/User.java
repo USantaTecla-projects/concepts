@@ -21,6 +21,7 @@ public class User {
     private String email;
 
     @Column
+    @JsonIgnore
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -38,7 +39,8 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String username, String email, String password, List<String> roles) {
+    public User(String fullName,String username, String email, String password, List<String> roles) {
+        this.fullName = fullName;
         this.username = username;
         this.email = email;
         this.password = password;

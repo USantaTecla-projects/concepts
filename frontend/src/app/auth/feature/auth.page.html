@@ -2,11 +2,11 @@
   <mat-card-title class="title">Authentication</mat-card-title>
 
   <mat-tab-group class="tab-group" dynamicHeight>
-    <mat-tab label="Login">
+    <mat-tab data-cy="login-tab" label="Login">
       <app-auth-login-form (loginUser)="onLoginUser($event)"></app-auth-login-form>
     </mat-tab>
 
-    <mat-tab label="Register">
+    <mat-tab data-cy="register-tab" label="Register">
       <app-auth-register-form (registerUser)="onRegisterUser($event)"></app-auth-register-form>
     </mat-tab>
   </mat-tab-group>

@@ -67,7 +67,10 @@ export class CorrectionInCourseComponent implements OnInit {
     const correctedExamResponses = this.correctionQuestionReplierService.getCorrectedQuestions();
     if (correctedExamResponses.length === this.correcionInCourseStore.getNumberOfQuestions()) {
       return this.correcionInCourseStore.updateExam(correctedExamResponses).subscribe({
-        next: () => this.router.navigateByUrl(''),
+        next: () => {
+          this.snackbarService.openSnackBar('Exam corrected!');
+          this.router.navigateByUrl('/correction');
+        },
         error: (error: Error) => this.snackbarService.openSnackBar(error.message),
       });
     }

@@ -9,6 +9,6 @@ export class IsLoggedGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return localStorage.getItem('logged') ? true : this.router.navigateByUrl('/auth');
+    return localStorage.getItem('auth_data') ? true : this.router.navigateByUrl('/auth');
   }
 }

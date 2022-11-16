@@ -32,7 +32,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refreshToken(
             @CookieValue(name = "RefreshToken", required = false) String refreshToken
     ) {
-
         return authService.refresh(refreshToken);
     }
 
