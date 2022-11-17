@@ -6,11 +6,22 @@
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Concept</mat-label>
-    <input matInput type="text" formControlName="text" placeholder="Concept text" />
+    <input
+      data-cy="knowledge-concept-update-input"
+      matInput
+      type="text"
+      formControlName="text"
+      placeholder="Concept text" />
     <mat-icon matSuffix>book</mat-icon>
   </mat-form-field>
 
-  <button class="save-button" [disabled]="!conceptForm.valid" mat-raised-button type="submit" color="primary">
+  <button
+    class="save-button"
+    [disabled]="!conceptForm.valid"
+    data-cy="knowledge-concept-update-button"
+    mat-raised-button
+    type="submit"
+    color="primary">
     Update Concept
   </button>
 </form>

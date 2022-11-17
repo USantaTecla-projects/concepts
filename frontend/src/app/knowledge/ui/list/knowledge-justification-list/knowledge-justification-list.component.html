@@ -5,7 +5,12 @@
   <mat-card-content class="justifications" *ngIf="state === 'normal'; else noJustifications">
     <div class="actions">
       <mat-card class="add-justification" [ngStyle]="{ width: !this.selectedJustificationID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onJustificationCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onJustificationCreate()"
+          data-cy="knowledge-create-justification-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add justification</p>
@@ -25,7 +30,7 @@
         *ngFor="let justification of justificationsList"
         (opened)="onJustificationSelect(justification.id)">
         <mat-expansion-panel-header>
-          <mat-panel-title class="justification-title">
+          <mat-panel-title class="justification-title" data-cy="knowledge-justification-title">
             {{ justification.text | titlecase | shortText: 100 }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -45,7 +50,12 @@
   <div class="justifications" *ngIf="state === 'empty'">
     <div class="actions">
       <mat-card class="add-justification" [ngStyle]="{ width: !this.selectedJustificationID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onJustificationCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onJustificationCreate()"
+          data-cy="knowledge-create-justification-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add justification</p>

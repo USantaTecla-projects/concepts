@@ -39,7 +39,7 @@ public class CreateExamService {
 
         final List<Question> questions = createQuestionService.createQuestionList(numberOfQuestions);
 
-        return createExamOnDatabase(userID, questions);
+        return new Exam(questions, userID, new Timestamp(System.currentTimeMillis()));
     }
 
     private Exam createExamOnDatabase(final Long userID, final List<Question> questionList) {

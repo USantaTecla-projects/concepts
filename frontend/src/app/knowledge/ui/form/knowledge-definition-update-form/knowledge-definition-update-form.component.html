@@ -7,18 +7,32 @@
   <mat-chip-list>
     <mat-chip class="chip" color="accent" selected>Is correct?</mat-chip>
   </mat-chip-list>
-  <p class="definition-text checkbox-source" [ngClass]="{ correct: definition.correct }">
+  <p
+    class="definition-text checkbox-source"
+    [ngClass]="{ correct: definition.correct }"
+    data-cy="knowledge-definition-correct-message">
     {{ definition.correct ? 'Correct' : 'Incorrect' }}
   </p>
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Definition</mat-label>
-    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Definition text"></textarea>
+    <textarea
+      matInput
+      data-cy="knowledge-definition-update-input"
+      formControlName="text"
+      cdkTextareaAutosize
+      placeholder="Definition text"></textarea>
   </mat-form-field>
 
   <mat-checkbox class="form-checkbox" formControlName="correct"> Is Correct </mat-checkbox>
 
-  <button class="save-button" [disabled]="!definitionForm.valid" mat-raised-button type="submit" color="primary">
+  <button
+    class="save-button"
+    [disabled]="!definitionForm.valid"
+    data-cy="knowledge-definition-update-button"
+    mat-raised-button
+    type="submit"
+    color="primary">
     Update Definition
   </button>
 </form>

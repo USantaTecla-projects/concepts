@@ -5,14 +5,24 @@
   <mat-card-content class="definitions" *ngIf="state === 'normal'; else noDefinitions">
     <div class="actions">
       <mat-card class="add-definition" [ngStyle]="{ width: !this.selectedDefinitionID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onDefinitionCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onDefinitionCreate()"
+          data-cy="knowledge-create-definition-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add definition</p>
       </mat-card>
 
       <mat-card class="delete-definition" *ngIf="this.selectedDefinitionID">
-        <button class="delete-button" (click)="onDefinitionDelete()" mat-mini-fab color="primary">
+        <button
+          class="delete-button"
+          (click)="onDefinitionDelete()"
+          data-cy="knowledge-delete-definition-button"
+          mat-mini-fab
+          color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete definition</p>
@@ -25,14 +35,13 @@
         *ngFor="let definition of definitionsList"
         (opened)="onDefinitionSelect(definition.id)">
         <mat-expansion-panel-header>
-          <mat-panel-title class="definition-title">
-            {{ definition.text | titlecase | shortText: 100 }}</mat-panel-title
-          >
+          <mat-panel-title class="definition-title" data-cy="knowledge-definition-title">
+            {{ definition.text | titlecase | shortText: 100 }}
+          </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <app-knowledge-definition-update-form
-          [definition]="definition"
-          (updateDefinition)="onDefinitionUpdate($event)"></app-knowledge-definition-update-form>
+        <app-knowledge-definition-update-form [definition]="definition" (updateDefinition)="onDefinitionUpdate($event)">
+        </app-knowledge-definition-update-form>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
@@ -45,7 +54,12 @@
   <div class="definitions" *ngIf="state === 'empty'">
     <div class="actions">
       <mat-card class="add-definition" [ngStyle]="{ width: !this.selectedDefinitionID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onDefinitionCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onDefinitionCreate()"
+          data-cy="knowledge-create-definition-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add definition</p>
@@ -58,6 +72,6 @@
         <p>Delete definition</p>
       </mat-card>
     </div>
-    <span>No definitions to display</span>
+    <span data-cy="knowledge-no-defintions-message">No definitions to display</span>
   </div>
 </ng-template>

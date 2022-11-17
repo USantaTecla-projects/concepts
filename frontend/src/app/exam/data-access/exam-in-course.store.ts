@@ -31,11 +31,10 @@ export class ExamInCourseStore {
 
     return this.httpClient.post<ExamData>(`${userID}/exam`, generateExamData).pipe(
       catchError(error => {
-        const message = 'Could not generate the exam';
+        const message = error.error.message ?? 'Could not generate the exam';
         console.error(message, error);
         return throwError(() => new Error(message));
       }),
-      tap(res => console.log(res)),
       map(examData => this.examMapperService.mapDTOToExam(examData)),
       tap(exam => {
         this.examInCourseSubject.next(exam);

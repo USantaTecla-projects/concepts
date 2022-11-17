@@ -19,7 +19,7 @@
   <p class="answer-text">{{ answer.reply ? 'Yes' : 'No' }}</p>
 
   <div class="actions">
-    <button (click)="correctQuestion(true)" mat-raised-button>Correct</button>
+    <button (click)="correctQuestion(true)" data-cy="correct-question-button" mat-raised-button>Correct</button>
     <button (click)="correctQuestion(false)" mat-raised-button color="warn">Incorrect</button>
   </div>
 </div>

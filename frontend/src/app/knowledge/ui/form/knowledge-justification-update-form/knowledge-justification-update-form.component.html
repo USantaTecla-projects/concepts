@@ -20,7 +20,12 @@
 
   <mat-form-field class="form-field" appearance="outline">
     <mat-label>Justification</mat-label>
-    <textarea matInput formControlName="text" cdkTextareaAutosize placeholder="Justification text"></textarea>
+    <textarea
+      matInput
+      data-cy="knowledge-justification-update-input"
+      formControlName="text"
+      cdkTextareaAutosize
+      placeholder="Justification text"></textarea>
   </mat-form-field>
 
   <mat-form-field class="form-field" appearance="outline">
@@ -35,7 +40,13 @@
     Is Correct
   </mat-checkbox>
 
-  <button class="save-button" [disabled]="!justificationForm.valid" mat-raised-button type="submit" color="primary">
+  <button
+    class="save-button"
+    [disabled]="!justificationForm.valid"
+    data-cy="knowledge-justification-update-button"
+    mat-raised-button
+    type="submit"
+    color="primary">
     Update Justification
   </button>
 </form>

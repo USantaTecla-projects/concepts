@@ -52,7 +52,6 @@ public class UpdateExamService {
                 .getUserIDOptional(updateExamDTO.getUserID())
                 .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field userID in UpdateExam DTO is mandatory"));
 
-        Long examID = checkExamExistOnDatabase(updateExamDTO);
 
         final List<QuestionAndAnswerDTO> questionAndAnswerDTOList = updateExamDTO
                 .getQuestionAndAnswerDTOListOptional(updateExamDTO.getQuestionAndAnswerDTOList())
@@ -72,39 +71,23 @@ public class UpdateExamService {
         final List<Answer> answers = answerService.saveManyAnswers(answerDTOList);
 
 
-        updateExamOnDatabase(updateExamDTO, answers, examID, userID);
+        updateExamOnDatabase(updateExamDTO, questions, answers, userID);
     }
 
-    private Long checkExamExistOnDatabase(final UpdateExamDTO updateExamDTO) {
-        final Long examID = updateExamDTO
-                .getExamIDOptional(updateExamDTO.getExamID())
-                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field examID in UpdateExam DTO is mandatory"));
-
-        final Timestamp creationDate = updateExamDTO
-                .getCreationDateOptional(updateExamDTO.getCreationDate())
-                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field creationDate in UpdateExam DTO is mandatory"));
-
-        final Exam exam = examRepository
-                .findById(examID)
-                .orElseThrow(() -> new ExamNotFoundException("Exam with this ID wasn't found in database"));
-
-        if (!exam.getCreationDate().equals(creationDate)) {
-            throw new ExamNotFoundException("Exam with this creation date wasn't found");
-        }
-
-        return examID;
-    }
 
     private void updateExamOnDatabase(
             final UpdateExamDTO updateExamDTO,
+            final List<Question> questions,
             final List<Answer> answers,
-            final Long examID,
             final Long userID
     ) {
-        final Exam exam = examRepository
-                .findByIdAndUserID(examID, userID)
-                .orElseThrow(() -> new ExamNotFoundException("The exam that you have replied wasn't found"));
 
+        Exam exam = checkExamExistOnDatabase(updateExamDTO);
+
+        if (exam == null) {
+            exam = new Exam(questions, userID, updateExamDTO.getCreationDate());
+        }
+        
         exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
         exam.calculateTimeSpend();
 
@@ -122,6 +105,35 @@ public class UpdateExamService {
 
         examRepository.save(exam);
     }
+
+    private Exam checkExamExistOnDatabase(final UpdateExamDTO updateExamDTO) {
+        final Long examID = updateExamDTO
+                .getExamIDOptional(updateExamDTO.getExamID())
+                .orElse(null);
+
+        if (examID == null) {
+            return null;
+        }
+
+        final Timestamp creationDate = updateExamDTO
+                .getCreationDateOptional(updateExamDTO.getCreationDate())
+                .orElseThrow(() -> new UpdateExamDTOBadRequestException("Field creationDate in UpdateExam DTO is mandatory"));
+
+        final Exam exam = examRepository
+                .findById(examID)
+                .orElse(null);
+
+        if (exam == null) {
+            return null;
+        }
+
+        if (!exam.getCreationDate().equals(creationDate)) {
+            throw new ExamNotFoundException("Exam with this creation date wasn't found");
+        }
+
+        return exam;
+    }
+
 
     private String calculateMark(List<Answer> answerList) {
         float correctAnswers = answerList

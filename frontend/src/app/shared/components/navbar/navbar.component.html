@@ -1,21 +1,29 @@
 <mat-toolbar class="navbar" color="primary">
   <div class="links">
-    <button mat-button routerLink="">
+    <button data-cy="navbar-home-button" mat-button routerLink="">
       <div class="button-content"><mat-icon class="icon">home</mat-icon> <span class="text">Home</span></div>
     </button>
-    <button mat-button routerLink="/exam/init">
+    <button data-cy="navbar-exam-button" mat-button routerLink="/exam/init">
       <div class="button-content">
         <mat-icon class="icon">description</mat-icon>
         <span class="text">Exams</span>
       </div>
     </button>
-    <button *ngIf="authStore.checkUserRoleAdmin() | async" mat-button routerLink="/knowledge">
+    <button
+      *ngIf="authStore.checkUserRoleAdmin() | async"
+      data-cy="navbar-knowledge-button"
+      mat-button
+      routerLink="/knowledge">
       <div class="button-content">
         <mat-icon class="icon">book</mat-icon>
         <span class="text">Knowledge</span>
       </div>
     </button>
-    <button *ngIf="authStore.checkUserRoleAdmin() | async" mat-button routerLink="/correction">
+    <button
+      *ngIf="authStore.checkUserRoleAdmin() | async"
+      data-cy="navbar-correction-button"
+      mat-button
+      routerLink="/correction">
       <div class="button-content">
         <mat-icon class="icon">draw</mat-icon>
         <span class="text">Correction</span>
@@ -24,12 +32,20 @@
   </div>
 
   <div class="profile">
-    <button class="profile-button" mat-stroked-button mat-button color="basic">
+    <button class="profile-button" data-cy="navbar-profile-button" mat-stroked-button mat-button color="basic">
       <div class="button-content" routerLink="/profile">
         <mat-icon class="icon">person</mat-icon>
         <span class="text">{{ (authStore.user$ | async)?.username | titlecase }}</span>
       </div>
     </button>
-    <button class="logout-button" (click)="logout()" mat-flat-button color="basic" routerLink="/auth">Logout</button>
+    <button
+      class="logout-button"
+      (click)="logout()"
+      data-cy="logout-button"
+      mat-flat-button
+      color="basic"
+      routerLink="/auth">
+      Logout
+    </button>
   </div>
 </mat-toolbar>

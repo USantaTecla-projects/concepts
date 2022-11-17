@@ -21,7 +21,9 @@
           [userID]="(user$ | async)?.id">
         </app-correction-question-renderer>
       </ng-container>
-      <button (click)="saveCorrection()" mat-raised-button color="primary">Correct exam</button>
+      <button (click)="saveCorrection()" data-cy="correction-correct-exam-button" mat-raised-button color="primary">
+        Correct exam
+      </button>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

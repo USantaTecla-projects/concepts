@@ -17,13 +17,23 @@
   <mat-card-content class="concepts" *ngIf="state === 'init' || state === 'normal'; else noConcepts">
     <div class="actions">
       <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onConceptCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onConceptCreate()"
+          data-cy="knowledge-create-concept-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add concept</p>
       </mat-card>
       <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
-        <button class="delete-button" (click)="onConceptDelete()" mat-mini-fab color="primary">
+        <button
+          class="delete-button"
+          (click)="onConceptDelete()"
+          data-cy="knowledge-delete-concept-button"
+          mat-mini-fab
+          color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete concept</p>
@@ -36,7 +46,9 @@
         *ngFor="let concept of conceptsPage!.content"
         (opened)="onConceptSelect(concept.id)">
         <mat-expansion-panel-header>
-          <mat-panel-title class="concept-title">{{ concept.text | titlecase }}</mat-panel-title>
+          <mat-panel-title class="concept-title" data-cy="knowledge-concept-title">{{
+            concept.text | titlecase
+          }}</mat-panel-title>
         </mat-expansion-panel-header>
         <app-knowledge-concept-update-form [concept]="concept" (updateConcept)="onConceptUpdate($event)">
         </app-knowledge-concept-update-form>
@@ -51,13 +63,23 @@
   <div class="concepts" *ngIf="state === 'empty'">
     <div class="actions">
       <mat-card class="add-concept" [ngStyle]="{ width: !this.selectedConceptID ? '100%' : '43%' }">
-        <button class="add-button" (click)="onConceptCreate()" mat-mini-fab color="warn">
+        <button
+          class="add-button"
+          (click)="onConceptCreate()"
+          data-cy="knowledge-create-concept-button"
+          mat-mini-fab
+          color="warn">
           <mat-icon>add</mat-icon>
         </button>
         <p>Add concept</p>
       </mat-card>
       <mat-card class="delete-concept" *ngIf="this.selectedConceptID">
-        <button class="delete-button" (click)="onConceptDelete()" mat-mini-fab color="primary">
+        <button
+          class="delete-button"
+          (click)="onConceptDelete()"
+          data-cy="knowledge-delete-concept-button"
+          mat-mini-fab
+          color="primary">
           <mat-icon>remove</mat-icon>
         </button>
         <p>Delete concept</p>

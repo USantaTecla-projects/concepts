@@ -1,6 +1,8 @@
 <h1 mat-dialog-title>Delete {{ data.knowledgeItem }}</h1>
 <div mat-dialog-content>Would you like to delete this {{ data.knowledgeItem }}?</div>
 <div class="actions" mat-dialog-action>
-  <button (click)="onClose(true)" mat-raised-button cdkFocusInitial color="warn">Yes</button>
-  <button class="cancel-button" (click)="onClose(false)" mat-raised-button>No</button>
+  <button (click)="onClose(true)" data-cy="dialog-confirm-button" mat-raised-button cdkFocusInitial color="warn">
+    Yes
+  </button>
+  <button class="cancel-button" (click)="onClose(false)" data-cy="dialog-cancel-button" mat-raised-button>No</button>
 </div>
