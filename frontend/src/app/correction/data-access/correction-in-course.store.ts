@@ -26,7 +26,7 @@ export class CorrecionInCourseStore {
 
   getExam(userID: number, examID: number) {
     console.log('???');
-    return this.httpClient.get<ExamData>(`${userID}/exam/${examID}`).pipe(
+    return this.httpClient.get<ExamData>(`${userID}/exams/${examID}`).pipe(
       catchError(error => {
         const message = 'Could not get the user exams';
         console.error(message, error);
@@ -48,7 +48,7 @@ export class CorrecionInCourseStore {
 
     console.log(updatedExamDTO);
 
-    return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
+    return this.httpClient.patch<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';
         console.error(message, error);

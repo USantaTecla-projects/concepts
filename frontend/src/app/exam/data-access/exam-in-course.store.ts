@@ -29,7 +29,7 @@ export class ExamInCourseStore {
   createExam(generateExamData: GenerateExamData): Observable<Exam> {
     const { userID } = generateExamData;
 
-    return this.httpClient.post<ExamData>(`${userID}/exam`, generateExamData).pipe(
+    return this.httpClient.post<ExamData>(`${userID}/exams`, generateExamData).pipe(
       catchError(error => {
         const message = error.error.message ?? 'Could not generate the exam';
         console.error(message, error);
@@ -51,7 +51,7 @@ export class ExamInCourseStore {
       examResponses
     );
 
-    return this.httpClient.patch<Exam>(`${userID}/exam`, updatedExamDTO).pipe(
+    return this.httpClient.patch<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';
         console.error(message, error);

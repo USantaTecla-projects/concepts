@@ -7,7 +7,6 @@ import { ReplyExamDTO } from 'src/app/shared/types/exam/dto/reply-exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 import { QuestionDTO } from 'src/app/shared/types/question/dto/question.dto';
-import { ExamQuestionAndAnswerDTO } from '../../shared/types/exam/dto/exam-question-answer.dto';
 import { Question } from '../../shared/types/question/model/question.model';
 
 import { fromQuestionTypeMappers, toQuestionTypeMappers } from '../utils/mappers.util';
@@ -32,20 +31,18 @@ export class ExamMapperService {
   }
 
   mapExamToDTO(metadata: ExamMetadata, examResponses: ExamResponse[]): ReplyExamDTO {
-    const mappedList: ExamQuestionAndAnswerDTO[] = examResponses.map(({ question, answer }) => {
+    const questionDTOList: QuestionDTO[] = examResponses.map(({ question }) => {
       const { type } = question;
       const questionDTO: QuestionDTO = fromQuestionTypeMappers[type](question);
-      const answerDTO: AnswerDTO = { ...answer };
-
-      return {
-        questionDTO,
-        answerDTO,
-      };
+      return questionDTO;
     });
+
+    const answerDTOList: AnswerDTO[] = examResponses.map(({ answer }) => ({ ...answer }));
 
     return {
       ...metadata,
-      questionAndAnswerDTOList: mappedList,
+      questionDTOList,
+      answerDTOList,
     };
   }
 }

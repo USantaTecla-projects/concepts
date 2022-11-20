@@ -22,7 +22,7 @@ export class ExamService {
   }
 
   private getExamObservable(userID: number, examID: number) {
-    return this.httpClient.get<ExamData>(`${userID}/exam/${examID}`).pipe(
+    return this.httpClient.get<ExamData>(`${userID}/exams/${examID}`).pipe(
       catchError(error => {
         const message = 'Could not get the user exams';
         console.error(message, error);
