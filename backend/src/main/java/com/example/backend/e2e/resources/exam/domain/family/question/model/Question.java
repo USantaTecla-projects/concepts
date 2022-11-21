@@ -22,6 +22,9 @@ public class Question {
     public Question() {
     }
 
+    public Question(Type type) {
+        this.type = type;
+    }
 
     public Long getId() {
         return id;

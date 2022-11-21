@@ -49,9 +49,6 @@ public class QuestionT2Generator implements QuestionGenerator {
         final long conceptID = definition.getConceptID();
 
         final Concept concept = getConcept(conceptID);
-        if (concept == null) {
-            return null;
-        }
 
         final long definitionID = definition.getId();
 

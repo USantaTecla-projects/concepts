@@ -14,5 +14,5 @@ public interface ConceptRepository extends CrudRepository<Concept, Long>, Paging
     long countAvailableType0Questions();
 
     @Query(value = "SELECT * FROM concept c WHERE c.id NOT IN ?1 LIMIT 1 OFFSET ?2", nativeQuery = true)
-    Optional<Concept> findRandomConcept(List<Long> conceptsId, int offset);
+    Optional<Concept> findRandomConcept(List<Long> conceptsID, int offset);
 }

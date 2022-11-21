@@ -1,6 +1,7 @@
-package com.example.backend.unit.exam.question.generator;
+package com.example.backend.unit.exam.question;
 
 
+import com.example.backend.e2e.resources.exam.domain.factory.Type;
 import com.example.backend.e2e.resources.exam.domain.family.question.model.Question;
 import com.example.backend.e2e.resources.exam.domain.family.question.model.specific.QuestionT0;
 import com.example.backend.e2e.resources.exam.domain.family.question.repository.QuestionT0Repository;
@@ -34,10 +35,10 @@ public class QuestionT0GeneratorTest {
     private QuestionT0Generator questionT0Generator;
 
     @Test
-    @DisplayName("Should get a question and create it on database")
+    @DisplayName("Should get a Question and create it on database")
     void newQuestion() {
         final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-        List<Question> alreadyGeneratedQuestions = new LinkedList<>();
+        final List<Question> alreadyGeneratedQuestions = new LinkedList<>();
 
         when(conceptRepository.count()).thenReturn(1L);
         when(conceptRepository.findRandomConcept(anyList(), anyInt()))
@@ -45,30 +46,30 @@ public class QuestionT0GeneratorTest {
 
         when(questionT0Repository.existsByConceptID(1L)).thenReturn(false);
         when(questionT0Repository.save(any(QuestionT0.class)))
-                .thenReturn(new QuestionT0(concept.getId(), concept.getText()));
+                .thenReturn(new QuestionT0(Type.TYPE0, concept.getId(), concept.getText()));
 
-        Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
+        final Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
+        assert question instanceof QuestionT0;
 
-        assert question != null;
         verify(questionT0Repository, never()).findByConceptID(anyLong());
         verify(questionT0Repository).save(any(QuestionT0.class));
     }
 
     @Test
-    @DisplayName("Should get a question that already exists on database")
+    @DisplayName("Should get a Question that already exists on database")
     void existingQuestion() {
         final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-        List<Question> alreadyGeneratedQuestions = new LinkedList<>();
+        final List<Question> alreadyGeneratedQuestions = new LinkedList<>();
 
         when(conceptRepository.count()).thenReturn(1L);
         when(conceptRepository.findRandomConcept(anyList(), anyInt()))
                 .thenReturn(Optional.of(concept));
 
         when(questionT0Repository.existsByConceptID(1L)).thenReturn(true);
-        when(questionT0Repository.findByConceptID(anyLong()))
-                .thenReturn(Optional.of(new QuestionT0(concept.getId(), concept.getText())));
+        when(questionT0Repository.findByConceptID(concept.getId()))
+                .thenReturn(Optional.of(new QuestionT0(Type.TYPE0, concept.getId(), concept.getText())));
 
-        Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
+        final Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
 
         assert question != null;
         verify(questionT0Repository).findByConceptID(anyLong());
@@ -76,16 +77,16 @@ public class QuestionT0GeneratorTest {
     }
 
     @Test
-    @DisplayName("Should not return a question if the concept is already used in another")
+    @DisplayName("Should not return a Question if the Concept is already used in another")
     void repeatedConcept() {
         final Concept concept = new Concept(1L, "Software", new LinkedList<>());
-        List<Question> alreadyGeneratedQuestions = new LinkedList<>(List.of(new QuestionT0(concept.getId(), concept.getText())));
+        final List<Question> alreadyGeneratedQuestions = new LinkedList<>(List.of(new QuestionT0(Type.TYPE0, concept.getId(), concept.getText())));
 
         when(conceptRepository.count()).thenReturn(1L);
         when(conceptRepository.findRandomConcept(anyList(), anyInt()))
                 .thenReturn(Optional.empty());
 
-        Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
+        final Question question = questionT0Generator.generateQuestion(alreadyGeneratedQuestions);
 
         assert question == null;
     }

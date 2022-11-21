@@ -25,5 +25,5 @@ public interface DefinitionRepository extends CrudRepository<Definition, Long>, 
     Optional<Definition> findRandomDefinitionBasedOnCorrect(List<Long> definitionID, boolean isCorrect, int offset);
 
     @Query(value = "SELECT * FROM definition d WHERE d.id NOT IN ?1 LIMIT 1 OFFSET ?2", nativeQuery = true)
-    Optional<Definition> findRandomDefinition(List<Long> definitionID, int offset);
+    Optional<Definition> findRandomDefinition(List<Long> definitionsID, int offset);
 }

@@ -15,15 +15,9 @@ import java.util.List;
 @Service
 public class CreateExamService {
 
-    private final ExamRepository examRepository;
     private final CreateQuestionService createQuestionService;
 
-
-    public CreateExamService(
-            ExamRepository examRepository,
-            CreateQuestionService createQuestionService
-    ) {
-        this.examRepository = examRepository;
+    public CreateExamService(CreateQuestionService createQuestionService) {
         this.createQuestionService = createQuestionService;
     }
 
@@ -40,10 +34,5 @@ public class CreateExamService {
         final List<Question> questions = createQuestionService.createQuestionList(numberOfQuestions);
 
         return new Exam(questions, userID, new Timestamp(System.currentTimeMillis()));
-    }
-
-    private Exam createExamOnDatabase(final Long userID, final List<Question> questionList) {
-        final Exam exam = new Exam(questionList, userID, new Timestamp(System.currentTimeMillis()));
-        return examRepository.save(exam);
     }
 }

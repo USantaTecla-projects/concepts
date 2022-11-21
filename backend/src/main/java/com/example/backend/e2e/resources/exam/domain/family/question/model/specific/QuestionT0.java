@@ -1,12 +1,12 @@
 package com.example.backend.e2e.resources.exam.domain.family.question.model.specific;
 
+import com.example.backend.e2e.resources.exam.domain.factory.Type;
 import com.example.backend.e2e.resources.exam.domain.family.question.model.Question;
 
 import javax.persistence.*;
 
 @Entity
 public class QuestionT0 extends Question {
-
 
     private Long conceptID;
 
@@ -16,7 +16,8 @@ public class QuestionT0 extends Question {
     public QuestionT0() {
     }
 
-    public QuestionT0(Long conceptID, String conceptText) {
+    public QuestionT0(Type type, Long conceptID, String conceptText) {
+        super(type);
         this.conceptID = conceptID;
         this.conceptText = conceptText;
     }
@@ -35,5 +36,15 @@ public class QuestionT0 extends Question {
 
     public void setConceptText(String conceptText) {
         this.conceptText = conceptText;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionT0{" +
+                "conceptID=" + conceptID +
+                ", conceptText='" + conceptText + '\'' +
+                ", type=" + type +
+                ", isFilled=" + isFilled +
+                '}';
     }
 }

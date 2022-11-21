@@ -49,25 +49,13 @@ public class QuestionT3Generator implements QuestionGenerator {
             return null;
         }
 
+        final long justificationID = justification.getId();
         final long definitionID = justification.getDefinitionID();
-
-
-        final Definition incorrectDefinition = getDefinition(definitionID);
-        if (incorrectDefinition == null) {
-            return null;
-        }
-
         final long conceptID = justification.getConceptID();
 
+        final Definition incorrectDefinition = getDefinition(definitionID);
         final Concept concept = getConcept(conceptID);
-        if (concept == null) {
-            return null;
-        }
 
-        final long justificationID = justification.getId();
-
-
-        System.out.println(questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID));
 
         if (questionT3Repository.existsByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID)) {
             QuestionT3 questionT3 = questionT3Repository.findByConceptIDAndDefinitionIDAndJustificationID(conceptID, definitionID, justificationID).orElseThrow();

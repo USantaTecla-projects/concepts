@@ -46,14 +46,9 @@ public class QuestionT1Generator implements QuestionGenerator {
         }
 
         final long conceptID = definition.getConceptID();
-
-        final Concept concept = getConcept(conceptID);
-        if (concept == null) {
-            return null;
-        }
-
         final long definitionID = definition.getId();
 
+        final Concept concept = getConcept(conceptID);
 
         if (questionT1Repository.existsByConceptIDAndDefinitionID(conceptID, definitionID)) {
             QuestionT1 questionT1 = questionT1Repository.findByConceptIDAndDefinitionID(conceptID, definitionID).orElseThrow();
