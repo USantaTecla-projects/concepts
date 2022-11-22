@@ -1,15 +1,19 @@
 version: '3.8'
 services:
-  postgres:
+
+  database:
     image: postgres:13
     restart: always
+    hostname: postgres
     ports:
-      - 5434:5432
+      - '5432:5432'
     environment:
       - DATABASE_HOST=127.0.0.1
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=concepts
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - concepts-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -19,4 +23,25 @@ services:
     ports:
       - '80:80'
     depends_on:
-      - postgres
+      - database
+    networks:
+      - concepts-network
+
+  backend:
+    restart: always
+    ports:
+      - "8443:8443"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+    image: 'concepts.jar'
+    depends_on:
+      - database
+    networks:
+      - concepts-network
+
+networks:
+  concepts-network:
+    name: concepts-network

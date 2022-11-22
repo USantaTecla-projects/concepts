@@ -1,11 +1,11 @@
 package com.example.backend.unit.knowledge;
 
-import com.example.backend.e2e.resources.knowledge.concept.CrudConceptService;
-import com.example.backend.e2e.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.e2e.resources.knowledge.concept.dto.ConceptDTO;
-import com.example.backend.e2e.resources.knowledge.concept.exception.specific.ConceptDTOBadRequestException;
-import com.example.backend.e2e.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
-import com.example.backend.e2e.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.knowledge.concept.CrudConceptService;
+import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
+import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.concept.exception.specific.ConceptNotFoundException;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

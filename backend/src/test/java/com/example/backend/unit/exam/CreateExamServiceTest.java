@@ -1,14 +1,13 @@
 package com.example.backend.unit.exam;
 
-import com.example.backend.e2e.resources.exam.domain.factory.Type;
-import com.example.backend.e2e.resources.exam.domain.family.question.model.specific.QuestionT0;
-import com.example.backend.e2e.resources.exam.domain.family.question.service.CreateQuestionService;
-import com.example.backend.e2e.resources.exam.dto.CreateExamDTO;
-import com.example.backend.e2e.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
-import com.example.backend.e2e.resources.exam.model.Exam;
-import com.example.backend.e2e.resources.exam.service.CreateExamService;
-import com.example.backend.e2e.resources.knowledge.concept.exception.specific.ConceptDTOBadRequestException;
-import com.example.backend.e2e.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.exam.domain.factory.Type;
+import com.example.backend.api.resources.exam.domain.family.question.model.specific.QuestionT0;
+import com.example.backend.api.resources.exam.domain.family.question.service.CreateQuestionService;
+import com.example.backend.api.resources.exam.dto.CreateExamDTO;
+import com.example.backend.api.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
+import com.example.backend.api.resources.exam.model.Exam;
+import com.example.backend.api.resources.exam.service.CreateExamService;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

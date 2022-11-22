@@ -170,6 +170,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>concepts</finalName>
     </build>
 
 </project>

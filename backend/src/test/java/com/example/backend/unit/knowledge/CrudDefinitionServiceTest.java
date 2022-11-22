@@ -1,14 +1,14 @@
 package com.example.backend.unit.knowledge;
 
-import com.example.backend.e2e.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.e2e.resources.knowledge.concept.model.Concept;
-import com.example.backend.e2e.resources.knowledge.definition.CrudDefinitionService;
-import com.example.backend.e2e.resources.knowledge.definition.DefinitionRepository;
-import com.example.backend.e2e.resources.knowledge.definition.dto.DefinitionDTO;
-import com.example.backend.e2e.resources.knowledge.definition.exception.specific.DefinitionDTOBadRequestException;
-import com.example.backend.e2e.resources.knowledge.definition.exception.specific.DefinitionNotBelongToConceptException;
-import com.example.backend.e2e.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
-import com.example.backend.e2e.resources.knowledge.definition.model.Definition;
+import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.knowledge.definition.CrudDefinitionService;
+import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
+import com.example.backend.api.resources.knowledge.definition.dto.DefinitionDTO;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionDTOBadRequestException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotBelongToConceptException;
+import com.example.backend.api.resources.knowledge.definition.exception.specific.DefinitionNotFoundException;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

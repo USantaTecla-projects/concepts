@@ -1,17 +1,17 @@
 package com.example.backend.unit.exam.question;
 
 
-import com.example.backend.e2e.resources.exam.domain.factory.Type;
-import com.example.backend.e2e.resources.exam.domain.family.question.model.Question;
-import com.example.backend.e2e.resources.exam.domain.family.question.model.specific.QuestionT3;
-import com.example.backend.e2e.resources.exam.domain.family.question.repository.QuestionT3Repository;
-import com.example.backend.e2e.resources.exam.domain.family.question.tools.generator.specific.QuestionT3Generator;
-import com.example.backend.e2e.resources.knowledge.concept.ConceptRepository;
-import com.example.backend.e2e.resources.knowledge.concept.model.Concept;
-import com.example.backend.e2e.resources.knowledge.definition.DefinitionRepository;
-import com.example.backend.e2e.resources.knowledge.definition.model.Definition;
-import com.example.backend.e2e.resources.knowledge.justification.JustificationRepository;
-import com.example.backend.e2e.resources.knowledge.justification.model.Justification;
+import com.example.backend.api.resources.exam.domain.factory.Type;
+import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.example.backend.api.resources.exam.domain.family.question.model.specific.QuestionT3;
+import com.example.backend.api.resources.exam.domain.family.question.repository.QuestionT3Repository;
+import com.example.backend.api.resources.exam.domain.family.question.tools.generator.specific.QuestionT3Generator;
+import com.example.backend.api.resources.knowledge.concept.ConceptRepository;
+import com.example.backend.api.resources.knowledge.concept.model.Concept;
+import com.example.backend.api.resources.knowledge.definition.DefinitionRepository;
+import com.example.backend.api.resources.knowledge.definition.model.Definition;
+import com.example.backend.api.resources.knowledge.justification.JustificationRepository;
+import com.example.backend.api.resources.knowledge.justification.model.Justification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

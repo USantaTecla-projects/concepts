@@ -1,6 +1,6 @@
 package com.example.backend.e2e.tests.knowledge;
 
-import com.example.backend.e2e.resources.knowledge.concept.dto.ConceptDTO;
+import com.example.backend.api.resources.knowledge.concept.dto.ConceptDTO;
 import com.example.backend.e2e.util.KnowledgeUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

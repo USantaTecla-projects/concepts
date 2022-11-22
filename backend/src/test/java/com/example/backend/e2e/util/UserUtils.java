@@ -1,6 +1,6 @@
 package com.example.backend.e2e.util;
 
-import com.example.backend.e2e.resources.user.dto.UserDTO;
+import com.example.backend.api.resources.user.dto.UserDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.springframework.http.HttpStatus;
