@@ -33,6 +33,7 @@ Then, you can start the frontend by running (inside `./frontend`)
 ```bash
 ng serve
 ```
+The Angular project will run on port 4200.
 
 ---
 
