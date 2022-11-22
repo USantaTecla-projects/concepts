@@ -3,7 +3,13 @@ Tool to auto generate exams from a knowledge base.
 
 ## Update Docker Image
 
-The app run under docker in production, so when a change is made, you'll probably want to update the image to apply the changes. To achieve this:
+The app run under docker in production, so when a change is made, you'll probably want to update the image to apply the changes.
+
+For this, you can run the script that is in the root folder of the project (`./concepts`) called `update_docker_image.sh`. 
+
+Remember to set 777 permission to allow the execution, also you'll need to have `node` and `npm` installed, you'll need to execute `npm install` in the `./frontend` folder and you need to have installed Angular CLI. 
+
+If you prefer do it manually, here are the steps that the script follows:
 
 1. If you have done changes on the frontend (if you just made changes on the API, go to step 3), you need to go to the root folder of the angular project `./frontend` and then execute the following command `$ ng build`. This will generate a folder called `./frontend/dist/frontend`.
 2. Once the frontend production code has been generated, you will need to copy the content inside `./frontend/dist/frontend` to `./backend/src/main/resources/static`. Probably you will want to first clear the `static` folder and then copy the frontend code.
