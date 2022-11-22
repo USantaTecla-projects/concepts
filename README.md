@@ -24,7 +24,7 @@ If you want to execute the app in production mode, you need to execute (inside `
 ```bash
 $ sudo docker-compose --env-file .env.prod up
 ```
-This will setup 3 containers. The database, pgAdmin and the dockerized backend. 
+This will setup 3 containers. The database, pgAdmin and the dockerized app. 
 
 In production mode the app is exposed on port 8543.
 
