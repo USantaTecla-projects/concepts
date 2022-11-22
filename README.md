@@ -20,7 +20,7 @@ If you prefer do it manually, here are the steps that the script follows:
 
 ### Production
 
-If you want to execute the app in production mode, you need to execute:
+If you want to execute the app in production mode, you need to execute (inside `./backend`):
 ```bash
 $ sudo docker-compose --env-file .env.prod up
 ```
