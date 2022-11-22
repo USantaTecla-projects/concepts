@@ -16,7 +16,7 @@ If you prefer do it manually, here are the steps that the script follows:
 3. Now you need to build the new docker image. First remove the content inside `./backend/target`, then, go to the root folder of the backend project (`./backend`) and run `mvn install` to generate the JAR file. Running `mvn install` will also execute the tests, if you want to generate the JAR without running them, run `mvn install -DskipTests` instead of `mvn install`. 
 4. Finally, you can run the app in production mode as explained down. 
 
-## Scripts
+## Enviroments
 
 To setup the database for development you need to execute:
 ```bash
@@ -37,4 +37,10 @@ $ sudo docker-compose --env-file .env.prod up
 This will setup 3 containers. The database, pgAdmin and the dockerized backend. 
 
 In production mode the app is exposed on port 8543.
+
+---
+
+The app doesn't have a Test enviroment, this is made on purpose to enforce the tests to work over different kind of scenarios and to adapt the code as the errors and bugs starts to appear.
+
+If in future developments this decission changes, then you will need to create another `.env` file called `.env.test`, where you specify the database name for the tests, and also you will need to define an env variable in `application.properties`.
 
