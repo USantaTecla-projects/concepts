@@ -18,15 +18,21 @@ If you prefer do it manually, here are the steps that the script follows:
 
 ## Enviroments
 
-To setup the database for development you need to execute:
+To setup the database for development you need to execute (inside `./backend`):
 ```bash
 $ sudo docker-compose --env-file .env.dev up database pgadmin
 ```
 This will setup 2 docker containers, one exposed on port 5432, which is the database, and the other exposed on port 80, which is pgAdmin (GUI database tool).
 
-Once the containers are up, you can start your application in your IDE.
+Once the containers are up, you can start the API in your IDE.
 
-In development mode the app is exposed on port 8544
+In development mode the API is exposed on port 8544.
+
+Then, you can start the frontend by running (inside `./frontend`)
+
+```bash
+ng serve
+```
 
 ---
 
