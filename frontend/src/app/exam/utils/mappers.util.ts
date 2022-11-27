@@ -1,13 +1,25 @@
+import {
+  mapFromQuestionType0,
+  mapToQuestionType0,
+} from 'src/app/shared/service/exam-mapper/mappers/question-type0.mapper';
+import {
+  mapFromQuestionType1,
+  mapToQuestionType1,
+} from 'src/app/shared/service/exam-mapper/mappers/question-type1.mapper';
+import {
+  mapFromQuestionType2,
+  mapToQuestionType2,
+} from 'src/app/shared/service/exam-mapper/mappers/question-type2.mapper';
+import {
+  mapFromQuestionType3,
+  mapToQuestionType3,
+} from 'src/app/shared/service/exam-mapper/mappers/question-type3.mapper';
 import { QuestionType0 } from 'src/app/shared/types/question/model/question-type0.model';
 import { QuestionType1 } from 'src/app/shared/types/question/model/question-type1.model';
 import { QuestionType2 } from 'src/app/shared/types/question/model/question-type2.model';
 import { QuestionType3 } from 'src/app/shared/types/question/model/question-type3.model';
 import { QuestionDTO } from '../../shared/types/question/dto/question.dto';
 import { Question } from '../../shared/types/question/model/question.model';
-import { mapFromQuestionType0, mapToQuestionType0 } from '../data-access/mappers/question-type0.mapper';
-import { mapFromQuestionType1, mapToQuestionType1 } from '../data-access/mappers/question-type1.mapper';
-import { mapFromQuestionType2, mapToQuestionType2 } from '../data-access/mappers/question-type2.mapper';
-import { mapFromQuestionType3, mapToQuestionType3 } from '../data-access/mappers/question-type3.mapper';
 
 export const toQuestionTypeMappers: { [key: string]: Function } = {
   TYPE0: (questionData: QuestionDTO): QuestionType0 => mapToQuestionType0(questionData),
