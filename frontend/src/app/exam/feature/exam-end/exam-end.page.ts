@@ -6,6 +6,6 @@ import { Router } from '@angular/router';
   templateUrl: './exam-end.page.html',
   styleUrls: ['./exam-end.page.scss'],
 })
-export class ExamEndComponent {
+export class ExamEndPage {
   constructor(private router: Router) {}
 }

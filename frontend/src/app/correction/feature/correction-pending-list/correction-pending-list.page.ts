@@ -11,10 +11,10 @@ import { CorrecionInCourseStore } from '../../data-access/correction-in-course.s
 
 @Component({
   selector: 'app-correction-pending-list',
-  templateUrl: './correction-pending-list.component.html',
-  styleUrls: ['./correction-pending-list.component.scss'],
+  templateUrl: './correction-pending-list.page.html',
+  styleUrls: ['./correction-pending-list.page.scss'],
 })
-export class CorrectionPendingListComponent implements OnInit {
+export class CorrectionPendingListPage implements OnInit {
   examItemDatasource!: CorredtedExamItemDatasource;
 
   hasRepliedExams$!: Observable<Page<Exam>>;

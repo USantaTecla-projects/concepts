@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CorrectionInCourseComponent } from './correction-in-course.component';
+import { CorrectionInCoursePage } from './correction-in-course.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: CorrectionInCourseComponent,
+    component: CorrectionInCoursePage,
   },
 ];
 

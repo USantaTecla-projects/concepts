@@ -14,11 +14,11 @@ import { CorrectionQuestionType0Component } from '../../ui/correction-question/c
 
 @Component({
   selector: 'app-correction-in-course',
-  templateUrl: './correction-in-course.component.html',
-  styleUrls: ['./correction-in-course.component.scss'],
+  templateUrl: './correction-in-course.page.html',
+  styleUrls: ['./correction-in-course.page.scss'],
   providers: [CorrectionQuestionReplierService],
 })
-export class CorrectionInCourseComponent implements OnInit {
+export class CorrectionInCoursePage implements OnInit {
   exam$!: Observable<Exam>;
 
   user$!: Observable<User | null>;
