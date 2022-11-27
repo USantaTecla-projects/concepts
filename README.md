@@ -18,27 +18,40 @@ If you prefer do it manually, here are the steps that the script follows:
 
 ## Enviroments
 
-To setup the database for development you need to execute:
+### Production
+
+If you want to execute the app in production mode, you need to execute (inside `./backend`):
+```bash
+$ sudo docker-compose --env-file .env.prod up
+```
+This will setup 3 containers. The database, pgAdmin and the dockerized app. 
+
+In production mode the app is exposed on port 8543.
+
+---
+
+### Development
+
+To setup the database for development you need to execute (inside `./backend`):
 ```bash
 $ sudo docker-compose --env-file .env.dev up database pgadmin
 ```
 This will setup 2 docker containers, one exposed on port 5432, which is the database, and the other exposed on port 80, which is pgAdmin (GUI database tool).
 
-Once the containers are up, you can start your application in your IDE.
+Once the containers are up, you can start the API in your IDE.
 
-In development mode the app is exposed on port 8544
+In development mode the API is exposed on port 8544.
 
----
+Then, you can start the frontend by running (inside `./frontend`)
 
-If you want to execute the app in production mode, you need to execute:
 ```bash
-$ sudo docker-compose --env-file .env.prod up
+ng serve
 ```
-This will setup 3 containers. The database, pgAdmin and the dockerized backend. 
-
-In production mode the app is exposed on port 8543.
+The Angular project will run on port 4200.
 
 ---
+
+### Test
 
 The app doesn't have a Test enviroment, this is made on purpose to enforce the tests to work over different kind of scenarios and to adapt the code as the errors and bugs starts to appear.
 
