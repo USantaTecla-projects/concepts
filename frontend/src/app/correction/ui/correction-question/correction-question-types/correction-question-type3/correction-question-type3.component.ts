@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CorrectionQuestionReplierService } from 'src/app/correction/data-access/correction-question-replier.service';
+import { CorrectionQuestionReplierService } from 'src/app/correction/util/correction-question-replier.service';
 import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
 import { AnswerT3 } from 'src/app/shared/types/answer/model/answer-type3.model';
 import { QuestionType3 } from 'src/app/shared/types/question/model/question-type3.model';

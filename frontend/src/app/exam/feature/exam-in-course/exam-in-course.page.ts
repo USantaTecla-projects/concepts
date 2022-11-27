@@ -7,7 +7,7 @@ import { User } from 'src/app/shared/types/auth/model/user.model';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { Question } from '../../../shared/types/question/model/question.model';
 import { ExamInCourseStore } from '../../data-access/exam-in-course.store';
-import { ExamQuestionReplierService } from '../../data-access/exam-question-replier.service';
+import { ExamQuestionReplierService } from '../../utils/exam-question-replier.service';
 
 @Component({
   selector: 'app-exam-in-course',

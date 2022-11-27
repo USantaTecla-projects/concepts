@@ -5,7 +5,7 @@ import { ExamService } from 'src/app/exam/data-access/exam.service';
 import { User } from 'src/app/shared/types/auth/model/user.model';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
-import { ExamItemDatasource } from '../data-access/exam-item.datasource';
+import { ExamItemDatasource } from '../utils/exam-item.datasource';
 
 @Component({
   selector: 'app-profile',

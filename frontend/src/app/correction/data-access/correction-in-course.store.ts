@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
-import { ExamMapperService } from 'src/app/exam/data-access/exam-mapper.service';
+import { ExamMapperService } from 'src/app/shared/service/exam-mapper/exam-mapper.service';
 import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';

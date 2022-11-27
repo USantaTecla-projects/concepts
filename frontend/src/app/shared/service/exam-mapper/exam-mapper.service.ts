@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { fromQuestionTypeMappers, toQuestionTypeMappers } from 'src/app/exam/utils/mappers.util';
 import { AnswerDTO } from 'src/app/shared/types/answer/dto/answer.dto';
 import { Answer } from 'src/app/shared/types/answer/model/answer.model';
 import { ExamMetadata } from 'src/app/shared/types/exam/dto/exam-medata.dto';
@@ -7,9 +8,7 @@ import { ReplyExamDTO } from 'src/app/shared/types/exam/dto/reply-exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 import { QuestionDTO } from 'src/app/shared/types/question/dto/question.dto';
-import { Question } from '../../shared/types/question/model/question.model';
-
-import { fromQuestionTypeMappers, toQuestionTypeMappers } from '../utils/mappers.util';
+import { Question } from '../../types/question/model/question.model';
 
 @Injectable({
   providedIn: 'root',

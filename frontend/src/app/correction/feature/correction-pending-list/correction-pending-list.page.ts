@@ -6,8 +6,8 @@ import { ExamService } from 'src/app/exam/data-access/exam.service';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
-import { CorredtedExamItemDatasource } from '../../data-access/corrected-exam-item.datasource';
 import { CorrecionInCourseStore } from '../../data-access/correction-in-course.store';
+import { CorredtedExamItemDatasource } from '../../util/corrected-exam-item.datasource';
 
 @Component({
   selector: 'app-correction-pending-list',

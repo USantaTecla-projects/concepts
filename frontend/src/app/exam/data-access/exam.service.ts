@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
+import { ExamMapperService } from 'src/app/shared/service/exam-mapper/exam-mapper.service';
 import { User } from 'src/app/shared/types/auth/model/user.model';
 import { ExamData } from 'src/app/shared/types/exam/dto/exam.dto';
 import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
-
-import { ExamMapperService } from './exam-mapper.service';
 
 @Injectable({
   providedIn: 'root',

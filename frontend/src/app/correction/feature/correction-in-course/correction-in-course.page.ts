@@ -9,8 +9,8 @@ import { Exam } from 'src/app/shared/types/exam/model/exam.model';
 import { ExamResponse } from 'src/app/shared/types/misc/model/exam-response.model';
 import { QuestionAnswerType } from 'src/app/shared/types/question/enum/question-answer-type.enum';
 import { CorrecionInCourseStore } from '../../data-access/correction-in-course.store';
-import { CorrectionQuestionReplierService } from '../../data-access/correction-question-replier.service';
 import { CorrectionQuestionType0Component } from '../../ui/correction-question/correction-question-types/correction-question-type0/correction-question-type0.component';
+import { CorrectionQuestionReplierService } from '../../util/correction-question-replier.service';
 
 @Component({
   selector: 'app-correction-in-course',

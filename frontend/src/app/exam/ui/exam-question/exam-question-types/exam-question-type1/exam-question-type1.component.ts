@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ExamQuestionReplierService } from 'src/app/exam/data-access/exam-question-replier.service';
+import { ExamQuestionReplierService } from 'src/app/exam/utils/exam-question-replier.service';
 import { AnswerCorrectionStatus } from 'src/app/shared/types/answer/enum/answer-correction-status.enum';
 import { QuestionAnswerType } from 'src/app/shared/types/question/enum/question-answer-type.enum';
 import { QuestionType1 } from 'src/app/shared/types/question/model/question-type1.model';
