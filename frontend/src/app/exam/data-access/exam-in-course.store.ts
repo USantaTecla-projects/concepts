@@ -50,7 +50,7 @@ export class ExamInCourseStore {
       examResponses
     );
 
-    return this.httpClient.patch<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
+    return this.httpClient.put<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';
         console.error(message, error);

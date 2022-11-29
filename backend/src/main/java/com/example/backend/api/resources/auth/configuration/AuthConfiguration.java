@@ -51,6 +51,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/concepts/**").hasRole("TEACHER");
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/concepts/**").hasRole("TEACHER");
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/concepts/**").hasRole("TEACHER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "**/exams").hasRole("TEACHER");
 
         // Other endpoints are public
         http.authorizeRequests().anyRequest().permitAll();

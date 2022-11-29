@@ -50,9 +50,15 @@ public class ExamController {
         return findExamsService.findAllByUserID(userID, page, isCorrected);
     }
 
+    @PutMapping("/exams")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void reply(@RequestBody final UpdateExamDTO updateExamDTO) {
+        updateExamService.update(updateExamDTO);
+    }
+
     @PatchMapping("/exams")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void updateOne(@RequestBody final UpdateExamDTO updateExamDTO) {
+    public void correct(@RequestBody final UpdateExamDTO updateExamDTO) {
         updateExamService.update(updateExamDTO);
     }
 }
