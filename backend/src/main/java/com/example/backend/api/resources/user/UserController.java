@@ -9,38 +9,38 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    private final CrudUserService crudUserService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(CrudUserService crudUserService) {
+        this.crudUserService = crudUserService;
     }
 
     @PostMapping("/")
     @ResponseStatus(code = HttpStatus.CREATED)
     public User create(@RequestBody final UserDTO userDTO) {
-        return userService.create(userDTO);
+        return crudUserService.create(userDTO);
     }
 
     @GetMapping("/{username}")
     public User findOne(@PathVariable final String username) {
-        return userService.findOneByUsername(username);
+        return crudUserService.findOneByUsername(username);
     }
 
     @GetMapping("/")
     public Page<User> findAll(@RequestParam Integer page) {
-        return userService.findAll(page);
+        return crudUserService.findAll(page);
     }
 
     @PutMapping("/{userId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void updateOne(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
-        userService.updateOne(userId, userDTO);
+        crudUserService.updateOne(userId, userDTO);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void removeOne(@PathVariable final Long userId) {
-        userService.removeOne(userId);
+        crudUserService.removeOne(userId);
     }
 
 }
