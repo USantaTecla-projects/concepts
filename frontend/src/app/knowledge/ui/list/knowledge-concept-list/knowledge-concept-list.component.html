@@ -8,7 +8,7 @@
   <div class="paginator">
     <mat-paginator
       [showFirstLastButtons]="true"
-      [length]="conceptsPage!.content.length"
+      [length]="numberOfConcepts$ | async"
       [pageSize]="10"
       (page)="onPageGet($event)"></mat-paginator>
   </div>

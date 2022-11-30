@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { BehaviorSubject, Observable, shareReplay, take } from 'rxjs';
+import { ConceptStore } from 'src/app/knowledge/data-access/concept.store';
 import { Concept } from 'src/app/shared/types/concept/concept.model';
 import { Page } from 'src/app/shared/types/misc/dto/page-response.dto';
 import { State } from 'src/app/shared/types/misc/enum/state.enum';
@@ -12,7 +14,7 @@ import { KnowledgeDialogDeleteComponent } from '../../dialog/knowledge-dialog-de
   templateUrl: './knowledge-concept-list.component.html',
   styleUrls: ['./knowledge-concept-list.component.scss'],
 })
-export class KnowledgeConceptListComponent {
+export class KnowledgeConceptListComponent implements OnInit {
   @Input() conceptsPage!: Page<Concept> | null;
 
   @Input() totalElements: number | null = 0;
@@ -31,7 +33,20 @@ export class KnowledgeConceptListComponent {
 
   selectedConceptID!: number;
 
-  constructor(public dialog: MatDialog) {}
+  numberOfConceptsSubejct: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  numberOfConcepts$!: Observable<number>;
+
+  constructor(public dialog: MatDialog, public concepStore: ConceptStore) {}
+
+  ngOnInit(): void {
+    this.numberOfConcepts$ = this.numberOfConceptsSubejct.asObservable();
+
+    this.concepStore
+      .countConcepts()
+      .pipe(take(1), shareReplay())
+      .subscribe(count => this.numberOfConceptsSubejct.next(count));
+  }
 
   onConceptSelect(conceptID: number): void {
     this.selectedConceptID = conceptID;
@@ -50,6 +65,7 @@ export class KnowledgeConceptListComponent {
       if (conceptFormValue) {
         const newConcept: Concept = { ...conceptFormValue };
         this.createConcept.emit(newConcept);
+        this.numberOfConceptsSubejct.next(this.numberOfConceptsSubejct.value + 1);
       }
     });
   }
@@ -78,4 +94,6 @@ export class KnowledgeConceptListComponent {
     const { pageIndex } = { ...page };
     this.getPage.emit(pageIndex);
   }
+
+  getNumberOfConcepts() {}
 }

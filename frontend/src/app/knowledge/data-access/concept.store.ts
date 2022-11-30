@@ -134,6 +134,16 @@ export class ConceptStore {
       );
   }
 
+  countConcepts(): Observable<number> {
+    return this.httpClient.get<number>('concepts/count').pipe(
+      catchError(error => {
+        const message = 'Could not count concepts';
+        console.error(message, error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   resetConceptList() {
     this.stateSubject.next(State.INIT);
   }

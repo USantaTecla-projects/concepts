@@ -33,6 +33,11 @@ public class CrudConceptService {
                 .orElseThrow(() -> new ConceptNotFoundException("The concept with ID = " + conceptID + " has not been found"));
     }
 
+    public Long count() {
+        System.out.println(conceptRepository.count());
+        return conceptRepository.count();
+    }
+
     public Page<Concept> findAll(int page) {
         int pageSize = 10;
         return conceptRepository.findAll(PageRequest.of(page, pageSize));

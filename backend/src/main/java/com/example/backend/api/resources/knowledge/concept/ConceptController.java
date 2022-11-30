@@ -27,6 +27,11 @@ public class ConceptController {
         return crudConceptsService.findOne(conceptID);
     }
 
+    @GetMapping("/count")
+    public Long count() {
+        return crudConceptsService.count();
+    }
+
     @GetMapping("/")
     public Page<Concept> findAll(@RequestParam Integer page) {
         return crudConceptsService.findAll(page);
