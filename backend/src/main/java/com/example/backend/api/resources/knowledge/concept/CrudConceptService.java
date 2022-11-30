@@ -34,7 +34,6 @@ public class CrudConceptService {
     }
 
     public Long count() {
-        System.out.println(conceptRepository.count());
         return conceptRepository.count();
     }
 
