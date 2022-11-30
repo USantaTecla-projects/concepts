@@ -32,10 +32,7 @@ export class AuthStore {
   login(credentials: Credentials): Observable<User> {
     return this.httpClient.post<AuthResponse>('auth/login', credentials).pipe(
       catchError((httpError: HttpErrorResponse) => {
-        const errorMessage =
-          httpError.status === 409
-            ? 'User with this email or username already exists'
-            : 'Unexpected error, try again later';
+        const errorMessage = 'Invalid credentials';
         return throwError(() => new Error(errorMessage));
       }),
       mergeMap(() => this.getUser(credentials.username)),
@@ -47,9 +44,6 @@ export class AuthStore {
   }
 
   logout(): Observable<any> {
-    this.userSubject.next(null);
-    localStorage.removeItem(this.AUTH_DATA);
-
     return this.httpClient.post<AuthResponse>('auth/logout', {}).pipe(
       catchError((httpError: HttpErrorResponse) => {
         const errorMessage =
@@ -57,6 +51,10 @@ export class AuthStore {
             ? 'User with this email or username already exists'
             : 'Unexpected error, try again later';
         return throwError(() => new Error(errorMessage));
+      }),
+      tap(() => {
+        this.userSubject.next(null);
+        localStorage.removeItem(this.AUTH_DATA);
       })
     );
   }

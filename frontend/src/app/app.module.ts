@@ -1,3 +1,4 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,6 +17,7 @@ export let AppInjector: Injector;
   declarations: [AppComponent],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, SharedModule],
   providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

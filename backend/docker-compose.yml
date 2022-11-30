@@ -8,12 +8,15 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - DATABASE_HOST=127.0.0.1
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=${DB_NAME}
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA : /var/lib/postgresql/data/${VOLUME}
     networks:
       - concepts-network
+    volumes:
+      - "${VOLUME}:/var/lib/postgresql/data"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -45,3 +48,9 @@ services:
 networks:
   concepts-network:
     name: concepts-network
+
+volumes:
+  concepts-dev-data:
+    driver: local
+  concepts-prod-data:
+    driver: local

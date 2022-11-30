@@ -25,7 +25,6 @@ export class CorrecionInCourseStore {
   constructor(private httpClient: HttpClient, private examMapperService: ExamMapperService) {}
 
   getExam(userID: number, examID: number) {
-    console.log('???');
     return this.httpClient.get<ExamData>(`${userID}/exams/${examID}`).pipe(
       catchError(error => {
         const message = 'Could not get the user exams';

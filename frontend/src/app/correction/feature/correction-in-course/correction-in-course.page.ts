@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { ExamQuestionType0Component } from 'src/app/exam/ui/exam-question/exam-question-types/exam-question-type0/exam-question-type0.component';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
@@ -66,13 +66,16 @@ export class CorrectionInCoursePage implements OnInit {
   saveCorrection() {
     const correctedExamResponses = this.correctionQuestionReplierService.getCorrectedQuestions();
     if (correctedExamResponses.length === this.correcionInCourseStore.getNumberOfQuestions()) {
-      return this.correcionInCourseStore.updateExam(correctedExamResponses).subscribe({
-        next: () => {
-          this.snackbarService.openSnackBar('Exam corrected!');
-          this.router.navigateByUrl('/correction');
-        },
-        error: (error: Error) => this.snackbarService.openSnackBar(error.message),
-      });
+      return this.correcionInCourseStore
+        .updateExam(correctedExamResponses)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.snackbarService.openSnackBar('Exam corrected!');
+            this.router.navigateByUrl('/correction');
+          },
+          error: (error: Error) => this.snackbarService.openSnackBar(error.message),
+        });
     }
 
     return this.snackbarService.openSnackBar('All questions should be corrected to finish');

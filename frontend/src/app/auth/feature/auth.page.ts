@@ -20,9 +20,8 @@ export class AuthPage {
   constructor(private authStore: AuthStore, private snackbarService: SnackbarService, private router: Router) {}
 
   onLoginUser(credentials: Credentials): void {
-    console.log(credentials);
     this.authStore.login(credentials).subscribe({
-      next: () => this.router.navigateByUrl(''),
+      next: () => this.router.navigateByUrl('/'),
       error: () => this.snackbarService.openSnackBar('Invalid credentials'),
     });
   }

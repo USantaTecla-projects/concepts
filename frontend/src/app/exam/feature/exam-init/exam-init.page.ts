@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { mergeMap } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { AuthStore } from '../../../auth/data-access/auth.store';
 import { GenerateExamData } from '../../../shared/types/exam/dto/create-exam.dto';
@@ -23,6 +23,7 @@ export class ExamInitPage {
   onExamStart(generateExamData: GenerateExamData) {
     this.authStore.user$
       .pipe(
+        take(1),
         map(user => (!user ? -1 : user.id)),
         mergeMap(userID => this.examInCourseStore.createExam({ ...generateExamData, userID }))
       )
