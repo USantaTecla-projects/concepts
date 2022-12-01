@@ -65,7 +65,7 @@ export class KnowledgeConceptListComponent implements OnInit {
       if (conceptFormValue) {
         const newConcept: Concept = { ...conceptFormValue };
         this.createConcept.emit(newConcept);
-        this.numberOfConceptsSubejct.next(this.numberOfConceptsSubejct.value + 1);
+        this.updateNumberOfConcepts(1);
       }
     });
   }
@@ -95,5 +95,7 @@ export class KnowledgeConceptListComponent implements OnInit {
     this.getPage.emit(pageIndex);
   }
 
-  getNumberOfConcepts() {}
+  updateNumberOfConcepts(adder: number) {
+    this.numberOfConceptsSubejct.next(this.numberOfConceptsSubejct.value + adder);
+  }
 }

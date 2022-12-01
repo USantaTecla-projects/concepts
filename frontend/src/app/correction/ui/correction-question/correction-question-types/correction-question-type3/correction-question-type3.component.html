@@ -19,7 +19,7 @@
     ¿Es cierto que {{ question.conceptText }} no es {{ question.incorrectDefinitionText }} porque
     {{ question.justificationText }}?
   </p>
-  <p class="answer-text">{{ answer.reply ? 'Yes' : 'No' }}</p>
+  <p class="answer-text">{{ answer.reply === null ? '' : answer.reply ? 'Yes' : 'No' }}</p>
 
   <div class="actions">
     <button (click)="correctQuestion(true)" data-cy="correct-question-button" mat-raised-button>Correct</button>

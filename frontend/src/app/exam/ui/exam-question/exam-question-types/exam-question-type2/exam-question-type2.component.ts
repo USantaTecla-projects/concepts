@@ -36,6 +36,9 @@ export class ExamQuestionType2Component implements OnInit, ExamQuestionComponent
   onQuestionReplied() {
     const questionReplyFormValue = this.questionReplyForm.value;
 
+    console.log(questionReplyFormValue.bool);
+    console.log('cabron');
+
     const response = {
       question: { ...this.question },
       answer: {

@@ -23,8 +23,6 @@ public class Exam {
 
     private Timestamp replyDate;
 
-    private Long timeSpent;
-
     private Boolean corrected = false;
 
     private String mark;
@@ -43,14 +41,6 @@ public class Exam {
         this.questionList = questionList;
         this.userID = userID;
         this.creationDate = creationDate;
-    }
-
-    public void calculateTimeSpend(){
-        if(replyDate == null){
-            throw new RuntimeException("Reply date is mandatory to calculate the time spent, the exam isn't replied");
-        }
-
-        timeSpent = replyDate.getTime() - creationDate.getTime();
     }
 
     public Long getId() {
@@ -83,14 +73,6 @@ public class Exam {
 
     public void setReplyDate(Timestamp replyDate) {
         this.replyDate = replyDate;
-    }
-
-    public Long getTimeSpent() {
-        return timeSpent;
-    }
-
-    public void setTimeSpent(Long timeSpent) {
-        this.timeSpent = timeSpent;
     }
 
     public Boolean getCorrected() {

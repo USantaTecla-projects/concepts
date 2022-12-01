@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
 import { Concept } from '../../shared/types/concept/concept.model';
@@ -7,6 +7,7 @@ import { Justification } from '../../shared/types/justification/justification.mo
 import { ConceptStore } from '../data-access/concept.store';
 import { DefinitionStore } from '../data-access/definition.store';
 import { JustificationStore } from '../data-access/justification.store';
+import { KnowledgeConceptListComponent } from '../ui/list/knowledge-concept-list/knowledge-concept-list.component';
 
 @Component({
   selector: 'app-knowledge-manager',
@@ -14,6 +15,9 @@ import { JustificationStore } from '../data-access/justification.store';
   styleUrls: ['./knowledge-manager.page.scss'],
 })
 export class KnowledgeManagerPage implements OnDestroy {
+  @ViewChild('conceptList')
+  private conceptList!: KnowledgeConceptListComponent;
+
   private subscriptionList: Subscription[] = [];
 
   private selectedConceptID!: number;
@@ -80,6 +84,7 @@ export class KnowledgeManagerPage implements OnDestroy {
           this.snackbarService.openSnackBar('Concept deleted.');
           this.definitionStore.resetDefinitionList();
           this.justificationStore.resetJustificationList();
+          this.conceptList.updateNumberOfConcepts(-1);
         },
         error: () => this.snackbarService.openSnackBar('Error deleting concept.'),
       })

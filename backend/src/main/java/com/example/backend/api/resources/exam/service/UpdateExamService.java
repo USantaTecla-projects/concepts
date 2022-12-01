@@ -12,6 +12,9 @@ import com.example.backend.api.resources.exam.dto.UpdateExamDTO;
 import com.example.backend.api.resources.exam.exception.specific.ExamNotFoundException;
 import com.example.backend.api.resources.exam.exception.specific.UpdateExamDTOBadRequestException;
 import com.example.backend.api.resources.exam.model.Exam;
+import com.example.backend.api.resources.user.UserRepository;
+import com.example.backend.api.resources.user.exception.model.UserNotFoundException;
+import com.example.backend.api.resources.user.model.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -23,16 +26,20 @@ import java.util.List;
 public class UpdateExamService {
 
     private final ExamRepository examRepository;
+
+    private final UserRepository userRepository;
     private final MapQuestionService mapQuestionService;
     private final SaveAnswerService saveAnswerService;
 
 
     public UpdateExamService(
             ExamRepository examRepository,
+            UserRepository userRepository,
             MapQuestionService mapQuestionService,
             SaveAnswerService saveAnswerService
     ) {
         this.examRepository = examRepository;
+        this.userRepository = userRepository;
         this.mapQuestionService = mapQuestionService;
         this.saveAnswerService = saveAnswerService;
     }
@@ -75,7 +82,6 @@ public class UpdateExamService {
         }
 
         exam.setReplyDate(new Timestamp(System.currentTimeMillis()));
-        exam.calculateTimeSpend();
 
         Boolean corrected = updateExamDTO
                 .getCorrectedOptional(updateExamDTO.getCorrected())
@@ -90,6 +96,17 @@ public class UpdateExamService {
         exam.setAnswerList(new ArrayList<>(answers));
 
         examRepository.save(exam);
+
+        referenceExamToUser(userID, exam);
+    }
+
+    private void referenceExamToUser(Long userID, Exam exam) {
+        User user = userRepository
+                .findById(userID)
+                .orElseThrow(() -> new UserNotFoundException("The user with ID =" + userID + " was not found"));
+
+        user.getExamList().add(exam);
+        userRepository.save(user);
     }
 
     private Exam checkExamExistOnDatabase(final UpdateExamDTO updateExamDTO) {

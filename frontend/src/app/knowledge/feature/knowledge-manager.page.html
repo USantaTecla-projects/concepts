@@ -4,6 +4,7 @@
 <div class="lists-container">
   <app-knowledge-concept-list
     class="card"
+    #conceptList
     [conceptsPage]="conceptStore.conceptsPage$ | async"
     [state]="conceptStore.state$ | async"
     (selectConcept)="onConceptSelect($event)"

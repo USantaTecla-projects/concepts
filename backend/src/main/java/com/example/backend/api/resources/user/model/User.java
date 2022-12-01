@@ -1,5 +1,6 @@
 package com.example.backend.api.resources.user.model;
 
+import com.example.backend.api.resources.exam.model.Exam;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -19,6 +20,9 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany
+    private List<Exam> examList;
 
     @Column
     @JsonIgnore
@@ -96,5 +100,13 @@ public class User {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public List<Exam> getExamList() {
+        return examList;
+    }
+
+    public void setExamList(List<Exam> examList) {
+        this.examList = examList;
     }
 }
