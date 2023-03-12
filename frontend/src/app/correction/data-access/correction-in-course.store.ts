@@ -44,9 +44,7 @@ export class CorrecionInCourseStore {
       { examID, userID, creationDate, corrected: true },
       examResponses
     );
-
-    console.log(updatedExamDTO);
-
+    console.log('sad');
     return this.httpClient.patch<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';

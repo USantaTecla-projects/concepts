@@ -3,6 +3,7 @@ package com.example.backend.api.resources.exam.model;
 
 import com.example.backend.api.resources.exam.domain.family.answer.model.Answer;
 import com.example.backend.api.resources.exam.domain.family.question.model.Question;
+import com.example.backend.api.resources.user.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -26,8 +27,6 @@ public class Exam {
     private Boolean corrected = false;
 
     private String mark;
-
-
     @ManyToMany
     private List<Question> questionList;
 

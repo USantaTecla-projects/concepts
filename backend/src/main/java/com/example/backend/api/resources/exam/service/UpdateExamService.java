@@ -45,7 +45,7 @@ public class UpdateExamService {
     }
 
 
-    public void update(final UpdateExamDTO updateExamDTO) {
+    public void update(final UpdateExamDTO updateExamDTO, String action) {
 
         final Long userID = updateExamDTO
                 .getUserIDOptional(updateExamDTO.getUserID())
@@ -64,7 +64,9 @@ public class UpdateExamService {
         final List<Question> questions = mapQuestionService.mapQuestionDTOToQuestion(questionDTOList);
         final List<Answer> answers = saveAnswerService.saveManyAnswers(answerDTOList);
 
-        updateExamOnDatabase(updateExamDTO, questions, answers, userID);
+
+        updateExamOnDatabase(updateExamDTO, questions, answers, userID, action);
+
     }
 
 
@@ -72,7 +74,8 @@ public class UpdateExamService {
             final UpdateExamDTO updateExamDTO,
             final List<Question> questions,
             final List<Answer> answers,
-            final Long userID
+            final Long userID,
+            final String action
     ) {
 
         Exam exam = checkExamExistOnDatabase(updateExamDTO);
@@ -95,9 +98,14 @@ public class UpdateExamService {
         exam.setCorrected(corrected);
         exam.setAnswerList(new ArrayList<>(answers));
 
+
         examRepository.save(exam);
 
-        referenceExamToUser(userID, exam);
+        if (action == "reply") {
+            referenceExamToUser(userID, exam);
+
+        }
+
     }
 
     private void referenceExamToUser(Long userID, Exam exam) {

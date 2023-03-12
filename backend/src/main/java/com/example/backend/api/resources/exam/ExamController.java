@@ -53,12 +53,12 @@ public class ExamController {
     @PutMapping("/exams")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void reply(@RequestBody final UpdateExamDTO updateExamDTO) {
-        updateExamService.update(updateExamDTO);
+        updateExamService.update(updateExamDTO,"reply");
     }
 
     @PatchMapping("/exams")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void correct(@RequestBody final UpdateExamDTO updateExamDTO) {
-        updateExamService.update(updateExamDTO);
+        updateExamService.update(updateExamDTO,"correct");
     }
 }

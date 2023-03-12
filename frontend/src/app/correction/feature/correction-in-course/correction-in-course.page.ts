@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable, take, tap } from 'rxjs';
 import { AuthStore } from 'src/app/auth/data-access/auth.store';
 import { ExamQuestionType0Component } from 'src/app/exam/ui/exam-question/exam-question-types/exam-question-type0/exam-question-type0.component';
 import { SnackbarService } from 'src/app/shared/service/snackbar.service';
