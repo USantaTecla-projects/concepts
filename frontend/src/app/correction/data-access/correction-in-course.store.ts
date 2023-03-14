@@ -32,7 +32,6 @@ export class CorrecionInCourseStore {
         return throwError(() => new Error(message));
       }),
       map(examData => this.examMapperService.mapDTOToExam(examData)),
-      tap(res => console.log(res)),
       tap(exam => this.correctionInCourseSubject.next(exam))
     );
   }
@@ -44,7 +43,6 @@ export class CorrecionInCourseStore {
       { examID, userID, creationDate, corrected: true },
       examResponses
     );
-    console.log('sad');
     return this.httpClient.patch<Exam>(`${userID}/exams`, updatedExamDTO).pipe(
       catchError(error => {
         const message = 'Could not reply the exam';

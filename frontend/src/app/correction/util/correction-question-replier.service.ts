@@ -11,7 +11,6 @@ export class CorrectionQuestionReplierService {
   constructor() {}
 
   addCorrectedQuestion(examResponse: ExamResponse) {
-    console.log(examResponse);
     const oldExamResponses = this.correctedQuestionsSubject.getValue();
     const index = oldExamResponses.findIndex(({ question: { id } }) => id === examResponse.question.id);
 

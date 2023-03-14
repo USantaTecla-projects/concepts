@@ -158,6 +158,8 @@ export class KnowledgeManagerPage implements OnDestroy {
   }
 
   onJustificationUpdate(updatedJustification: Justification) {
+    console.log(updatedJustification);
+    console.table([this.selectedConceptID, this.selectedDefinitionID, this.selectedJustificationID]);
     this.subscriptionList.push(
       this.justificationStore
         .updateJustification(
